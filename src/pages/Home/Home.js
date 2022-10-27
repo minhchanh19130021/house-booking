@@ -1,7 +1,8 @@
 function Home() {
     return (
-        <div className="py-12 text-8xl font-medium">
-            <h1>Trang Home</h1>
+        <div className="text-[50px] font-medium">
+            <p>Trang Home</p>
+            <p>lorem Ips lorem ipsum dolor sit amet, consectetur adip lorem ipsum dolor sit amet, consectetur adip</p>
         </div>
     );
 }
