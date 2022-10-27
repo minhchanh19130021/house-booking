@@ -10,7 +10,7 @@ function DefaultLayout({ children }) {
         <div className="box-border p-0 m-0 h-full">
             <Header />
             {children}
-            <Footer />
+            {/* <Footer /> */}
         </div>
     );
 }
