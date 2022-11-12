@@ -1,6 +1,6 @@
 function Contact() {
     return (
-        <div className="text-8xl font-medium">
+        <div>
             <h1>Trang Contact</h1>
         </div>
     );

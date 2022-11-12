@@ -1,0 +1,23 @@
+.wrapper {
+    background-color: #f7f7f7;
+    border-top: 1px solid #dddddd;
+    // padding: 50px 0px !important;
+    // margin-top: 50px;
+    // width: 100vh;
+}
+.footer-item {
+    display: flex !important;
+    flex-direction: column;
+    margin-top: 10px;
+    .footer-item__title {
+        color: var(--primary);
+        font-weight: 700;
+    }
+    .footer-item__link {
+        padding: 4px 0;
+        &:hover {
+            text-decoration: underline;
+            transition: all 0.3 ease-in-out;
+        }
+    }
+}
