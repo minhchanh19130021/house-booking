@@ -580,6 +580,14 @@ video {
   right: 1.5rem;
 }
 
+.left-4 {
+  left: 1rem;
+}
+
+.bottom-4 {
+  bottom: 1rem;
+}
+
 .z-10 {
   z-index: 10;
 }
@@ -598,9 +606,22 @@ video {
   margin-right: auto;
 }
 
+.mx-\[-4px\] {
+  margin-left: -4px;
+  margin-right: -4px;
+}
+
 .mx-0 {
   margin-left: 0px;
   margin-right: 0px;
+}
+
+.mt-10 {
+  margin-top: 2.5rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
 }
 
 .mt-1 {
@@ -631,10 +652,6 @@ video {
   margin-bottom: 1.5rem;
 }
 
-.mb-2 {
-  margin-bottom: 0.5rem;
-}
-
 .ml-\[30px\] {
   margin-left: 30px;
 }
@@ -663,12 +680,16 @@ video {
   height: 100%;
 }
 
-.h-\[50px\] {
-  height: 50px;
-}
-
 .h-6 {
   height: 1.5rem;
+}
+
+.h-40 {
+  height: 10rem;
+}
+
+.h-\[50px\] {
+  height: 50px;
 }
 
 .h-4 {
@@ -699,28 +720,20 @@ video {
   height: 80px;
 }
 
-.w-\[700px\] {
-  width: 700px;
-}
-
 .w-6 {
   width: 1.5rem;
 }
 
-.w-screen {
-  width: 100vw;
-}
-
-.w-4\/12 {
-  width: 33.333333%;
-}
-
-.w-\[400px\] {
-  width: 400px;
+.w-7 {
+  width: 1.75rem;
 }
 
 .w-full {
   width: 100%;
+}
+
+.w-screen {
+  width: 100vw;
 }
 
 .w-4 {
@@ -739,8 +752,28 @@ video {
   width: 180px;
 }
 
-.w-\[300px\] {
-  width: 300px;
+.w-10 {
+  width: 2.5rem;
+}
+
+.w-\[100px\] {
+  width: 100px;
+}
+
+.w-\[20px\] {
+  width: 20px;
+}
+
+.w-\[60px\] {
+  width: 60px;
+}
+
+.w-\[200px\] {
+  width: 200px;
+}
+
+.min-w-\[400px\] {
+  min-width: 400px;
 }
 
 .min-w-\[250px\] {
@@ -755,8 +788,8 @@ video {
   min-width: 214px;
 }
 
-.min-w-\[400px\] {
-  min-width: 400px;
+.min-w-full {
+  min-width: 100%;
 }
 
 .max-w-\[1200px\] {
@@ -845,6 +878,18 @@ video {
   background-color: rgb(77 183 254 / var(--tw-bg-opacity));
 }
 
+.bg-\[url\(\"\"\)\] {
+  background-image: url("");
+}
+
+.bg-\[url\(\'\'\)\] {
+  background-image: url('');
+}
+
+.bg-\[url\(\'https\:\/\/townhub\.kwst\.net\/images\/all\/56\.jpg\'\)\] {
+  background-image: url('https://townhub.kwst.net/images/all/56.jpg');
+}
+
 .fill-slate-400 {
   fill: #94a3b8;
 }
@@ -884,6 +929,11 @@ video {
   padding-bottom: 1.25rem;
 }
 
+.px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
 .py-\[11px\] {
   padding-top: 11px;
   padding-bottom: 11px;
@@ -897,16 +947,6 @@ video {
 .px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
-}
-
-.py-12 {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-}
-
-.px-1 {
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
 }
 
 .pr-\[120x\] {
@@ -932,6 +972,16 @@ video {
 
 .text-\[50px\] {
   font-size: 50px;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
 }
 
 .text-xs {
@@ -984,6 +1034,24 @@ video {
   outline-width: 0px;
 }
 
+.contrast-200 {
+  --tw-contrast: contrast(2);
+  -webkit-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+          filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.saturate-200 {
+  --tw-saturate: saturate(2);
+  -webkit-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+          filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.sepia-0 {
+  --tw-sepia: sepia(0);
+  -webkit-filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+          filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
 .transition-all {
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -1023,8 +1091,8 @@ video {
 }
 
 @media (min-width: 1024px) {
-  .lg\:w-3\/12 {
-    width: 25%;
+  .lg\:w-6\/12 {
+    width: 50%;
   }
 }
 
@@ -1034,6 +1102,12 @@ video {
   }
 
   .xl\:w-4\/12 {
+    width: 33.333333%;
+  }
+}
+
+@media (min-width: 1536px) {
+  .\32xl\:w-4\/12 {
     width: 33.333333%;
   }
 }
