@@ -1,4 +1,4 @@
-// // @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 @import 'normalize.css';
 :root {
     --primary: #2e3f6e;
@@ -10,36 +10,15 @@
     --yellow: #fce700;
     --danger: #cf0a0a;
 }
-@font-face {
-    font-family: Avenir Next, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-    src: url('../GlobalStyles/font/29bca18dce5a8e111855e31314a9b1d750ea9beb.woff2');
-    font-weight: 400;
-}
-@font-face {
-    font-family: Avenir Next, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-    src: url('../GlobalStyles/font/KFOlCnqEu92Fr1MmEU9fBBc4.woff2');
-    font-weight: 500;
-}
-@font-face {
-    font-family: Avenir Next, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-    src: url('../GlobalStyles/font/KFOmCnqEu92Fr1Mu4mxK.woff2');
-    font-weight: 600;
-}
-@font-face {
-    font-family: Avenir Next, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-    src: url('../GlobalStyles/font/KFOmCnqEu92Fr1Mu7WxKOzY.woff2');
-    font-weight: 700;
-}
 * {
-    // margin: 0;
-    // padding: 0;
     box-sizing: border-box;
 }
 
 html {
     font-size: 62.5%;
     color: var(--white);
-    font-family: Avenir Next, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6rem;
 }
 
 body {
@@ -55,9 +34,10 @@ body {
     flex-direction: column;
 }
 p {
-   margin: 8px 0;
+    line-height: 1.8rem;
+    margin-bottom: 4px;
+    margin-top: 4px;
 }
-
 a {
     color: var(--primary);
     text-decoration: none;
@@ -74,13 +54,3 @@ li {
 ul {
     list-style: none;
 }
-// html ::-webkit-scrollbar-thumb {
-//     border-radius: 4px;
-//     background-color: rgba(22, 24, 35, 0.06);
-// }
-// html *::-webkit-scrollbar {
-//     border-radius: 0;
-//     width: 8px;
-//     background-color: rgba(109, 109, 109, 0.06);
-//     // background-color: gray;
-// }
