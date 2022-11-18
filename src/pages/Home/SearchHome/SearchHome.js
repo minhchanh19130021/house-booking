@@ -53,7 +53,7 @@ function SearchHome() {
             </div>
             <div className={cx('border')}>
                 <div className={cx('bg-form')}>
-                    <form action="#" method="post" className={cx('search-form', 'row', )}>
+                    <form action="#" method="post" className={cx('search-form', 'row')}>
                         <div className={cx('form-control', 'col', 'l-3', 'm-12', 'c-12')}>
                             <label htmlFor="search">
                                 <svg

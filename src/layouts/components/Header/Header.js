@@ -86,7 +86,7 @@ function Header() {
                     Đăng Nhập
                 </Button>
                 <Button
-                    to="/signup_owner"
+                    to="/signup-owner"
                     large
                     className={cx('owner-register')}
                     leftIcon={

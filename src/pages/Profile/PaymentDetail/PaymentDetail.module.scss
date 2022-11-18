@@ -1,0 +1,63 @@
+.profile-form {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    padding: 20px;
+}
+.profile-input {
+    margin-bottom: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    label {
+        margin-bottom: 4px;
+        color: #878c9f;
+        font-weight: 700;
+        font-size: 1.6rem;
+        display: block;
+    }
+    input,
+    select {
+        border: 1px solid #ccc;
+        outline: none;
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 4px;
+
+        outline: none;
+        border: 1px solid #e5e7f2;
+        background: #f9f9f9;
+        border-radius: 4px;
+        color: #7d93b2;
+        &:focus {
+            background-color: var(--white);
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        }
+    }
+}
+.link-item {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    .logo-link {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+    }
+    .name-link {
+        width: 300px;
+        display: flex;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow-y: hidden;
+    }
+}
+
+.submit-info {
+    float: right;
+}
+.btn-remove {
+    background-color: transparent;
+    border: 1px solid transparent;
+    outline: none;
+    text-decoration: underline;
+}
