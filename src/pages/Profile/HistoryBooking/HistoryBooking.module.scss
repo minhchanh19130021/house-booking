@@ -1,0 +1,38 @@
+.history-item {
+    display: flex;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    width: 100%;
+    &:hover {
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    }
+}
+.name-host {
+    padding: 6px 0 !important;
+}
+.avatar {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 999px;
+}
+
+.text {
+    padding: 8px 0;
+}
+.function {
+    display: flex;
+    justify-content: flex-end;
+    justify-content: space-between;
+    .fuction-btn {
+        display: flex;
+        justify-content: flex-end;
+    }
+}
+.thanks{
+    border-top: 1px solid var(--border-transparent);
+    margin-top: 20px;
+    padding: 20px 0;
+}

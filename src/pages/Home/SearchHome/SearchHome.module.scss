@@ -9,11 +9,14 @@
             font-size: 4.6rem;
             font-weight: 700;
             text-align: center;
+            color: var(--white);
         }
 
         p {
             font-size: 1.4rem;
             text-align: center;
+            color: var(--white);
+
         }
     }
 }
@@ -36,7 +39,7 @@
         align-items: center;
         flex-wrap: wrap;
 
-        border-right: 1px solid rgb(204, 204, 204);
+        // border-right: 1px solid rgb(204, 204, 204);
 
         label svg {
             width: 20px;
