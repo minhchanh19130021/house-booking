@@ -23,19 +23,28 @@ function Evaluate({ children }) {
                             fillRule="evenodd"
                         />
                     </svg>
-                    <p className={cx('total-star')}>4,97</p>
+                    <p className={cx('total-star')}>8,6</p>
                     <p className={cx('total-evaluate')}> 497 đánh giá</p>
                 </div>
             </div>
             <div className={cx('row', 'categories')}>
                 <div className={cx('col', 'categories-item', 'l-6', 'm-6', 'c-6')}>
-                    <InfoEvaluate title="Nhân viên gần gũi" value={34} rate={7.4} />
+                    <InfoEvaluate title="Nhân viên gần gũi" value={88} rate={7.4} />
                 </div>
                 <div className={cx('col', 'categories-item', 'l-6', 'm-6', 'c-6')}>
-                    <InfoEvaluate title="Nhân viên gần gũi" value={34} rate={7.4} />
+                    <InfoEvaluate title="Sạch sẽ" value={89} rate={8.4} />
                 </div>
                 <div className={cx('col', 'categories-item', 'l-6', 'm-6', 'c-6')}>
-                    <InfoEvaluate title="Nhân viên gần gũi" value={34} rate={7.4} />
+                    <InfoEvaluate title="Liên lạc" value={67} rate={9.2} />
+                </div>
+                <div className={cx('col', 'categories-item', 'l-6', 'm-6', 'c-6')}>
+                    <InfoEvaluate title="chất lượng giá cả" value={94} rate={6.4} />
+                </div>
+                <div className={cx('col', 'categories-item', 'l-6', 'm-6', 'c-6')}>
+                    <InfoEvaluate title="Địa điểm" value={81} rate={8.2} />
+                </div>
+                <div className={cx('col', 'categories-item', 'l-6', 'm-6', 'c-6')}>
+                    <InfoEvaluate title="Nhân viên gần gũi" value={61} rate={7.5} />
                 </div>
             </div>
             <div className={cx('row', 'evaluates')}>

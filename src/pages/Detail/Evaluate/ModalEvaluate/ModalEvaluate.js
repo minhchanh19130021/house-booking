@@ -34,16 +34,22 @@ function ModalEvaluate({children}) {
                 <div className={cx('col', 'l-4', 'm-12', 'c-12')}>
                     <div className="row">
                         <div className="col l-12 m-12 c-12">
-                            <InfoEvaluate title="Mức độ sạch sẽ" value={30} rate={3.4} />
+                            <InfoEvaluate title="Nhân viên gần gũi" value={88} rate={7.4} />
                         </div>
                         <div className="col l-12 m-12 c-12">
-                            <InfoEvaluate title="Mức độ sạch sẽ" value={30} rate={3.4} />
+                            <InfoEvaluate title="Sạch sẽ" value={89} rate={8.4} />
                         </div>
                         <div className="col l-12 m-12 c-12">
-                            <InfoEvaluate title="Mức độ sạch sẽ" value={30} rate={3.4} />
+                            <InfoEvaluate title="Liên lạc" value={67} rate={9.2} />
                         </div>
                         <div className="col l-12 m-12 c-12">
-                            <InfoEvaluate title="Mức độ sạch sẽ" value={30} rate={3.4} />
+                            <InfoEvaluate title="chất lượng giá cả" value={94} rate={6.4} />
+                        </div>
+                        <div className="col l-12 m-12 c-12">
+                            <InfoEvaluate title="Địa điểm" value={81} rate={8.2} />
+                        </div>
+                        <div className="col l-12 m-12 c-12">
+                            <InfoEvaluate title="Nhân viên gần gũi" value={61} rate={7.5} />
                         </div>
                     </div>
                 </div>
