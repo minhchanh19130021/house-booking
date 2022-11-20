@@ -13,6 +13,7 @@ import Security from '~/pages/Profile/Security';
 import SignIn from '~/pages/SignIn';
 import SignUp from '~/pages/SignUp';
 import SignUpOwner from '~/pages/SignUpOwner';
+import ListHouse from '~/pages/ListHouse';
 
 const publicRoutes = [
     { path: config.routes.home, component: Home },
@@ -30,7 +31,7 @@ const publicRoutes = [
     { path: config.routes.preference, component: Preference },
     { path: config.routes.security, component: Security },
     { path: config.routes.history_booking, component: HistoryBooking },
-
+    { path: config.routes.listHouse, component: ListHouse },
 ];
 const privateRoutes = [];
 export { publicRoutes, privateRoutes };
