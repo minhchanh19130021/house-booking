@@ -14,5 +14,6 @@ const routes = {
     personal_detail: '/personal-detail',
     preference: '/preference',
     security: '/security',
+    listHouse: '/listHouse',
 };
 export default routes;

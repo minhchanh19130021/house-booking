@@ -1,0 +1,81 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    .contain__filter {
+        width: 30%;
+        padding: 20px 40px;
+        margin-right: 10px;
+        margin-top: 10px;
+        border: 1px solid var(--border-grey);
+        border-radius: 20px;
+        height: fit-content;
+    }
+    .contain__listHouse {
+        justify-content: space-between;
+        width: 70%;
+        .contain__pagination {
+            width: 100%;
+            .pagination {
+                display: flex;
+                justify-content: center;
+                .pagination__button {
+                    color: var(--grey);
+                    border: 1px solid var(--border-white);
+                    background-color: var(--white);
+                    width: 44px;
+                    height: 44px;
+                    line-height: 44px;
+                    border-radius: 6px;
+                    font-size: 13px;
+                    text-align: center;
+                    margin: 4px;
+                    &:hover,
+                    &.active {
+                        background-color: var(--button);
+                        color: var(--white);
+                    }
+                }
+                .pagination__button-prev,
+                .pagination__button-next {
+                    padding: 0 30px;
+                }
+            }
+        }
+    }
+}
+
+.contain__button-expandFilter {
+    display: none;
+    z-index: 100;
+    margin: 0 10px;
+    .button-expandFilter {
+        background-color: var(--secondary);
+        padding: 10px 20px;
+    }
+}
+
+.displayContain {
+    display: block !important;
+}
+
+.hiddenContain {
+    display: none !important;
+}
+
+@media screen and (max-width: 850px) {
+    .contain__button-expandFilter {
+        display: block;
+    }
+    .contain__filter {
+        display: none;
+        position: absolute;
+        z-index: 100;
+        background-color: var(--white);
+        border: 3px solid var(--border-filter-mobile) !important;
+        width: 100% !important;
+    }
+    .contain__listHouse {
+        width: 100% !important;
+        padding: 0 10px;
+    }
+}
