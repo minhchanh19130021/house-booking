@@ -4,6 +4,7 @@ import CardHouse from '~/components/CardHouse';
 import { useState, useEffect, useRef } from 'react';
 import Button from '~/components/Button';
 import Filter from './Filter/Filter';
+import Pagination from './Pagination';
 
 const cx = classNames.bind(styles);
 
@@ -84,28 +85,7 @@ function ListHouse() {
                             );
                         })}
                     </div>
-                    <div className={cx('contain__pagination')}>
-                        <div className={cx('pagination')}>
-                            <Button small to="" className={cx('pagination__button-prev', 'pagination__button')}>
-                                prev
-                            </Button>
-                            <a href="1" className={cx('pagination__button', 'active')}>
-                                1
-                            </a>
-                            <a href="2" className={cx('pagination__button')}>
-                                2
-                            </a>
-                            <a href="2" className={cx('pagination__button')}>
-                                ...
-                            </a>
-                            <a href="7" className={cx('pagination__button')}>
-                                7
-                            </a>
-                            <Button small to="" className={cx('pagination__button-next', 'pagination__button')}>
-                                next
-                            </Button>
-                        </div>
-                    </div>
+                    <Pagination></Pagination>
                 </div>
             </div>
         </div>

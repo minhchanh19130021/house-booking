@@ -1,0 +1,28 @@
+.contain__pagination {
+    width: 100%;
+    .pagination {
+        display: flex;
+        justify-content: center;
+        .pagination__button {
+            color: var(--grey);
+            border: 1px solid var(--border-white);
+            background-color: var(--white);
+            width: 44px;
+            height: 44px;
+            line-height: 44px;
+            border-radius: 6px;
+            font-size: 13px;
+            text-align: center;
+            margin: 4px;
+            &:hover,
+            &.active {
+                background-color: var(--button);
+                color: var(--white);
+            }
+        }
+        .pagination__button-prev,
+        .pagination__button-next {
+            padding: 0 30px;
+        }
+    }
+}
