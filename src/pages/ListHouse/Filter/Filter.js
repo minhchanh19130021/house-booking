@@ -7,8 +7,6 @@ const cx = classNames.bind(styles);
 
 function Filter() {
     const [isExpandFacilities, setExpandFacilities] = useState(false);
-    const [isExpandFilter, setExpandFilter] = useState(false);
-    const [isMobile, setMobile] = useState(window.innerWidth < 850 ? true : false);
     const [numberBedroom, setNumberBedroom] = useState(0);
     const [numberBed, setNumberBed] = useState(0);
     const [numberBathroom, setNumberBathroom] = useState(0);
@@ -44,17 +42,6 @@ function Filter() {
         checkFacilityFeature.current.map((e) => (e.checked = false));
         checkFacilitySafe.current.map((e) => (e.checked = false));
     }
-
-    useEffect(() => {
-        window.addEventListener('resize', () => {
-            if (window.innerWidth < 850) {
-                setMobile(true);
-            } else {
-                setMobile(false);
-                setExpandFilter(false);
-            }
-        });
-    });
 
     return (
         <form>
