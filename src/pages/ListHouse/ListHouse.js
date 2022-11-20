@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './ListHouse.module.scss';
 import CardHouse from '~/components/CardHouse';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Button from '~/components/Button';
 import Filter from './Filter/Filter';
 import Pagination from './Pagination';
