@@ -35,7 +35,8 @@ function HistoryItem({ avatar, nameHost, nameHouse, member, date, payment, total
                     <strong>Hình thức thanh toán:</strong> {payment}
                 </p>
                 <p className={cx('total-booking', 'text')}>
-                    <strong>Tổng số tiền: </strong>{total} VNĐ
+                    <strong>Tổng số tiền: </strong>
+                    {total} VNĐ
                 </p>
                 <div className={cx('function')}>
                     <div className={cx('fuction-btn')}>
@@ -46,9 +47,6 @@ function HistoryItem({ avatar, nameHost, nameHouse, member, date, payment, total
                 <p className={cx('thanks', 'text')}>
                     <strong>Lời cảm ơn: </strong>
                     {thanks}
-                    Rất hân hạnh được phục vụ bạn trong suốt những năm qua. Chúng tôi hy
-                    vọng sẽ tiếp tục mối quan hệ này trong năm tới với sự tôn trọng và kính trọng. Chúc bạn một năm mới
-                    hạnh phúc và viên mãn.
                 </p>
             </div>
         </div>

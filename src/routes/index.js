@@ -10,10 +10,17 @@ import PaymentDetail from '~/pages/Profile/PaymentDetail';
 import PersonalDetail from '~/pages/Profile/PersonalDetail';
 import Preference from '~/pages/Profile/Preference';
 import Security from '~/pages/Profile/Security';
+import HouseList from '~/pages/ProfileHost/HouseList';
+import ProfileHost from '~/pages/ProfileHost/ProfileHost';
+import RentHistory from '~/pages/ProfileHost/RentHistory';
+import Statistical from '~/pages/ProfileHost/Statistical';
 import SignIn from '~/pages/SignIn';
 import SignUp from '~/pages/SignUp';
 import SignUpOwner from '~/pages/SignUpOwner';
 import ListHouse from '~/pages/ListHouse';
+import HostManage from '~/pages/ProfileHost/HostManage';
+import HostNew from '~/pages/ProfileHost/HostNew';
+import HostRenting from '~/pages/ProfileHost/HostRenting';
 
 const publicRoutes = [
     { path: config.routes.home, component: Home },
@@ -31,6 +38,17 @@ const publicRoutes = [
     { path: config.routes.preference, component: Preference },
     { path: config.routes.security, component: Security },
     { path: config.routes.history_booking, component: HistoryBooking },
+
+    // profile host
+    { path: config.routes.profile_host, component: ProfileHost },
+    { path: config.routes.statistical, component: Statistical },
+    { path: config.routes.house_list, component: HouseList },
+    { path: config.routes.rent_history, component: RentHistory },
+    { path: config.routes.host_manage, component: HostManage },
+    { path: config.routes.host_new, component: HostNew },
+    { path: config.routes.host_renting, component: HostRenting },
+
+
     { path: config.routes.listHouse, component: ListHouse },
 ];
 const privateRoutes = [];

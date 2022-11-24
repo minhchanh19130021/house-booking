@@ -58,6 +58,26 @@ function BasicInfo({ children }) {
                     <label htmlFor="time-return">Thời gian trả phòng</label>
                     <input name="time-return" id="time-return" type="time" />
                 </div>
+                <div className={cx('form-group', 'col', 'l-6', 'm-6', 'c-6')}>
+                    <label>Số ngày thuê tối thiểu</label>
+                    <select>
+                        <option value="Khách sạn"> 3 ngày </option>
+                        <option value="Khách sạn"> 5 ngày </option>
+                        <option value="Khách sạn"> 7 ngày </option>
+                        <option value="Khách sạn"> 10 ngày </option>
+                        <option value="Khách sạn"> 30 ngày </option>
+                    </select>
+                </div>
+                <div className={cx('form-group', 'col', 'l-6', 'm-6', 'c-6')}>
+                    <label>Số ngày hủy tối đa</label>
+                    <select>
+                        <option value="Khách sạn"> 3 ngày </option>
+                        <option value="Khách sạn"> 5 ngày </option>
+                        <option value="Khách sạn"> 7 ngày </option>
+                        <option value="Khách sạn"> 10 ngày </option>
+                        <option value="Khách sạn"> 30 ngày </option>
+                    </select>
+                </div>
                 <div className={cx('form-group', 'col', 'l-12', 'm-12', 'c-12')}>{children}</div>
             </div>
         </div>
