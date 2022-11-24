@@ -1,0 +1,27 @@
+.info {
+}
+
+.item {
+    background-color: var(--primary);
+    color: var(--white);
+    border-radius: 4px;
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    .number {
+        font-weight: 700;
+    }
+    svg {
+        width: 50px;
+        height: 50px;
+        color: var(--white);
+    }
+}
+.choose-time {
+    outline: none;
+    border: 1px solid var(--button);
+    padding: 4px 20px;
+    margin-bottom: 8px;
+}

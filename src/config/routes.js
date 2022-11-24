@@ -15,5 +15,14 @@ const routes = {
     preference: '/preference',
     security: '/security',
     listHouse: '/listHouse',
+    // profile host
+    profile_host: '/profile-host',
+    statistical: '/statistical',
+    house_list: '/house-list',
+    rent_history: '/rent-history',
+    host_manage: '/host-manage',
+    host_new: '/host-new',
+    host_renting: '/host-renting',
+    listHouse: '/listHouse',
 };
 export default routes;
