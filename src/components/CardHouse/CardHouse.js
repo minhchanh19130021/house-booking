@@ -2,6 +2,7 @@ import classNames from 'classnames/bind';
 import { NavLink } from 'react-router-dom';
 import Button from '../Button';
 import styles from './CardHouse.module.scss';
+import SVG from 'react-inlinesvg';
 
 const cx = classNames.bind(styles);
 function CardHouse({ img, rate, title, location, desc, facilities, price, status, to }) {
@@ -135,7 +136,19 @@ function CardHouse({ img, rate, title, location, desc, facilities, price, status
                     <span>{desc}</span>
                     <div className={cx('facilities')}>
                         <p>Tiện nghi: </p>
-                        <div className={cx('items')}>{facilities}</div>
+                        {facilities.map((e, i) => {
+                            const mySVG = e.icon
+                                .replace(
+                                    "style={{ display: 'block', height: 24, width: 24, fill: 'currentcolor', }}",
+                                    '',
+                                )
+                                .replace('\\', '');
+                            return (
+                                <div key={i} className={cx('items')} title={e.name}>
+                                    <SVG src={mySVG} />
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
                 <div className={cx('footer')}>
