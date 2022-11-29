@@ -48,7 +48,6 @@ const publicRoutes = [
     { path: config.routes.host_new, component: HostNew },
     { path: config.routes.host_renting, component: HostRenting },
 
-
     { path: config.routes.listHouse, component: ListHouse },
 ];
 const privateRoutes = [];

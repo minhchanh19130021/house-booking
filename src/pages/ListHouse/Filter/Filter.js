@@ -5,7 +5,7 @@ import Button from '~/components/Button';
 
 const cx = classNames.bind(styles);
 
-function Filter() {
+function Filter(props) {
     const [isExpandFacilities, setExpandFacilities] = useState(false);
     const [numberBedroom, setNumberBedroom] = useState(0);
     const [numberBed, setNumberBed] = useState(0);
@@ -14,17 +14,19 @@ function Filter() {
     const [fromPrice, setFromPrice] = useState(0);
     const [toPrice, setToPrice] = useState(0);
     const [selectCity, setSelectCity] = useState('all');
-    const facilitiesBasicCompact = ['Wi-Fi', 'Bếp', 'TV', 'Máy giặt'];
-    const facilitiesBasicExpand = ['Máy sấy tóc', 'Bàn Là', 'Điều hòa nhiệt độ', 'Máy sấy quần áo'];
-    const facilitiesFeature = ['Bể Bơi', 'Cũi', 'Đỗ Xe Miễn Phí', 'Bộ Sạc Điện'];
-    const facilitiesSafe = ['Máy Báo Khói', 'Máy Báo Khí CO'];
+    const [facilitiesLaundry, setFacilitiesLaundry] = useState([]);
+    const [facilitiesSafe, setFacilitiesSafe] = useState([]);
+    const [facilitiesFeature, setFacilitiesFeature] = useState([]);
+    const [facilitiesKitchen, setFacilitiesKitchen] = useState([]);
+    const [facilitiesBath, setFacilitiesBath] = useState([]);
     const checkRateStar = useRef([]);
     // do react auto render mỗi khi có change nên mới tạo nhiều ref riêng
     // cần tối ưu lại chỗ này (useMemo?, useCallBack?)
-    const checkFacilityBasicCompact = useRef([]);
-    const checkFacilityBasicExpand = useRef([]);
+    const checkFacilityLaundry = useRef([]);
     const checkFacilityFeature = useRef([]);
     const checkFacilitySafe = useRef([]);
+    const checkFacilityKitchen = useRef([]);
+    const checkFacilityBath = useRef([]);
 
     function activeResetFilter() {
         setNumberBedroom(0);
@@ -37,19 +39,71 @@ function Filter() {
         checkRateStar.current.map((e) => (e.checked = false));
         // do react auto render mỗi khi có change nên mới tạo nhiều ref riêng
         // cần tối ưu lại chỗ này (useMemo?, useCallBack?)
-        checkFacilityBasicCompact.current.map((e) => (e.checked = false));
-        checkFacilityBasicExpand.current.map((e) => (e.checked = false));
+        checkFacilityLaundry.current.map((e) => (e.checked = false));
         checkFacilityFeature.current.map((e) => (e.checked = false));
         checkFacilitySafe.current.map((e) => (e.checked = false));
+        checkFacilityKitchen.current.map((e) => (e.checked = false));
+        checkFacilityBath.current.map((e) => (e.checked = false));
     }
 
+    useEffect(() => {
+        fetch(`http://localhost:8080/api/v2/facilities`, {
+            method: 'GET',
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                response.data.forEach((element) => {
+                    if (element.type === 'laundry') {
+                        setFacilitiesLaundry((e) => [...e, element]);
+                    } else if (element.type === 'feature') {
+                        setFacilitiesFeature((e) => [...e, element]);
+                    } else if (element.type === 'safe') {
+                        setFacilitiesSafe((e) => [...e, element]);
+                    } else if (element.type === 'kitchen') {
+                        setFacilitiesKitchen((e) => [...e, element]);
+                    } else if (element.type === 'bath') {
+                        setFacilitiesBath((e) => [...e, element]);
+                    }
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const data = new FormData(e.target);
+        // append key - value
+        data.append('numberBedroom', numberBedroom);
+        data.append('numberBathroom', numberBathroom);
+        data.append('numberBed', numberBed);
+        let body = Object.fromEntries(data);
+        body.stars = data.getAll('stars');
+        body.facilities = data.getAll('facilities');
+        fetch(`http://localhost:8080/api/v2/filter`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                console.log(response);
+                props.setListHouse(response.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
             <div className={cx('filter')}>
                 <span className={cx('filter__icon')}>
                     <i className="fa-solid fa-bookmark"></i>
                 </span>
                 <input
+                    name="name"
                     className={cx('filter__input')}
                     type={'text'}
                     value={searchName}
@@ -61,12 +115,17 @@ function Filter() {
                 <span className={cx('filter__icon')}>
                     <i className="fa-solid fa-list"></i>
                 </span>
-                <select className={cx('filter__input')} value={selectCity} onChange={setSelectCity}>
+                <select
+                    className={cx('filter__input')}
+                    name="city"
+                    value={selectCity}
+                    onChange={(e) => setSelectCity(e.target.value)}
+                >
                     <option value="all">Tất cả thành phố</option>
                     <option value="da-lat">Đà Lạt</option>
                     <option value="binh-duong">Bình Dương</option>
                     <option value="hcm">Thành phố Hồ Chí Minh</option>
-                    <option value="phu-quoc">Phú Quốc</option>
+                    <option value="Phu Quoc">Phú Quốc</option>
                 </select>
             </div>
             <div className={cx('filter')}>
@@ -78,7 +137,7 @@ function Filter() {
                                 <input
                                     type="checkbox"
                                     value={5 - index}
-                                    name={index + '-star'}
+                                    name={'stars'}
                                     id={index + '-star'}
                                     ref={(el) => (checkRateStar.current[index] = el)}
                                 />
@@ -103,21 +162,25 @@ function Filter() {
                     <p className={cx('price__name')}>Giá</p>
                     <p>
                         <input
+                            min={0}
                             type={'number'}
                             className={cx('price__input')}
-                            value={toPrice || ''}
+                            value={fromPrice || ''}
                             onChange={(e) => setFromPrice(e.currentTarget.value)}
                             placeholder="0 Đ"
+                            name="minPrice"
                         ></input>
                     </p>
                     <p className={cx('price__dash')}>-</p>
                     <p>
                         <input
+                            min={0}
                             type={'number'}
                             className={cx('price__input')}
-                            value={fromPrice || ''}
+                            value={toPrice || ''}
                             onChange={(e) => setToPrice(e.currentTarget.value)}
                             placeholder="5.000.000 Đ"
+                            name="maxPrice"
                         ></input>
                     </p>
                 </div>
@@ -168,39 +231,29 @@ function Filter() {
                                 {i === 0 ? 'Bất kì' : i}
                             </Button>
                         ))}
+                        {/* <input type="hidden" name="numberBedroom" value={numberBedroom} />
+                        <input type="hidden" name="numberBed" value={numberBed} />
+                        <input type="hidden" name="numberBathroom" value={numberBathroom} />
+                        <input type="hidden" name="" /> */}
                     </div>
                 </div>
             </div>
             <div className={cx('filter')}>
                 <div className={cx('filter__facility')}>
                     <p className={cx('filter__name')}>Tiện nghi</p>
-                    <p className={cx('facility__type')}>Đồ dùng thiết yếu</p>
-                    {/* 
-                            *
-                            *
-                            * 
-                            * 
-                            * 
-                            tiện nghi lấy trong database rồi render ra màn hình 
-                            ở dưới chỉ là để làm frontend 
-                            *
-                            *
-                            * 
-                            * 
-                            * 
-                            */}
+                    <p className={cx('facility__type')}>Giặt ủi</p>
                     <div className={cx('filter__facility-grid')}>
-                        {facilitiesBasicCompact.map((e, i) => {
+                        {facilitiesLaundry.map((e, i) => {
                             return (
                                 <p className={cx('filter__facility-choose')} key={i}>
                                     <input
-                                        ref={(el) => (checkFacilityBasicCompact.current[i] = el)}
+                                        ref={(el) => (checkFacilityLaundry.current[i] = el)}
                                         type={'checkbox'}
-                                        name={e}
-                                        value={e}
-                                        id={e}
+                                        name={'facilities'}
+                                        value={e._id}
+                                        id={e.name}
                                     ></input>
-                                    <label htmlFor={e}>{e}</label>
+                                    <label htmlFor={e.name}>{e.name}</label>
                                 </p>
                             );
                         })}
@@ -211,22 +264,6 @@ function Filter() {
                             isExpandFacilities ? 'filter__facility-fullDisplay' : 'filter__facility-fullHidden',
                         )}
                     >
-                        <div className={cx('filter__facility-grid')}>
-                            {facilitiesBasicExpand.map((e, i) => {
-                                return (
-                                    <p className={cx('filter__facility-choose')} key={i}>
-                                        <input
-                                            ref={(el) => (checkFacilityBasicExpand.current[i] = el)}
-                                            type={'checkbox'}
-                                            name={e}
-                                            value={e}
-                                            id={e}
-                                        ></input>
-                                        <label htmlFor={e}>{e}</label>
-                                    </p>
-                                );
-                            })}
-                        </div>
                         <p className={cx('facility__type')}>Đặc điểm</p>
                         <div className={cx('filter__facility-grid')}>
                             {facilitiesFeature.map((e, i) => {
@@ -235,11 +272,45 @@ function Filter() {
                                         <input
                                             ref={(el) => (checkFacilityFeature.current[i] = el)}
                                             type={'checkbox'}
-                                            name={e}
-                                            value={e}
-                                            id={e}
+                                            name={'facility'}
+                                            value={e._id}
+                                            id={e.name}
                                         ></input>
-                                        <label htmlFor={e}>{e}</label>
+                                        <label htmlFor={e.name}>{e.name}</label>
+                                    </p>
+                                );
+                            })}
+                        </div>
+                        <p className={cx('facility__type')}>Bếp</p>
+                        <div className={cx('filter__facility-grid')}>
+                            {facilitiesKitchen.map((e, i) => {
+                                return (
+                                    <p className={cx('filter__facility-choose')} key={i}>
+                                        <input
+                                            ref={(el) => (checkFacilityKitchen.current[i] = el)}
+                                            type={'checkbox'}
+                                            name={'facilities'}
+                                            value={e._id}
+                                            id={e.name}
+                                        ></input>
+                                        <label htmlFor={e.name}>{e.name}</label>
+                                    </p>
+                                );
+                            })}
+                        </div>
+                        <p className={cx('facility__type')}>Phòng tắm</p>
+                        <div className={cx('filter__facility-grid')}>
+                            {facilitiesBath.map((e, i) => {
+                                return (
+                                    <p className={cx('filter__facility-choose')} key={i}>
+                                        <input
+                                            ref={(el) => (checkFacilityBath.current[i] = el)}
+                                            type={'checkbox'}
+                                            name={'facilities'}
+                                            value={e._id}
+                                            id={e.name}
+                                        ></input>
+                                        <label htmlFor={e.name}>{e.name}</label>
                                     </p>
                                 );
                             })}
@@ -252,11 +323,11 @@ function Filter() {
                                         <input
                                             ref={(el) => (checkFacilitySafe.current[i] = el)}
                                             type={'checkbox'}
-                                            name={e}
-                                            value={e}
-                                            id={e}
+                                            name={'facilities'}
+                                            value={e._id}
+                                            id={e.name}
                                         ></input>
-                                        <label htmlFor={e}>{e}</label>
+                                        <label htmlFor={e.name}>{e.name}</label>
                                     </p>
                                 );
                             })}
