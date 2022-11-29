@@ -23,6 +23,6 @@ const routes = {
     host_manage: '/host-manage',
     host_new: '/host-new',
     host_renting: '/host-renting',
-    listHouse: '/listHouse/city/:slug/:pagination',
+    listHouse: '/listHouse/city/:slug/:currentPagination',
 };
 export default routes;

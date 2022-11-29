@@ -81,19 +81,8 @@ function Filter(props) {
         let body = Object.fromEntries(data);
         body.stars = data.getAll('stars');
         body.facilities = data.getAll('facilities');
-        fetch(`http://localhost:8080/api/v2/filter`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
-        })
-            .then((response) => response.json())
-            .then((response) => {
-                console.log(response);
-                props.setListHouse(response.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        const queryString = new URLSearchParams(body).toString();
+        window.location.href = `http://localhost:3000/ListHouse/city/Phu%20Quoc/1?${queryString}`;
     };
 
     return (
