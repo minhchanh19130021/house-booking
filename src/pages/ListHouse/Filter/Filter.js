@@ -6,13 +6,15 @@ import Button from '~/components/Button';
 const cx = classNames.bind(styles);
 
 function Filter(props) {
+    // to add value in filter when load link url has paramater
+    const params = Object.fromEntries(new URLSearchParams(window.location.search));
     const [isExpandFacilities, setExpandFacilities] = useState(false);
-    const [numberBedroom, setNumberBedroom] = useState(0);
-    const [numberBed, setNumberBed] = useState(0);
-    const [numberBathroom, setNumberBathroom] = useState(0);
-    const [searchName, setSearchName] = useState('');
-    const [fromPrice, setFromPrice] = useState(0);
-    const [toPrice, setToPrice] = useState(0);
+    const [numberBedroom, setNumberBedroom] = useState(Number(params.numberBedroom));
+    const [numberBed, setNumberBed] = useState(Number(params.numberBed));
+    const [numberBathroom, setNumberBathroom] = useState(Number(params.numberBathroom));
+    const [searchName, setSearchName] = useState(params.name ? params.name : '');
+    const [fromPrice, setFromPrice] = useState(params.minPrice ? params.minPrice : 0);
+    const [toPrice, setToPrice] = useState(params.maxPrice ? params.maxPrice : 0);
     const [selectCity, setSelectCity] = useState('all');
     const [facilitiesLaundry, setFacilitiesLaundry] = useState([]);
     const [facilitiesSafe, setFacilitiesSafe] = useState([]);
@@ -82,7 +84,27 @@ function Filter(props) {
         body.stars = data.getAll('stars');
         body.facilities = data.getAll('facilities');
         const queryString = new URLSearchParams(body).toString();
-        window.location.href = `http://localhost:3000/ListHouse/city/Phu%20Quoc/1?${queryString}`;
+        // window.history.replaceState(stateObj, title, url)
+        /*
+        stateObj: đối tượng javascript cần lưu lại 
+        title: tiêu đề 
+        url: đường dẫn mới của trang web
+        */
+        window.history.replaceState(null, null, `/ListHouse/city/Phu%20Quoc/1?${queryString}`);
+        props.setQueryString(queryString);
+        fetch(`http://localhost:8080/api/v2/filter?pagination=${props.currentPagination}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                props.setListHouse(response.data);
+                props.setTotalPagination(response.pagination);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
 
     return (
@@ -124,6 +146,7 @@ function Filter(props) {
                         return (
                             <li className={cx('star')} key={index}>
                                 <input
+                                    defaultChecked={params?.stars?.includes(5 - index) ? true : false}
                                     type="checkbox"
                                     value={5 - index}
                                     name={'stars'}
@@ -236,6 +259,7 @@ function Filter(props) {
                             return (
                                 <p className={cx('filter__facility-choose')} key={i}>
                                     <input
+                                        defaultChecked={params?.facilities?.includes(e._id) ? true : false}
                                         ref={(el) => (checkFacilityLaundry.current[i] = el)}
                                         type={'checkbox'}
                                         name={'facilities'}
@@ -259,6 +283,7 @@ function Filter(props) {
                                 return (
                                     <p className={cx('filter__facility-choose')} key={i}>
                                         <input
+                                            defaultChecked={params?.facilities?.includes(e._id) ? true : false}
                                             ref={(el) => (checkFacilityFeature.current[i] = el)}
                                             type={'checkbox'}
                                             name={'facility'}
@@ -276,6 +301,7 @@ function Filter(props) {
                                 return (
                                     <p className={cx('filter__facility-choose')} key={i}>
                                         <input
+                                            defaultChecked={params?.facilities?.includes(e._id) ? true : false}
                                             ref={(el) => (checkFacilityKitchen.current[i] = el)}
                                             type={'checkbox'}
                                             name={'facilities'}
@@ -293,6 +319,7 @@ function Filter(props) {
                                 return (
                                     <p className={cx('filter__facility-choose')} key={i}>
                                         <input
+                                            defaultChecked={params?.facilities?.includes(e._id) ? true : false}
                                             ref={(el) => (checkFacilityBath.current[i] = el)}
                                             type={'checkbox'}
                                             name={'facilities'}
@@ -310,6 +337,7 @@ function Filter(props) {
                                 return (
                                     <p className={cx('filter__facility-choose')} key={i}>
                                         <input
+                                            defaultChecked={params?.facilities?.includes(e._id) ? true : false}
                                             ref={(el) => (checkFacilitySafe.current[i] = el)}
                                             type={'checkbox'}
                                             name={'facilities'}

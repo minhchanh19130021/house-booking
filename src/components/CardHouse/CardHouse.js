@@ -3,14 +3,29 @@ import { NavLink } from 'react-router-dom';
 import Button from '../Button';
 import styles from './CardHouse.module.scss';
 import SVG from 'react-inlinesvg';
+import { ref, getDownloadURL } from 'firebase/storage';
+import { storage } from '~/config/firebase';
+import { useState } from 'react';
 
 const cx = classNames.bind(styles);
-function CardHouse({ img, rate, title, location, desc, facilities, price, status, to }) {
+
+function CardHouse({ idHouse, numberReview, img, rate, title, location, desc, facilities, price, status, to }) {
+    const [linkImg, setLinkImg] = useState(
+        'https://preview.redd.it/zcgs03lgoy351.png?width=288&format=png&auto=webp&s=d9bf4b46713d7fdbf11b82a8e364ceee79724a9c',
+    );
+    let getImageFromFirebase = (_id) => {
+        getDownloadURL(ref(storage, `house/${_id}/avatar.webp`))
+            .then((url) => {
+                setLinkImg(url);
+            })
+            .catch((error) => {});
+    };
+    getImageFromFirebase(idHouse);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('thumbnail')}>
                 <NavLink to={to}>
-                    <img src={img} alt="thumbnail" />
+                    <img src={linkImg} alt="thumbnail" />
                 </NavLink>
                 <div className={cx('thumbnail-content')}>
                     <div className={cx('border-status')}>
@@ -57,56 +72,25 @@ function CardHouse({ img, rate, title, location, desc, facilities, price, status
                         <button>{rate}</button>
                         <div className={cx('star-rate')}>
                             <div className={cx('stars')}>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    className="w-6 h-6"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    className="w-6 h-6"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    className="w-6 h-6"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                    className="w-6 h-6"
-                                >
-                                    <path
-                                        fillRule="evenodd"
-                                        d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                                        clipRule="evenodd"
-                                    />
-                                </svg>
+                                {Array.from({ length: rate }, (e, i) => {
+                                    return (
+                                        <svg
+                                            key={i}
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            fill="currentColor"
+                                            className="w-6 h-6"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                                                clipRule="evenodd"
+                                            />
+                                        </svg>
+                                    );
+                                })}
                             </div>
-                            <span>12 nhận xét</span>
+                            <span className={cx('number_review')}>{numberReview} nhận xét</span>
                         </div>
                     </div>
                 </div>
