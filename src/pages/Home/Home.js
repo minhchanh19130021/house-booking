@@ -144,7 +144,7 @@ function Home() {
                                     active: visible === 1,
                                 })}
                             >
-                                <div className={cx('col', 'l-4', 'm-6', 'c-12')}>
+                                {/* <div className={cx('col', 'l-4', 'm-6', 'c-12')}>
                                     <CardHouse
                                         to="/detail"
                                         img="https://townhub.kwst.net/images/all/28.jpg"
@@ -200,7 +200,7 @@ function Home() {
                                         ]}
                                         price={234.245}
                                     />
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     )}
@@ -214,7 +214,7 @@ function Home() {
                                     active: visible === 2,
                                 })}
                             >
-                                <div className={cx('col', 'l-4', 'm-6', 'c-12')}>
+                                {/* <div className={cx('col', 'l-4', 'm-6', 'c-12')}>
                                     <CardHouse
                                         to="/detail"
                                         img="https://townhub.kwst.net/images/all/28.jpg"
@@ -327,7 +327,7 @@ function Home() {
                                         ]}
                                         price={234.245}
                                     />
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     )}
@@ -341,7 +341,7 @@ function Home() {
                                     active: visible === 3,
                                 })}
                             >
-                                <div className={cx('col', 'l-4', 'm-6', 'c-12')}>
+                                {/* <div className={cx('col', 'l-4', 'm-6', 'c-12')}>
                                     <CardHouse
                                         to="/detail"
                                         img="https://townhub.kwst.net/images/all/28.jpg"
@@ -511,7 +511,7 @@ function Home() {
                                         ]}
                                         price={234.245}
                                     />
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     )}

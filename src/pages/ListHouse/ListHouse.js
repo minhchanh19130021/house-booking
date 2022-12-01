@@ -6,7 +6,6 @@ import Button from '~/components/Button';
 import Filter from './Filter/Filter';
 import Pagination from './Pagination';
 import { useParams } from 'react-router-dom';
-
 const cx = classNames.bind(styles);
 
 function ListHouse() {
@@ -14,22 +13,23 @@ function ListHouse() {
     const [listHouse, setListHouse] = useState([]);
     const [totalPagination, setTotalPagination] = useState(0);
     const [isMobile, setMobile] = useState(window.innerWidth < 850 ? true : false);
-    const { slug, currentPagination } = useParams();
-    const queryString = window.location.search;
+    const [queryString, setQueryString] = useState(window.location.search);
+    const { slug } = useParams();
     const params = Object.fromEntries(new URLSearchParams(queryString));
     const body = JSON.stringify(params);
-
+    //detect url change when pagination or submit form to upload data in use effect
+    let url = window.location.href;
+    let currentPagination = window.location.pathname.split('/').pop();
     // get list house from params on url
     useEffect(() => {
         if (body === '{}') {
-            console.log(123);
             fetch(`http://localhost:8080/api/v2/houses/city/${slug}/${currentPagination}`, {
                 method: 'GET',
             })
                 .then((response) => response.json())
                 .then((response) => {
-                    console.log(response);
                     if (response.success === true) {
+                        console.log(response);
                         setListHouse(response.data);
                         setTotalPagination(response.pagination);
                     }
@@ -52,7 +52,7 @@ function ListHouse() {
                     console.log(err);
                 });
         }
-    }, []);
+    }, [url]);
 
     // handle responsive
     useEffect(() => {
@@ -89,6 +89,7 @@ function ListHouse() {
                         currentPagination={currentPagination}
                         setListHouse={setListHouse}
                         setTotalPagination={setTotalPagination}
+                        setQueryString={setQueryString}
                     ></Filter>
                 </div>
                 <div
@@ -102,9 +103,10 @@ function ListHouse() {
                             return (
                                 <div key={i} className={cx('col', 'l-4', 'm-6', 'c-12')}>
                                     <CardHouse
+                                        idHouse={e._id}
                                         to="/detail"
-                                        img="https://townhub.kwst.net/images/all/28.jpg"
-                                        status="close"
+                                        status={e.status ? 'open' : 'close'}
+                                        numberReview={e.number_review}
                                         title={e.name}
                                         location={`${e.address.city} ${e.address.district} ${e.address.number}`}
                                         desc={e.introduce}
