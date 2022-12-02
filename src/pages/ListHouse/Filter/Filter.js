@@ -6,12 +6,16 @@ import Button from '~/components/Button';
 const cx = classNames.bind(styles);
 
 function Filter(props) {
-    // to add value in filter when load link url has paramater
+    // to add value in filter when load link url has parameter
     const params = Object.fromEntries(new URLSearchParams(window.location.search));
     const [isExpandFacilities, setExpandFacilities] = useState(false);
-    const [numberBedroom, setNumberBedroom] = useState(Number(params.numberBedroom));
-    const [numberBed, setNumberBed] = useState(Number(params.numberBed));
-    const [numberBathroom, setNumberBathroom] = useState(Number(params.numberBathroom));
+    const [numberBedroom, setNumberBedroom] = useState(
+        Number(params.numberBedroom) ? Number(params.numberBedroom) : '',
+    );
+    const [numberBed, setNumberBed] = useState(Number(params.numberBed) ? Number(params.numberBed) : '');
+    const [numberBathroom, setNumberBathroom] = useState(
+        Number(params.numberBathroom) ? Number(params.numberBathroom) : '',
+    );
     const [searchName, setSearchName] = useState(params.name ? params.name : '');
     const [fromPrice, setFromPrice] = useState(params.minPrice ? params.minPrice : 0);
     const [toPrice, setToPrice] = useState(params.maxPrice ? params.maxPrice : 0);
