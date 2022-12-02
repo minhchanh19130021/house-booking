@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-function CardBest({ bg, title, desc }) {
+function CardBest({ bg, title, desc, link }) {
     return (
         // 'col', 'l-4', 'm-6', 'c-12',
         <div className={cx('banner')}>
@@ -13,7 +13,7 @@ function CardBest({ bg, title, desc }) {
                 <div className={cx('overlay')}></div>
             </div>
             <div className={cx('description')}>
-                <NavLink to="#" className={cx('link')}>
+                <NavLink to={link} className={cx('link')}>
                     {title}
                 </NavLink>
                 <p>{desc}</p>

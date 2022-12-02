@@ -9,12 +9,12 @@ import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 
-function CardHouse({ idHouse, numberReview, img, rate, title, location, desc, facilities, price, status, to }) {
+function CardHouse({ avatar, idHouse, numberReview, img, rate, title, location, desc, facilities, price, status, to }) {
     const [linkImg, setLinkImg] = useState(
         'https://preview.redd.it/zcgs03lgoy351.png?width=288&format=png&auto=webp&s=d9bf4b46713d7fdbf11b82a8e364ceee79724a9c',
     );
     let getImageFromFirebase = (_id) => {
-        getDownloadURL(ref(storage, `house/${_id}/avatar.webp`))
+        getDownloadURL(ref(storage, `house/${_id}/${avatar}`))
             .then((url) => {
                 setLinkImg(url);
             })
@@ -121,12 +121,12 @@ function CardHouse({ idHouse, numberReview, img, rate, title, location, desc, fa
                     <div className={cx('facilities')}>
                         <p>Tiện nghi: </p>
                         {facilities.map((e, i) => {
-                            const mySVG = e.icon
-                                .replace(
+                            const mySVG = e?.icon
+                                ?.replace(
                                     "style={{ display: 'block', height: 24, width: 24, fill: 'currentcolor', }}",
                                     '',
                                 )
-                                .replace('\\', '');
+                                ?.replace('\\', '');
                             return (
                                 <div key={i} className={cx('items')} title={e.name}>
                                     <SVG src={mySVG} />

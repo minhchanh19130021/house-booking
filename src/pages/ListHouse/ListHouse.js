@@ -45,6 +45,7 @@ function ListHouse() {
             })
                 .then((response) => response.json())
                 .then((response) => {
+                    console.log(response);
                     setListHouse(response.data);
                     setTotalPagination(response.pagination);
                 })
@@ -103,6 +104,7 @@ function ListHouse() {
                             return (
                                 <div key={i} className={cx('col', 'l-4', 'm-6', 'c-12')}>
                                     <CardHouse
+                                        avatar={e.avatar}
                                         idHouse={e._id}
                                         to="/detail"
                                         status={e.status ? 'open' : 'close'}
