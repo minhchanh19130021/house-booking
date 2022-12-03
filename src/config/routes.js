@@ -23,6 +23,8 @@ const routes = {
     host_manage: '/host-manage',
     host_new: '/host-new',
     host_renting: '/host-renting',
+    confirm_success: 'confirm-success',
+    confirm_fail: 'confirm-fail',
     listHouse: '/listHouse/city/:slug/:currentPagination',
 };
 export default routes;

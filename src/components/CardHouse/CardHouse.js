@@ -132,7 +132,8 @@ function CardHouse({ avatar, idHouse, numberReview, img, rate, title, location, 
                                     <SVG src={mySVG} />
                                 </div>
                             );
-                        })}
+                        })}{' '}
+                        */}
                     </div>
                 </div>
                 <div className={cx('footer')}>

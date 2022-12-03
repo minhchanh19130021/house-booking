@@ -1,16 +1,49 @@
 import classNames from 'classnames/bind';
 import styles from '../Header/Header.module.scss';
 import Button from '~/components/Button';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import HeaderSearch from './HeaderSearch';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutFailure, logoutStart, logoutSuccess } from '~/redux/authenticationSlide';
 
 const cx = classNames.bind(styles);
 function Header() {
     const [searchModal, setSearchModal] = useState(false);
+    const user = useSelector((state) => state.authentication.login.currentUser);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleVisibleModal = () => {
         setSearchModal((searchModal) => !searchModal);
+    };
+
+    const handleLogout = () => {
+        dispatch(logoutStart());
+        (async () => {
+            await fetch(`http://localhost:8080/api/v1/logout`, {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    token: `Bearer ${user?.accessToken}`,
+                },
+            })
+                .then((response) => response.json())
+                .then((result) => {
+                    console.log(result);
+                    if (result.status) {
+                        dispatch(logoutSuccess(result));
+                        navigate('/signin');
+                    } else {
+                        dispatch(logoutFailure());
+                    }
+                    return result;
+                })
+                .catch((err) => {
+                    dispatch(logoutFailure());
+                    console.log(err);
+                });
+        })();
     };
     return (
         <div className={cx('wrapper', 'grid')}>
@@ -62,29 +95,49 @@ function Header() {
                 >
                     Đăng Ký
                 </Button>
+                {user?.status && user !== null ? (
+                    <div className={cx('user')}>
+                        <img
+                            src="https://a0.muscache.com/im/pictures/user/feac4078-fdbd-4a28-bf73-a11bc4019781.jpg?im_w=240"
+                            alt="user-avatar"
+                            className={cx('user-avatar')}
+                        />
 
-                <Button
-                    to="/signin"
-                    className={cx('sign-in')}
-                    leftIcon={
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-6 h-6"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-                            />
-                        </svg>
-                    }
-                >
-                    Đăng Nhập
-                </Button>
+                        <p className={cx('username')}>Xin chào, {user?.username}</p>
+                        <div className={cx('menu-user')}>
+                            <li className={cx('menu-item')}>
+                                <NavLink to="/personal-detail">Trang cá nhân</NavLink>
+                            </li>
+                            <li className={cx('menu-item')} onClick={handleLogout}>
+                                Đăng xuất
+                            </li>
+                        </div>
+                    </div>
+                ) : (
+                    <Button
+                        to="/signin"
+                        className={cx('sign-in')}
+                        leftIcon={
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="w-6 h-6"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                                />
+                            </svg>
+                        }
+                    >
+                        Đăng Nhập
+                    </Button>
+                )}
+
                 <Button
                     to="/signup-owner"
                     large

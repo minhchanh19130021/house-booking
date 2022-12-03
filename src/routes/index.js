@@ -21,6 +21,7 @@ import ListHouse from '~/pages/ListHouse';
 import HostManage from '~/pages/ProfileHost/HostManage';
 import HostNew from '~/pages/ProfileHost/HostNew';
 import HostRenting from '~/pages/ProfileHost/HostRenting';
+import ConfirmSuccess, { ConfirmFail } from '~/pages/ConfirmSuccess';
 
 const publicRoutes = [
     { path: config.routes.home, component: Home },
@@ -38,6 +39,8 @@ const publicRoutes = [
     { path: config.routes.preference, component: Preference },
     { path: config.routes.security, component: Security },
     { path: config.routes.history_booking, component: HistoryBooking },
+    { path: config.routes.confirm_success, component: ConfirmSuccess },
+    { path: config.routes.confirm_fail, component: ConfirmFail },
 
     // profile host
     { path: config.routes.profile_host, component: ProfileHost },

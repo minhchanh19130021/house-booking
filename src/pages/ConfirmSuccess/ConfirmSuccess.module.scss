@@ -1,0 +1,16 @@
+.wrapper {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+    width: 700px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 12px;
+}
+.status-img {
+    width: 128px;
+    text-align: center;
+}
