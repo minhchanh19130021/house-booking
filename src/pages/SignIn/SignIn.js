@@ -1,10 +1,59 @@
 import classNames from 'classnames/bind';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import Button from '~/components/Button';
 import styles from './SignIn.module.scss';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
+import { loginFailure, loginStart, loginSuccess } from '~/redux/authenticationSlide';
+import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 function SignIn() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [dataLogin, setDataLogin] = useState();
+    const formik = useFormik({
+        initialValues: {
+            username: '',
+            password: '',
+        },
+        validationSchema: Yup.object({
+            username: Yup.string().required('Vui lòng nhập đầy đủ'),
+            password: Yup.string().required('Vui lòng nhập đầy đủ'),
+        }),
+        onSubmit: (values) => {
+            (async () => {
+                dispatch(loginStart());
+                await fetch(`http://localhost:8080/api/v1/login`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        username: values?.username,
+                        password: values?.password,
+                    }),
+                    headers: {
+                        'Content-type': 'application/json; charset=UTF-8',
+                    },
+                })
+                    .then((response) => response.json())
+                    .then((result) => {
+                        console.log(result);
+                        setDataLogin(result);
+                        if (result.status === true) {
+                            dispatch(loginSuccess(result));
+                            navigate('/personal-detail');
+                        } else {
+                            dispatch(loginFailure());
+                        }
+                        return result;
+                    })
+                    .catch((err) => {
+                        dispatch(loginFailure());
+                    });
+            })();
+        },
+    });
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('', 'form-login')}>
@@ -12,16 +61,38 @@ function SignIn() {
                     <img src="https://townhub.kwst.net/images/logo3.png" alt="logo" />
                     <h3>Chào mừng bạn đến với hệ thống đăng nhập</h3>
                 </div>
-                <div className={cx('body')}>
+
+                <form className={cx('body')} onSubmit={formik.handleSubmit}>
+                    <div className="row">
+                        <div className="col l-12 m-12 c-12">
+                            {dataLogin?.status === false && <p className={cx('warning')}>{dataLogin?.msg}</p>}
+                        </div>
+                    </div>
                     <div className={cx('form-group')}>
                         <label htmlFor="username">Tên tài khoản hoặc địa chỉ email *</label>
-                        <input name="username" id="username" type="text" />
+                        <input
+                            name="username"
+                            id="username"
+                            type="text"
+                            value={formik.values.username}
+                            onChange={formik.handleChange}
+                        />
+                        {formik.errors.username && <p className={cx('alert-message')}>{formik.errors.username}</p>}
                     </div>
                     <div className={cx('form-group')}>
                         <label htmlFor="password">Mật khẩu *</label>
-                        <input name="password" id="password" type="password" />
+                        <input
+                            name="password"
+                            id="password"
+                            type="password"
+                            value={formik.values.password}
+                            onChange={formik.handleChange}
+                        />
+                        {formik.errors.password && <p className={cx('alert-message')}>{formik.errors.password}</p>}
                     </div>
-                    <Button large>Đăng Nhập</Button>
+                    <Button large type="submit">
+                        Đăng Nhập
+                    </Button>
                     <div className={cx('function')}>
                         <NavLink to="/signup">Tạo tài khoản</NavLink>
                         <NavLink to="/forgot_password" className={cx('forgot-password')}>
@@ -37,7 +108,7 @@ function SignIn() {
                         <Button className={cx('btn-social', 'facebook')}>Facebook</Button>
                         <Button className={cx('btn-social', 'google')}>Google</Button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     );
