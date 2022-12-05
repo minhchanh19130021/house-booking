@@ -207,3 +207,13 @@
     margin: 0 auto;
     padding: 20px 0;
 }
+.headerSearchText {
+    color: lightgray;
+    cursor: pointer;
+}
+
+.headerSearchItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }

@@ -3,6 +3,8 @@ import Contact from '~/pages/Contact';
 import Detail from '~/pages/Detail';
 import ForgotPassword from '~/pages/ForgotPassword';
 import Home from '~/pages/Home';
+import Payment from '~/pages/Payment';
+import PaymentSuccess from '~/pages/PaymentSuccess';
 import Profile from '~/pages/Profile';
 import EmailNofication from '~/pages/Profile/EmailNofication';
 import HistoryBooking from '~/pages/Profile/HistoryBooking';
@@ -22,6 +24,8 @@ const publicRoutes = [
     { path: config.routes.signin, component: SignIn },
     { path: config.routes.forgot_password, component: ForgotPassword },
     { path: config.routes.signup_owner, component: SignUpOwner },
+    { path: config.routes.payment, component: Payment },
+    { path: config.routes.payment_success, component: PaymentSuccess },
     // profile page
     { path: config.routes.profile, component: Profile },
     { path: config.routes.email_nofication, component: EmailNofication },
@@ -30,7 +34,6 @@ const publicRoutes = [
     { path: config.routes.preference, component: Preference },
     { path: config.routes.security, component: Security },
     { path: config.routes.history_booking, component: HistoryBooking },
-
 ];
 const privateRoutes = [];
 export { publicRoutes, privateRoutes };

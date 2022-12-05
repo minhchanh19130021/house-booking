@@ -1,8 +1,17 @@
+import { faBed, faCalendarDays, faCar, faPerson, faPlane, faTaxi } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import { useContext, useState } from "react";
 import Button from '~/components/Button';
 import styles from './BookingForm.module.scss';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { SearchContext } from '../../../context/SearchContext';
+import { DateRange } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css';
+import { format } from 'date-fns';
+import { data } from 'autoprefixer';
 
 const cx = classNames.bind(styles);
 function BookingForm() {
@@ -11,6 +20,43 @@ function BookingForm() {
     const hanldeVisibleGuestInfo = () => {
         setVisibleGuestInfo((visibleGuestInfo) => !visibleGuestInfo);
     };
+
+    const [home, setHome] = useState('');
+    const [openDate, setOpenDate] = useState(false);
+    const [dates, setDates] = useState([
+        {
+            startDate: new Date(),
+            endDate: new Date(),
+            key: 'selection',
+        },
+    ]);
+    const [openOptions, setOpenOptions] = useState(false);
+    const [options, setOptions] = useState({
+        adult: 1,
+        children: 0,
+        baby: 0,
+        pet: 0,
+    });
+
+    const handleOption = (name, operation) => {
+        setOptions((prev) => {
+            return {
+                ...prev,
+                [name]: operation === 'i' ? options[name] + 1 : options[name] - 1,
+            };
+        });
+    };
+
+    const { dispatch } = useContext(SearchContext);
+    const navigate = useNavigate();
+
+    const idh = "636ce065825a1cd1940641a2";
+
+    const handleSearch = () => {
+        dispatch({ type: "NEW_SEARCH", payload: { home, dates, options } });
+        navigate('/payment/'+idh+'&numberOfAdults='+options.adult+'&numberOfChildren='+options.children+'&numberOfInfants='+options.baby+'&checkin='+dates[0].startDate+'&checkout='+dates[0].endDate, { state: { home, dates, options } });
+    };
+
     return (
         <>
             <form className={cx('booking-form')}>
@@ -39,181 +85,26 @@ function BookingForm() {
                     </div>
                 </div>
                 <div className={cx('booking-form__body')}>
-                    <div className={cx('time', 'row', 'no-gutters')}>
-                        <div className={cx('receive', 'col', 'l-6')}>
-                            <label htmlFor="receive">Nhận phòng</label>
-                            <input type="date" name="receive" id="receive" />
-                        </div>
-                        <div className={cx('return', 'col', 'l-6')}>
-                            <label htmlFor="return">Trả phòng</label>
-                            <input type="date" name="return" id="return" />
-                        </div>
-                    </div>
                     <div className={cx('guest')}>
                         <div className={cx('guest-title')}>
-                            <label onClick={hanldeVisibleGuestInfo}>Khách</label>
-                            <label onClick={hanldeVisibleGuestInfo}>2 khách</label>
-                        {visibleGuestInfo && (
-                            <motion.div animate={{ }} className={cx('guest-info')}>
-                                <div className={cx('guest-info__item')}>
-                                    <div className={cx('guest-info__item-title')}>
-                                        <p>Người lớn</p>
-                                        <span>Từ 13 tuổi trở lên</span>
-                                    </div>
-                                    <div className={cx('guest-info__item-select')}>
-                                        <div className={cx('select-increment')}>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                strokeWidth={1.5}
-                                                stroke="currentColor"
-                                                className="w-6 h-6"
-                                            >
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15" />
-                                            </svg>
-                                        </div>
-                                        <p className={cx('current-number')}>1</p>
-                                        <div className={cx('select-decrement')}>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                strokeWidth={1.5}
-                                                stroke="currentColor"
-                                                className="w-6 h-6"
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    d="M12 4.5v15m7.5-7.5h-15"
-                                                />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={cx('guest-info__item')}>
-                                    <div className={cx('guest-info__item-title')}>
-                                        <p>Trẻ em</p>
-                                        <span>Độ tuổi 2 - 12</span>
-                                    </div>
-                                    <div className={cx('guest-info__item-select')}>
-                                        <div className={cx('select-increment')}>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                strokeWidth={1.5}
-                                                stroke="currentColor"
-                                                className="w-6 h-6"
-                                            >
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15" />
-                                            </svg>
-                                        </div>
-                                        <p className={cx('current-number')}>1</p>
-                                        <div className={cx('select-decrement')}>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                strokeWidth={1.5}
-                                                stroke="currentColor"
-                                                className="w-6 h-6"
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    d="M12 4.5v15m7.5-7.5h-15"
-                                                />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={cx('guest-info__item')}>
-                                    <div className={cx('guest-info__item-title')}>
-                                        <p>Em bé</p>
-                                        <span>Dưới 2 tuổi</span>
-                                    </div>
-                                    <div className={cx('guest-info__item-select')}>
-                                        <div className={cx('select-increment')}>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                strokeWidth={1.5}
-                                                stroke="currentColor"
-                                                className="w-6 h-6"
-                                            >
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15" />
-                                            </svg>
-                                        </div>
-                                        <p className={cx('current-number')}>1</p>
-                                        <div className={cx('select-decrement')}>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                strokeWidth={1.5}
-                                                stroke="currentColor"
-                                                className="w-6 h-6"
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    d="M12 4.5v15m7.5-7.5h-15"
-                                                />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={cx('guest-info__item')}>
-                                    <div className={cx('guest-info__item-title')}>
-                                        <p>Thú cưng</p>
-                                        <span></span>
-                                    </div>
-                                    <div className={cx('guest-info__item-select')}>
-                                        <div className={cx('select-increment')}>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                strokeWidth={1.5}
-                                                stroke="currentColor"
-                                                className="w-6 h-6"
-                                            >
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15" />
-                                            </svg>
-                                        </div>
-                                        <p className={cx('current-number')}>1</p>
-                                        <div className={cx('select-decrement')}>
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                strokeWidth={1.5}
-                                                stroke="currentColor"
-                                                className="w-6 h-6"
-                                            >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    d="M12 4.5v15m7.5-7.5h-15"
-                                                />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <Button
-                                    onClick={hanldeVisibleGuestInfo}
-                                    className={cx('close-guest-info')}
-                                    outline
-                                    type="button"
-                                >
-                                    Đóng
-                                </Button>
-                            </motion.div>
-                        )}
+                            <label><FontAwesomeIcon icon={faCalendarDays} className="headerIcon" /> Ngày</label>
+                            <div className="headerSearchItem">
+                                
+                                <label onClick={() => setOpenDate(!openDate)} className="headerSearchText">{`${format(
+                                    dates[0].startDate,
+                                    'dd/MM/yyyy',
+                                )} to ${format(dates[0].endDate, 'dd/MM/yyyy')}`}</label>
+                                {openDate && (
+                                    <DateRange
+                                        editableDateInputs={true}
+                                        onChange={(item) => setDates([item.selection])}
+                                        moveRangeOnFirstSelection={false}
+                                        ranges={dates}
+                                        className="date"
+                                        minDate={new Date()}
+                                    />
+                                )}
+                            </div>
                         </div>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -227,7 +118,226 @@ function BookingForm() {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                         </svg>
                     </div>
-                    <Button type="submit" className={cx('btn-booking')}>
+                    <div className={cx('guest')}>
+                        <div className={cx('guest-title')}>
+                            <label onClick={hanldeVisibleGuestInfo}><FontAwesomeIcon icon={faPerson} className="headerIcon" /> Khách</label>
+                            <label
+                                onClick={hanldeVisibleGuestInfo}
+                            >{`${options.adult} adult · ${options.children} children · ${options.baby} baby · ${options.pet} pet`}</label>
+                            {visibleGuestInfo && (
+                                <motion.div animate={{}} className={cx('guest-info')}>
+                                    <div className={cx('guest-info__item')}>
+                                        <div className={cx('guest-info__item-title')}>
+                                            <p>Người lớn</p>
+                                            <span>Từ 13 tuổi trở lên</span>
+                                        </div>
+                                        <div className={cx('guest-info__item-select')}>
+                                            <div
+                                                className={cx('select-increment')}
+                                                style={{ display: options.adult <= 1 ? 'none' : 'block' }}
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    strokeWidth={1.5}
+                                                    stroke="currentColor"
+                                                    className="w-6 h-6"
+                                                    onClick={() => handleOption('adult', 'd')}
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        d="M19.5 12h-15"
+                                                    />
+                                                </svg>
+                                            </div>
+                                            <p className={cx('current-number')}>{`${options.adult}`}</p>
+                                            <div className={cx('select-decrement')}>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    strokeWidth={1.5}
+                                                    stroke="currentColor"
+                                                    className="w-6 h-6"
+                                                    onClick={() => handleOption('adult', 'i')}
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        d="M12 4.5v15m7.5-7.5h-15"
+                                                    />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={cx('guest-info__item')}>
+                                        <div className={cx('guest-info__item-title')}>
+                                            <p>Trẻ em</p>
+                                            <span>Độ tuổi 2 - 12</span>
+                                        </div>
+                                        <div className={cx('guest-info__item-select')}>
+                                            <div
+                                                className={cx('select-increment')}
+                                                style={{ display: options.children <= 0 ? 'none' : 'block' }}
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    strokeWidth={1.5}
+                                                    stroke="currentColor"
+                                                    className="w-6 h-6"
+                                                    disabled={options.children <= 0}
+                                                    onClick={() => handleOption('children', 'd')}
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        d="M19.5 12h-15"
+                                                    />
+                                                </svg>
+                                            </div>
+                                            <p className={cx('current-number')}>{`${options.children}`}</p>
+                                            <div className={cx('select-decrement')}>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    strokeWidth={1.5}
+                                                    stroke="currentColor"
+                                                    className="w-6 h-6"
+                                                    onClick={() => handleOption('children', 'i')}
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        d="M12 4.5v15m7.5-7.5h-15"
+                                                    />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={cx('guest-info__item')}>
+                                        <div className={cx('guest-info__item-title')}>
+                                            <p>Em bé</p>
+                                            <span>Dưới 2 tuổi</span>
+                                        </div>
+                                        <div className={cx('guest-info__item-select')}>
+                                            <div
+                                                className={cx('select-increment')}
+                                                style={{ display: options.baby <= 0 ? 'none' : 'block' }}
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    strokeWidth={1.5}
+                                                    stroke="currentColor"
+                                                    className="w-6 h-6"
+                                                    disabled={options.baby <= 0}
+                                                    onClick={() => handleOption('baby', 'd')}
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        d="M19.5 12h-15"
+                                                    />
+                                                </svg>
+                                            </div>
+                                            <p className={cx('current-number')}>{`${options.baby}`}</p>
+                                            <div className={cx('select-decrement')}>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    strokeWidth={1.5}
+                                                    stroke="currentColor"
+                                                    className="w-6 h-6"
+                                                    onClick={() => handleOption('baby', 'i')}
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        d="M12 4.5v15m7.5-7.5h-15"
+                                                    />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={cx('guest-info__item')}>
+                                        <div className={cx('guest-info__item-title')}>
+                                            <p>Thú cưng</p>
+                                            <span></span>
+                                        </div>
+                                        <div className={cx('guest-info__item-select')}>
+                                            <div
+                                                className={cx('select-increment')}
+                                                style={{ display: options.pet <= 0 ? 'none' : 'block' }}
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    strokeWidth={1.5}
+                                                    stroke="currentColor"
+                                                    className="w-6 h-6"
+                                                    disabled={options.adult <= 0}
+                                                    onClick={() => handleOption('pet', 'd')}
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        d="M19.5 12h-15"
+                                                    />
+                                                </svg>
+                                            </div>
+                                            <p className={cx('current-number')}>{`${options.pet}`}</p>
+                                            <div className={cx('select-decrement')}>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    strokeWidth={1.5}
+                                                    stroke="currentColor"
+                                                    className="w-6 h-6"
+                                                    onClick={() => handleOption('pet', 'i')}
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        d="M12 4.5v15m7.5-7.5h-15"
+                                                    />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <Button
+                                        onClick={hanldeVisibleGuestInfo}
+                                        className={cx('close-guest-info')}
+                                        outline
+                                        type="button"
+                                    >
+                                        Đóng
+                                    </Button>
+                                </motion.div>
+                            )}
+                        </div>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className={cx('guest-title-icon')}
+                            onClick={hanldeVisibleGuestInfo}
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                        </svg>
+                    </div>
+                    <Button type="submit" className={cx('btn-booking')}   onClick={handleSearch}>
                         Đặt Phòng
                     </Button>
                     <div className={cx('price-detail')}>

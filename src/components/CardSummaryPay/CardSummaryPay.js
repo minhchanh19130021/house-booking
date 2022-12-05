@@ -1,10 +1,56 @@
 import classNames from 'classnames/bind';
-import { NavLink } from 'react-router-dom';
+import { useLocation, NavLink } from 'react-router-dom';
 import styles from './CardSummaryPay.module.scss';
+import useFetch from "../../hooks/useFetch";
+import { SearchContext } from '../../context/SearchContext';
+import { useContext, useState } from 'react';
+import { ref, getDownloadURL } from 'firebase/storage';
+import { storage } from '~/config/firebase';
+import ImageHouse from '~/pages/Detail/ImageHouse';
 
 const cx = classNames.bind(styles);
 
 function CardSummaryPay() {
+    const location = useLocation();
+    const id = location.pathname.split('/')[2];
+    const { data, loading, error } = useFetch(`http://localhost:8800/api/homes/find/636ce065825a1cd1940641a2`);
+    const { dates, options } = useContext(SearchContext);
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    });
+
+    const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
+    function dayDifference(date1, date2) {
+      const timeDiff = Math.abs(date2.getTime() - date1.getTime());
+      const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
+      return diffDays;
+    }
+
+    function totalPrice() {
+        return data.price * days + 50 + 10;
+    }
+
+    const days = dayDifference(dates[0].endDate, dates[0].startDate);
+
+    function priceStay() {
+        return data.price * days;
+    }
+
+    const [linkImg, setLinkImg] = useState(
+        'https://preview.redd.it/zcgs03lgoy351.png?width=288&format=png&auto=webp&s=d9bf4b46713d7fdbf11b82a8e364ceee79724a9c',
+    );
+    let getImageFromFirebase = (_id) => {
+        getDownloadURL(ref(storage, `house/${_id}/avatar.jpg`))
+            .then((url) => {
+                setLinkImg(url);
+            })
+            .catch((error) => {});
+    };
+    getImageFromFirebase('636ce065825a1cd1940641a2');
+  
+    
+      
     return (
        
             <div className={cx('_ai1he2')}>
@@ -28,7 +74,7 @@ function CardSummaryPay() {
                                                     aria-hidden="true"
                                                     alt=""
                                                     elementtiming="LCP-target"
-                                                    src="https://a0.muscache.com/im/pictures/miso/Hosting-709029553824546972/original/e3dcc7a5-6a07-47ba-95b2-911dcc48d1e7.jpeg?aki_policy=large"
+                                                    src={linkImg}
                                                     data-original-uri="https://a0.muscache.com/im/pictures/miso/Hosting-709029553824546972/original/e3dcc7a5-6a07-47ba-95b2-911dcc48d1e7.jpeg?aki_policy=large"
                                                     /*style="object-fit: cover; vertical-align: bottom;"*/
                                                 />
@@ -42,7 +88,7 @@ function CardSummaryPay() {
                                             <div>
                                                 <div className={cx('_1fza94o')}>Phòng riêng tại nhà</div>
                                                 <div id="LISTING_CARD-title" className={cx('_bp4bbx')}>
-                                                    La Maison - Starry night @ Double Attic room#1
+                                                    {data.name}
                                                 </div>
                                             </div>
                                             <div className={cx('_1l43ux5')}>
@@ -69,7 +115,7 @@ function CardSummaryPay() {
                                                                 </svg>
                                                             </span>
                                                             <span className={cx('_2a6au1i')} aria-hidden="true">
-                                                                5,00
+                                                                {data.rate}
                                                             </span>
                                                             <span className={cx('_a7a5sx')} aria-hidden="true">
                                                                 &nbsp;(1 đánh giá)
@@ -186,12 +232,12 @@ function CardSummaryPay() {
                                                             <div className={cx('_10d7v0r')}>
                                                                 <button type="button" className={cx('_101nvu7m')}>
                                                                     <div className={cx('_12hv04d')}>
-                                                                        $17,73 x 5&nbsp;đêm&nbsp;
+                                                                    {formatter.format(data.price)} x {days}&nbsp;đêm&nbsp;
                                                                     </div>
                                                                 </button>
                                                             </div>
                                                             <div data-testid="price-item-ACCOMMODATION" className={cx('_t65zql')}>
-                                                                <span>$88,66</span>
+                                                                <span>{formatter.format(priceStay())}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -203,7 +249,7 @@ function CardSummaryPay() {
                                                                 </button>
                                                             </div>
                                                             <div data-testid="price-item-CLEANING_FEE" className={cx('_t65zql')}>
-                                                                <span>$5,24</span>
+                                                                <span> {formatter.format(10)}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -218,7 +264,7 @@ function CardSummaryPay() {
                                                                 data-testid="price-item-AIRBNB_GUEST_FEE"
                                                                 className={cx('_t65zql')}
                                                             >
-                                                                <span>$13,26</span>
+                                                                <span> {formatter.format(50)}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -228,15 +274,15 @@ function CardSummaryPay() {
                                                             Tổng
                                                             <button
                                                                 id="MowebCurrencyPicker_trigger"
-                                                                aria-label="Loại tiền tệ hiện tại: (USD). Thay đổi loại tiền tệ thanh toán"
+                                                                aria-label="Loại tiền tệ hiện tại: (VND). Thay đổi loại tiền tệ thanh toán"
                                                                 type="button"
                                                                 className={cx('_15rpys7s')}
                                                             >
-                                                                (USD)
+                                                                (VND)
                                                             </button>
                                                         </div>
                                                         <div data-testid="price-item-total" className={cx('_j1143kl')}>
-                                                            <span>$107,16</span>
+                                                            <span>{formatter.format(totalPrice())}</span>
                                                         </div>
                                                     </div>
                                                 </div>
