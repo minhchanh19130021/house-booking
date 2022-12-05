@@ -6,6 +6,8 @@ const routes = {
     signup_owner: '/signup-owner',
     signin: '/signin',
     forgot_password: '/forgot-password',
+    payment: '/payment/:id&numberOfAdults=:nad&numberOfChildren=:ncd&numberOfInfants=:nif&checkin=:dayin&checkout=:dayout',
+    payment_success: '/payment/success',
     // profile page
     profile: '/profile',
     history_booking: '/history-booking',

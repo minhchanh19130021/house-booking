@@ -1,0 +1,83 @@
+.wrapper {
+    background: var(--primary);
+    height: 80px;
+    overflow: hidden;
+    display: flex !important;
+    justify-content: space-between;
+    padding: 0 20px !important;
+    // min-width: 880px;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    img {
+        width: 140px;
+        height: 30px;
+        object-fit: cover;
+    }
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 180px;
+    height: 43px;
+    border-radius: 20px;
+    background-color: var(--secondary);
+    margin-left: 70px;
+    cursor: pointer;
+
+    svg {
+        width: 20px;
+        height: 20px;
+        position: relative;
+        color: var(--white);
+
+        &:before {
+            content: '';
+            position: absolute;
+            width: 1px;
+            height: 100%;
+            background-color: var(--white);
+            color: var(--white);
+        }
+    }
+
+    .search-title {
+        font-size: 1.3rem;
+        font-weight: 500;
+        user-select: none;
+        color: var(--white);
+    }
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.right {
+    display: flex;
+    align-items: center;
+}
+
+
+
+.sign-in {
+    background-color: transparent !important;
+    margin-right: 20px;
+
+    svg {
+        color: var(--button);
+        width: 2rem;
+        height: 2rem;
+    }
+}
+
+.owner-register {
+}

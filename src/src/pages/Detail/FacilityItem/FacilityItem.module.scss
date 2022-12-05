@@ -1,0 +1,10 @@
+.facilities-item {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    svg {
+        margin-right: 10px;
+        width: 20px;
+        height: 20px;
+    }
+}

@@ -1,0 +1,21 @@
+.language {
+    display: flex;
+    align-items: center;
+    padding: 10px 10px 10px 0;
+    cursor: pointer;
+    width: 100px;
+    height: 20px;
+    border-right: 1px solid var(--white);
+    margin-right: 20px;
+
+    svg {
+        width: 20px;
+        height: 20px;
+        color: var(--button);
+        margin-left: 10px;
+        margin-right: 4px;
+    }
+    .language-current {
+        color: var(--white);
+    }
+}

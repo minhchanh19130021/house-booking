@@ -1,0 +1,38 @@
+.wrapper {
+    border-top: 1px solid var(--border-transparent);
+    padding: 10px 0;
+    position: relative;
+    .summary {
+        padding: 10px 0px;
+    }
+    .categories {
+        padding: 10px 0px;
+    }
+    .evaluates-item {
+        padding: 10px 0px;
+    }
+}
+.summary-item {
+    display: flex;
+    align-items: center;
+    .total-star {
+        margin-left: 4px;
+        font-weight: 700 !important;
+    }
+    .total-evaluate {
+        margin-left: 12px;
+        font-weight: 700 !important;
+    }
+}
+
+.categories-item {
+    display: flex !important;
+    align-items: center;
+    .categories-info {
+        display: flex !important;
+        align-items: center;
+    }
+    .categories-total {
+        margin-left: 8px;
+    }
+}
