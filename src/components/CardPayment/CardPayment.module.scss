@@ -226,9 +226,7 @@ input, textarea, select, button, a {
     transition-timing-function: ease-in-out !important;
 }
 
-._e296pg {
-    position: relative !important;
-}
+
 
 
 ._4l12l8 {
@@ -578,6 +576,32 @@ input, textarea, select, button, a {
     justify-content: flex-end !important;
     align-items: center !important;
 }
+
+.btnpay {
+    background: var(--dls19-brand-gradient, linear-gradient(to right, #E61E4D 0%, #E31C5F 50%, #D70466 100%)) !important;
+    cursor: pointer !important;
+    display: inline-block !important;
+    margin: 0px !important;
+    position: relative !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    width: auto !important;
+    touch-action: manipulation !important;
+    font-family: var(--e-ls-qkw) !important;
+    font-size: var(--ll-l-ys-f) !important;
+    line-height: var(--f-xgviq) !important;
+    font-weight: var(--jx-zk-pv) !important;
+    border-radius: var(--go-h-jh-l) !important;
+    outline: none !important;
+    padding: 16px 32px !important;
+    transition: box-shadow 0.2s ease 0s, -ms-transform 0.1s ease 0s, -webkit-transform 0.1s ease 0s, transform 0.1s ease 0s !important;
+    -webkit-tap-highlight-color: transparent !important;
+    border: none !important;
+    background: linear-gradient(to right, rgb(46 63 110) 0%, rgb(45, 63, 113) 50%, rgb(43, 60, 108) 100%) !important;
+    color: rgb(255, 255, 255) !important;
+}
+
+
 
 
 

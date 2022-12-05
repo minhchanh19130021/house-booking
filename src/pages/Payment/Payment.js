@@ -11,8 +11,7 @@ function Payment() {
             <Title
             title="Xác nhận và thanh toán"
             to="/detail"
-            />
-            
+            />         
             <div className={cx('_12nksyy')}>
                 <CardPayment/>
                 <CardSummaryPay/>

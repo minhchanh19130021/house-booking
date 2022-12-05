@@ -22,6 +22,8 @@ import HostManage from '~/pages/ProfileHost/HostManage';
 import HostNew from '~/pages/ProfileHost/HostNew';
 import HostRenting from '~/pages/ProfileHost/HostRenting';
 import ConfirmSuccess, { ConfirmFail } from '~/pages/ConfirmSuccess';
+import Payment from '~/pages/Payment';
+import PaymentSuccess from '~/pages/PaymentSuccess';
 
 const publicRoutes = [
     { path: config.routes.home, component: Home },
@@ -31,6 +33,8 @@ const publicRoutes = [
     { path: config.routes.signin, component: SignIn },
     { path: config.routes.forgot_password, component: ForgotPassword },
     { path: config.routes.signup_owner, component: SignUpOwner },
+    { path: config.routes.payment, component: Payment },
+    { path: config.routes.payment_success, component: PaymentSuccess },
     // profile page
     { path: config.routes.profile, component: Profile },
     { path: config.routes.email_nofication, component: EmailNofication },
