@@ -2,6 +2,7 @@ import config from '~/config';
 import Contact from '~/pages/Contact';
 import Detail from '~/pages/Detail';
 import ForgotPassword from '~/pages/ForgotPassword';
+import NewPassword from '~/pages/ForgotPassword/NewPassword';
 import Home from '~/pages/Home';
 import Profile from '~/pages/Profile';
 import EmailNofication from '~/pages/Profile/EmailNofication';
@@ -32,6 +33,8 @@ const publicRoutes = [
     { path: config.routes.signup, component: SignUp },
     { path: config.routes.signin, component: SignIn },
     { path: config.routes.forgot_password, component: ForgotPassword },
+    { path: config.routes.new_password, component: NewPassword },
+
     { path: config.routes.signup_owner, component: SignUpOwner },
     { path: config.routes.payment, component: Payment },
     { path: config.routes.payment_success, component: PaymentSuccess },
