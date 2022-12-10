@@ -6,6 +6,8 @@ import { useState } from 'react';
 import HeaderSearch from './HeaderSearch';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutFailure, logoutStart, logoutSuccess } from '~/redux/authenticationSlide';
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
+import useMatchMedia from 'react-use-match-media';
 
 const cx = classNames.bind(styles);
 function Header() {
@@ -13,6 +15,9 @@ function Header() {
     const user = useSelector((state) => state.authentication.login.currentUser);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [modalMenu, setModalMenu] = useState(false);
+    modalMenu ? disableBodyScroll(document) : enableBodyScroll(document);
+    const isDesktopResolution = useMatchMedia('(max-width:992px)', true);
 
     const handleVisibleModal = () => {
         setSearchModal((searchModal) => !searchModal);
@@ -70,52 +75,10 @@ function Header() {
                     <p className={cx('search-title')}>Tìm kiếm</p>
                 </div>
             </div>
-            <div className={cx('', '', 'right')}>
-                {/* <HeaderLanguage /> */}
-
-                <Button
-                    to="/signup"
-                    className={cx('sign-in')}
-                    leftIcon={
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-6 h-6"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
-                            />
-                        </svg>
-                    }
-                >
-                    Đăng Ký
-                </Button>
-                {user?.status && user !== null ? (
-                    <div className={cx('user')}>
-                        <img
-                            src="https://a0.muscache.com/im/pictures/user/feac4078-fdbd-4a28-bf73-a11bc4019781.jpg?im_w=240"
-                            alt="user-avatar"
-                            className={cx('user-avatar')}
-                        />
-
-                        <p className={cx('username')}>Xin chào, {user?.username}</p>
-                        <div className={cx('menu-user')}>
-                            <li className={cx('menu-item')}>
-                                <NavLink to="/personal-detail">Trang cá nhân</NavLink>
-                            </li>
-                            <li className={cx('menu-item')} onClick={handleLogout}>
-                                Đăng xuất
-                            </li>
-                        </div>
-                    </div>
-                ) : (
+            {!isDesktopResolution && (
+                <div className={cx('right')}>
                     <Button
-                        to="/signin"
+                        to="/signup"
                         className={cx('sign-in')}
                         leftIcon={
                             <svg
@@ -129,20 +92,85 @@ function Header() {
                                 <path
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
-                                    d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                                    d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
                                 />
                             </svg>
                         }
                     >
-                        Đăng Nhập
+                        Đăng Ký
                     </Button>
-                )}
+                    {user?.status && user !== null ? (
+                        <div className={cx('user')}>
+                            <img
+                                src="https://a0.muscache.com/im/pictures/user/feac4078-fdbd-4a28-bf73-a11bc4019781.jpg?im_w=240"
+                                alt="user-avatar"
+                                className={cx('user-avatar')}
+                            />
 
-                <Button
-                    to="/signup-owner"
-                    large
-                    className={cx('owner-register')}
-                    leftIcon={
+                            <p className={cx('username')}>Xin chào, {user?.username}</p>
+                            <div className={cx('menu-user')}>
+                                <li className={cx('menu-item')}>
+                                    <NavLink to="/personal-detail">Trang cá nhân</NavLink>
+                                </li>
+                                <li className={cx('menu-item')} onClick={handleLogout}>
+                                    Đăng xuất
+                                </li>
+                            </div>
+                        </div>
+                    ) : (
+                        <Button
+                            to="/signin"
+                            className={cx('sign-in')}
+                            leftIcon={
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-6 h-6"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                                    />
+                                </svg>
+                            }
+                        >
+                            Đăng Nhập
+                        </Button>
+                    )}
+
+                    <Button
+                        to="/signup-owner"
+                        large
+                        className={cx('owner-register')}
+                        leftIcon={
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="w-6 h-6"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5M6.75 7.364V3h-3v18m3-13.636l10.5-3.819"
+                                />
+                            </svg>
+                        }
+                    >
+                        Đăng Ký Chủ Nhà
+                    </Button>
+                </div>
+            )}
+            {searchModal && <HeaderSearch />}
+            {isDesktopResolution && (
+                <div className={cx('right-mobile')}>
+                    <button className={cx('btn-bar')} onClick={() => setModalMenu(true)}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -154,15 +182,68 @@ function Header() {
                             <path
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
-                                d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205l3 1m1.5.5l-1.5-.5M6.75 7.364V3h-3v18m3-13.636l10.5-3.819"
+                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
                             />
                         </svg>
-                    }
-                >
-                    Đăng Ký Chủ Nhà
-                </Button>
-            </div>
-            {searchModal && <HeaderSearch />}
+                    </button>
+                    {modalMenu && (
+                        <div className={cx('modal-menu')}>
+                            <div className={cx('overlay')} onClick={() => setModalMenu(false)}></div>
+                            <div className={cx('modal-content')}>
+                                {user?.status && user !== null ? (
+                                    <div className={cx('menu')}>
+                                        <NavLink
+                                            to="/personal-detail"
+                                            className={cx('menu-item')}
+                                            onClick={() => setModalMenu(false)}
+                                        >
+                                            Xin chào! {user?.username}
+                                        </NavLink>
+                                        <NavLink
+                                            to="/personal-detail"
+                                            className={cx('menu-item')}
+                                            onClick={() => setModalMenu(false)}
+                                        >
+                                            Trang cá nhân
+                                        </NavLink>
+                                        <NavLink
+                                            to="/personal-detail"
+                                            className={cx('menu-item')}
+                                            onClick={() => setModalMenu(false)}
+                                        >
+                                            Lịch sử đặt nhà
+                                        </NavLink>
+                                        <NavLink onClick={handleLogout}>Đăng xuất</NavLink>
+                                    </div>
+                                ) : (
+                                    <div className={cx('menu')}>
+                                        <NavLink
+                                            to="/signin"
+                                            className={cx('menu-item')}
+                                            onClick={() => setModalMenu(false)}
+                                        >
+                                            Đăng nhập
+                                        </NavLink>
+                                        <NavLink
+                                            to="/signup"
+                                            className={cx('menu-item')}
+                                            onClick={() => setModalMenu(false)}
+                                        >
+                                            Đăng ký
+                                        </NavLink>
+                                        <NavLink to="" className={cx('menu-item')} onClick={() => setModalMenu(false)}>
+                                            Đăng ký chủ nhà
+                                        </NavLink>
+                                        <div className={cx('menu-button')} onClick={() => setModalMenu(false)}>
+                                            <Button className={cx('btn-close')}>Đóng</Button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 }
