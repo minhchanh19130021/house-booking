@@ -4,6 +4,7 @@
     display: flex !important;
     justify-content: space-between;
     padding: 0 20px !important;
+    align-items: center;
     // min-width: 880px;
 }
 
@@ -125,3 +126,68 @@
 .user:hover .menu-user {
     display: block;
 }
+
+// mobile right
+.btn-bar {
+    padding: 4px 8px;
+    background-color: var(--button);
+    border-radius: 4px;
+    outline: none;
+    border: 1px solid transparent;
+    // display: none;
+    svg {
+        width: 20px;
+        height: 20px;
+        color: var(--white);
+    }
+}
+.modal-menu,
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(148, 142, 142, 0.5);
+    z-index: 9;
+}
+.modal-content {
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255);
+    width: 350px;
+    height: 100%;
+    // border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.8s ease;
+    z-index: 10;
+
+}
+.menu-item {
+    user-select: none;
+    padding: 20px;
+    display: block;
+
+    &:hover {
+        background-color: var(--button);
+        cursor: pointer;
+    }
+}
+.menu-button {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    .btn-close {
+        background-color: var(--danger);
+        display: flex;
+    }
+}
+// @media only screen and (max-width: 992px) {
+//     .btn-bar {
+//         display: block;
+//     }
+//     .right{
+//         display: none;
+//     }
+// }

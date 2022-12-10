@@ -51,7 +51,7 @@ function Home() {
             <div className={cx('bg-banner', 'grid')}>
                 <div className={cx('overlay')}></div>
                 <img src="https://townhub.kwst.net/images/bg/hero/1.jpg" alt="home-banner" className={cx('grid')} />
-                <SearchHome />
+                {/* <SearchHome /> */}
             </div>
             <div className={cx('location-best', 'grid', 'wide')}>
                 <div className={cx('location-best__title')}>
