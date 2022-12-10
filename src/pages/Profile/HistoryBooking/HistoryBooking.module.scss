@@ -31,8 +31,38 @@
         justify-content: flex-end;
     }
 }
-.thanks{
+.thanks {
     border-top: 1px solid var(--border-transparent);
     margin-top: 20px;
     padding: 20px 0;
+}
+
+.container__voucher {
+    display: flex;
+    flex-wrap: wrap;
+    .voucher {
+        margin: 0 10px;
+        background-color: var(--blue-light);
+        width: fit-content;
+        padding: 1px;
+        width: 155px;
+        text-align: center;
+        border-radius: 10px;
+        .value {
+            margin: 10px 0;
+            font-weight: bold;
+            font-size: 30px;
+        }
+    }
+}
+
+.container__review {
+    display: none;
+    height: 0%;
+}
+
+.container__review--active {
+    margin-top: 20px;
+    height: auto;
+    display: block;
 }

@@ -6,8 +6,10 @@ const routes = {
     signup_owner: '/signup-owner',
     signin: '/signin',
     forgot_password: '/forgot-password',
+    listHouse: '/listHouse/city/:slug/:currentPagination',
     new_password: '/new-password/:id/:token',
-    payment: '/payment/:id&numberOfAdults=:nad&numberOfChildren=:ncd&numberOfInfants=:nif&checkin=:dayin&checkout=:dayout',
+    payment:
+        '/payment/:id&numberOfAdults=:nad&numberOfChildren=:ncd&numberOfInfants=:nif&checkin=:dayin&checkout=:dayout',
     payment_success: '/payment/success',
     // profile page
     profile: '/profile',
@@ -17,7 +19,8 @@ const routes = {
     personal_detail: '/personal-detail',
     preference: '/preference',
     security: '/security',
-    listHouse: '/listHouse',
+    review: '/review/:oid',
+    get_review: '/get_review',
     // profile host
     profile_host: '/profile-host',
     statistical: '/statistical',
@@ -28,6 +31,5 @@ const routes = {
     host_renting: '/host-renting',
     confirm_success: 'confirm-success',
     confirm_fail: 'confirm-fail',
-    listHouse: '/listHouse/city/:slug/:currentPagination',
 };
 export default routes;

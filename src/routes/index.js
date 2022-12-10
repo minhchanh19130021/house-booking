@@ -23,6 +23,7 @@ import HostManage from '~/pages/ProfileHost/HostManage';
 import HostNew from '~/pages/ProfileHost/HostNew';
 import HostRenting from '~/pages/ProfileHost/HostRenting';
 import ConfirmSuccess, { ConfirmFail } from '~/pages/ConfirmSuccess';
+import Review from '~/pages/Review';
 import Payment from '~/pages/Payment';
 import PaymentSuccess from '~/pages/PaymentSuccess';
 
@@ -36,6 +37,7 @@ const publicRoutes = [
     { path: config.routes.new_password, component: NewPassword },
 
     { path: config.routes.signup_owner, component: SignUpOwner },
+    { path: config.routes.listHouse, component: ListHouse },
     { path: config.routes.payment, component: Payment },
     { path: config.routes.payment_success, component: PaymentSuccess },
     // profile page
@@ -57,8 +59,7 @@ const publicRoutes = [
     { path: config.routes.host_manage, component: HostManage },
     { path: config.routes.host_new, component: HostNew },
     { path: config.routes.host_renting, component: HostRenting },
-
-    { path: config.routes.listHouse, component: ListHouse },
+    { path: config.routes.review, component: Review },
 ];
 const privateRoutes = [];
 export { publicRoutes, privateRoutes };

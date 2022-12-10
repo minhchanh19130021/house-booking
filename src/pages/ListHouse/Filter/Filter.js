@@ -79,6 +79,10 @@ function Filter(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (Number(fromPrice) > Number(toPrice)) {
+            alert('Giá tiền không hợp lệ');
+            return;
+        }
         const data = new FormData(e.target);
         // append key - value
         data.append('numberBedroom', numberBedroom);
@@ -172,33 +176,39 @@ function Filter(props) {
             </div>
             <div className={cx('filter')}>
                 <div className={cx('filter__price')}>
-                    <span className={cx('price__icon')}>
+                    {/* <span className={cx('price__icon')}>
                         <i className="fa-solid fa-hand-holding-dollar"></i>
                     </span>
-                    <p className={cx('price__name')}>Giá</p>
-                    <p>
-                        <input
-                            min={0}
-                            type={'number'}
-                            className={cx('price__input')}
-                            value={fromPrice || ''}
-                            onChange={(e) => setFromPrice(e.currentTarget.value)}
-                            placeholder="0 Đ"
-                            name="minPrice"
-                        ></input>
-                    </p>
+                    <p className={cx('price__name')}>Giá</p> */}
+                    <div className={cx('range__price')}>
+                        <span>giá tối thiểu</span>
+                        <p>
+                            <span>Đ</span>
+                            <input
+                                min={0}
+                                type={'number'}
+                                className={cx('price__input')}
+                                value={fromPrice || ''}
+                                onChange={(e) => setFromPrice(e.currentTarget.value)}
+                                name="minPrice"
+                            ></input>
+                        </p>
+                    </div>
                     <p className={cx('price__dash')}>-</p>
-                    <p>
-                        <input
-                            min={0}
-                            type={'number'}
-                            className={cx('price__input')}
-                            value={toPrice || ''}
-                            onChange={(e) => setToPrice(e.currentTarget.value)}
-                            placeholder="5.000.000 Đ"
-                            name="maxPrice"
-                        ></input>
-                    </p>
+                    <div className={cx('range__price')}>
+                        <span>giá tối đa</span>
+                        <p>
+                            <span>Đ</span>
+                            <input
+                                min={0}
+                                type={'number'}
+                                className={cx('price__input')}
+                                value={toPrice || ''}
+                                onChange={(e) => setToPrice(e.currentTarget.value)}
+                                name="maxPrice"
+                            ></input>
+                        </p>
+                    </div>
                 </div>
             </div>
             <div className={cx('filter')}>
