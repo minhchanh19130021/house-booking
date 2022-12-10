@@ -31,6 +31,7 @@ const publicRoutes = [
     { path: config.routes.detail, component: Detail },
     { path: config.routes.signup, component: SignUp },
     { path: config.routes.signin, component: SignIn },
+    { path: config.routes.signin_pay, component: SignIn },
     { path: config.routes.forgot_password, component: ForgotPassword },
     { path: config.routes.signup_owner, component: SignUpOwner },
     { path: config.routes.payment, component: Payment },

@@ -1,7 +1,7 @@
 import { createContext, useEffect, useReducer } from "react";
 
 const INITIAL_STATE = {
-  home: undefined,
+  home: JSON.parse(localStorage.getItem("home")) || undefined,
   dates:  [
     {
       startDate: new Date(localStorage.getItem("startDate")),
@@ -10,11 +10,12 @@ const INITIAL_STATE = {
     }
   ] || [],
   options: JSON.parse(localStorage.getItem("options")) || {
-    adult: undefined,
-    children: undefined,
-    baby: undefined,
-    pet: undefined,
+    adult: 0,
+    children: 0,
+    baby: 0,
+    pet: 0,
   },
+  goToCheckout:  JSON.parse(localStorage.getItem("goToCheckout")) || false,
 };
 
 export const SearchContext = createContext(INITIAL_STATE);
@@ -36,6 +37,10 @@ export const SearchContextProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem("home", JSON.stringify(state.home));
   }, [state.home]);
+
+  useEffect(() => {
+    localStorage.setItem("goToCheckout", JSON.stringify(state.goToCheckout));
+  }, [state.goToCheckout]);
 
   // useEffect(() => {
   //   localStorage.setItem("dates", JSON.stringify(state.dates));
@@ -62,6 +67,7 @@ export const SearchContextProvider = ({ children }) => {
         home: state.home,
         dates: state.dates,
         options: state.options,
+        goToCheckout: state.goToCheckout,
         dispatch,
       }}
     >

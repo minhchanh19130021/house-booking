@@ -6,13 +6,15 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { loginFailure, loginStart, loginSuccess } from '~/redux/authenticationSlide';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { SearchContext } from '../../context/SearchContext';
 
 const cx = classNames.bind(styles);
 function SignIn() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [dataLogin, setDataLogin] = useState();
+    const { dates, options } = useContext(SearchContext);
     const formik = useFormik({
         initialValues: {
             username: '',
@@ -41,7 +43,13 @@ function SignIn() {
                         setDataLogin(result);
                         if (result.status === true) {
                             dispatch(loginSuccess(result));
-                            navigate('/personal-detail');
+                            if(options.adult >= 1){
+                                const idh = "636ce065825a1cd1940641a2";
+                                navigate('/payment/'+idh+'&numberOfAdults='+options.adult+'&numberOfChildren='+options.children+'&numberOfInfants='+options.baby+'&checkin='+dates[0].startDate+'&checkout='+dates[0].endDate, { state: { dates, options } });
+                            } else{
+                                navigate('/personal-detail');
+                            }
+                            
                         } else {
                             dispatch(loginFailure());
                         }

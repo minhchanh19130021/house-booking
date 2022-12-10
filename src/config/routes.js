@@ -5,6 +5,7 @@ const routes = {
     signup: '/signup',
     signup_owner: '/signup-owner',
     signin: '/signin',
+    signin_pay: '/signin/pay',
     forgot_password: '/forgot-password',
     payment: '/payment/:id&numberOfAdults=:nad&numberOfChildren=:ncd&numberOfInfants=:nif&checkin=:dayin&checkout=:dayout',
     payment_success: '/payment/success',
