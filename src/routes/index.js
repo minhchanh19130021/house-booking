@@ -2,6 +2,7 @@ import config from '~/config';
 import Contact from '~/pages/Contact';
 import Detail from '~/pages/Detail';
 import ForgotPassword from '~/pages/ForgotPassword';
+import NewPassword from '~/pages/ForgotPassword/NewPassword';
 import Home from '~/pages/Home';
 import Profile from '~/pages/Profile';
 import EmailNofication from '~/pages/Profile/EmailNofication';
@@ -23,6 +24,8 @@ import HostNew from '~/pages/ProfileHost/HostNew';
 import HostRenting from '~/pages/ProfileHost/HostRenting';
 import ConfirmSuccess, { ConfirmFail } from '~/pages/ConfirmSuccess';
 import Review from '~/pages/Review';
+import Payment from '~/pages/Payment';
+import PaymentSuccess from '~/pages/PaymentSuccess';
 
 const publicRoutes = [
     { path: config.routes.home, component: Home },
@@ -31,8 +34,12 @@ const publicRoutes = [
     { path: config.routes.signup, component: SignUp },
     { path: config.routes.signin, component: SignIn },
     { path: config.routes.forgot_password, component: ForgotPassword },
+    { path: config.routes.new_password, component: NewPassword },
+
     { path: config.routes.signup_owner, component: SignUpOwner },
     { path: config.routes.listHouse, component: ListHouse },
+    { path: config.routes.payment, component: Payment },
+    { path: config.routes.payment_success, component: PaymentSuccess },
     // profile page
     { path: config.routes.profile, component: Profile },
     { path: config.routes.email_nofication, component: EmailNofication },

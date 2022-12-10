@@ -5,6 +5,7 @@ import CardBest from '~/components/CardBest';
 import CardHouse from '~/components/CardHouse';
 import { useEffect, useState } from 'react';
 import CardNew from '~/components/CardNew';
+import SearchHome from './SearchHome';
 
 const cx = classNames.bind(styles);
 

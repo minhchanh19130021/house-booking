@@ -7,6 +7,8 @@ import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { loginFailure, loginStart, loginSuccess } from '~/redux/authenticationSlide';
 import { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const cx = classNames.bind(styles);
 function SignIn() {
@@ -69,7 +71,7 @@ function SignIn() {
                         </div>
                     </div>
                     <div className={cx('form-group')}>
-                        <label htmlFor="username">Tên tài khoản hoặc địa chỉ email *</label>
+                        <label htmlFor="username">Tên đăng nhập*</label>
                         <input
                             name="username"
                             id="username"
@@ -95,7 +97,7 @@ function SignIn() {
                     </Button>
                     <div className={cx('function')}>
                         <NavLink to="/signup">Tạo tài khoản</NavLink>
-                        <NavLink to="/forgot_password" className={cx('forgot-password')}>
+                        <NavLink to="/forgot-password" className={cx('forgot-password')}>
                             Quên mật khẩu?
                         </NavLink>
                     </div>
