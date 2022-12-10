@@ -17,7 +17,7 @@ function CardSummaryPay() {
     const { dates, options } = useContext(SearchContext);
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'USD',
+        currency: 'VND',
     });
 
     const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
@@ -28,7 +28,7 @@ function CardSummaryPay() {
     }
 
     function totalPrice() {
-        return data.price * days + 50 + 10;
+        return data.price * days + 350000 + 100000;
     }
 
     const days = dayDifference(dates[0].endDate, dates[0].startDate);
@@ -249,7 +249,7 @@ function CardSummaryPay() {
                                                                 </button>
                                                             </div>
                                                             <div data-testid="price-item-CLEANING_FEE" className={cx('_t65zql')}>
-                                                                <span> {formatter.format(10)}</span>
+                                                                <span> {formatter.format(100000)}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -264,7 +264,7 @@ function CardSummaryPay() {
                                                                 data-testid="price-item-AIRBNB_GUEST_FEE"
                                                                 className={cx('_t65zql')}
                                                             >
-                                                                <span> {formatter.format(50)}</span>
+                                                                <span> {formatter.format(350000)}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -274,11 +274,11 @@ function CardSummaryPay() {
                                                             Tổng
                                                             <button
                                                                 id="MowebCurrencyPicker_trigger"
-                                                                aria-label="Loại tiền tệ hiện tại: (VND). Thay đổi loại tiền tệ thanh toán"
+                                                                aria-label="Loại tiền tệ hiện tại: (₫). Thay đổi loại tiền tệ thanh toán"
                                                                 type="button"
                                                                 className={cx('_15rpys7s')}
                                                             >
-                                                                (VND)
+                                                                (₫)
                                                             </button>
                                                         </div>
                                                         <div data-testid="price-item-total" className={cx('_j1143kl')}>

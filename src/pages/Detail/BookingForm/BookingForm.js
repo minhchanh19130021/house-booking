@@ -1,7 +1,7 @@
 import { faBed, faCalendarDays, faCar, faPerson, faPlane, faTaxi } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
-import { useContext, useState } from "react";
+import { useContext, useState } from 'react';
 import Button from '~/components/Button';
 import styles from './BookingForm.module.scss';
 import { motion } from 'framer-motion';
@@ -11,7 +11,8 @@ import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css';
 import { format } from 'date-fns';
-import { data } from 'autoprefixer';
+// import { data } from 'autoprefixer';
+import useFetch from '../../../hooks/useFetch';
 
 const cx = classNames.bind(styles);
 function BookingForm() {
@@ -21,22 +22,31 @@ function BookingForm() {
         setVisibleGuestInfo((visibleGuestInfo) => !visibleGuestInfo);
     };
 
-    const [home, setHome] = useState('');
+    const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/636ce065825a1cd1940641a2`);
+
+    const [home, setHome] = useState('636ce065825a1cd1940641a2');
+    const [goToCheckout, setGoToCheckout] = useState(true);
     const [openDate, setOpenDate] = useState(false);
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
     const [dates, setDates] = useState([
         {
             startDate: new Date(),
-            endDate: new Date(),
+            endDate: tomorrow,
             key: 'selection',
         },
     ]);
     const [openOptions, setOpenOptions] = useState(false);
+
     const [options, setOptions] = useState({
         adult: 1,
         children: 0,
         baby: 0,
         pet: 0,
     });
+
+    
 
     const handleOption = (name, operation) => {
         setOptions((prev) => {
@@ -50,20 +60,56 @@ function BookingForm() {
     const { dispatch } = useContext(SearchContext);
     const navigate = useNavigate();
 
-    const idh = "636ce065825a1cd1940641a2";
+    const idh = '636ce065825a1cd1940641a2';
 
     const handleSearch = () => {
-        dispatch({ type: "NEW_SEARCH", payload: { home, dates, options } });
-        navigate('/payment/'+idh+'&numberOfAdults='+options.adult+'&numberOfChildren='+options.children+'&numberOfInfants='+options.baby+'&checkin='+dates[0].startDate+'&checkout='+dates[0].endDate, { state: { home, dates, options } });
+        dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, goToCheckout } });
+        navigate(
+            '/payment/' +
+                idh +
+                '&numberOfAdults=' +
+                options.adult +
+                '&numberOfChildren=' +
+                options.children +
+                '&numberOfInfants=' +
+                options.baby +
+                '&checkin=' +
+                dates[0].startDate +
+                '&checkout=' +
+                dates[0].endDate,
+            { state: { home, dates, options } },
+        );
     };
+
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'VND',
+    });
+
+    const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
+    function dayDifference(date1, date2) {
+        const timeDiff = Math.abs(date2.getTime() - date1.getTime());
+        const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
+        return diffDays;
+    }
+
+    function allPrice() {
+        return priceStay() + 350000 + 100000;
+    }
+
+    const days = dayDifference(dates[0].endDate, dates[0].startDate);
+
+    function priceStay() {
+        return data.price * days;
+    }
 
     return (
         <>
             <form className={cx('booking-form')}>
                 <div className={cx('booking-form__header')}>
                     <div className={cx('price')}>
-                        <p className={cx('old')}>2.234.434 VNĐ / đêm</p>
-                        <p className={cx('new')}>2.234.434 VNĐ / đêm</p>
+                        <p className={cx('old')}>{formatter.format(data.price)} / đêm</p>
+                        <p className={cx('new')}>{formatter.format(data.price)} / đêm</p>
                     </div>
                     <div className={cx('star')}>
                         <p className={cx('rate')}>
@@ -79,7 +125,7 @@ function BookingForm() {
                                     clipRule="evenodd"
                                 />
                             </svg>
-                            4.52
+                            {data.rate}
                         </p>
                         <p className={cx('number')}>61 đánh giá</p>
                     </div>
@@ -87,13 +133,14 @@ function BookingForm() {
                 <div className={cx('booking-form__body')}>
                     <div className={cx('guest')}>
                         <div className={cx('guest-title')}>
-                            <label><FontAwesomeIcon icon={faCalendarDays} className="headerIcon" /> Ngày</label>
+                            <label>
+                                <FontAwesomeIcon icon={faCalendarDays} className="headerIcon" /> Ngày
+                            </label>
                             <div className="headerSearchItem">
-                                
                                 <label onClick={() => setOpenDate(!openDate)} className="headerSearchText">{`${format(
                                     dates[0].startDate,
                                     'dd/MM/yyyy',
-                                )} to ${format(dates[0].endDate, 'dd/MM/yyyy')}`}</label>
+                                )} đến ${format(dates[0].endDate, 'dd/MM/yyyy')}`}</label>
                                 {openDate && (
                                     <DateRange
                                         editableDateInputs={true}
@@ -120,10 +167,13 @@ function BookingForm() {
                     </div>
                     <div className={cx('guest')}>
                         <div className={cx('guest-title')}>
-                            <label onClick={hanldeVisibleGuestInfo}><FontAwesomeIcon icon={faPerson} className="headerIcon" /> Khách</label>
+                            <label onClick={hanldeVisibleGuestInfo}>
+                                <FontAwesomeIcon icon={faPerson} className="headerIcon" /> Khách
+                            </label>
                             <label
                                 onClick={hanldeVisibleGuestInfo}
-                            >{`${options.adult} adult · ${options.children} children · ${options.baby} baby · ${options.pet} pet`}</label>
+                                style={{ fontSize: 14 }}
+                            >{`${options.adult} Người lớn · ${options.children} Trẻ em · ${options.baby} Em bé · ${options.pet} Thú cưng`}</label>
                             {visibleGuestInfo && (
                                 <motion.div animate={{}} className={cx('guest-info')}>
                                     <div className={cx('guest-info__item')}>
@@ -337,22 +387,26 @@ function BookingForm() {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                         </svg>
                     </div>
-                    <Button type="submit" className={cx('btn-booking')}   onClick={handleSearch}>
+                    <Button type="submit" className={cx('btn-booking')} onClick={handleSearch}>
                         Đặt Phòng
                     </Button>
                     <div className={cx('price-detail')}>
                         <div className={cx('price-item')}>
-                            <p className={cx('price-item__title')}>Phí dịch vụ</p>
-                            <p className={cx('price-item__value')}>2.667.213 VNĐ</p>
+                            <p className={cx('price-item__title')}>Tiền phòng ({days} đêm) </p>
+                            <p className={cx('price-item__value')}>{formatter.format(priceStay())}</p>
                         </div>
                         <div className={cx('price-item')}>
-                            <p className={cx('price-item__title')}>Tiền phòng</p>
-                            <p className={cx('price-item__value')}>2.667.213 VNĐ</p>
+                            <p className={cx('price-item__title')}>Phí dịch vụ</p>
+                            <p className={cx('price-item__value')}>{formatter.format(350000)}</p>
+                        </div>
+                        <div className={cx('price-item')}>
+                            <p className={cx('price-item__title')}>Phí vệ sinh</p>
+                            <p className={cx('price-item__value')}>{formatter.format(100000)}</p>
                         </div>
                     </div>
                     <div className={cx('price-total')}>
                         <p className={cx('price-total__title')}>Tổng trước thuế</p>
-                        <p className={cx('price-total__value')}>2.667.213 VNĐ</p>
+                        <p className={cx('price-total__value')}>{formatter.format(allPrice())}</p>
                     </div>
                 </div>
             </form>

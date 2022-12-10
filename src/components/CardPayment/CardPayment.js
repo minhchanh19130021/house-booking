@@ -1,24 +1,27 @@
 import classNames from 'classnames/bind';
 import { NavLink } from 'react-router-dom';
 import styles from './CardPayment.module.scss';
-import { useContext, useState } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import SelectPaymentOptions from '~/components/SelectPaymentOptions';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SearchContext } from '../../context/SearchContext';
 import { forwardRef, useImperativeHandle, useRef } from 'react';
 import { format } from 'date-fns';
 import useFetch from '../../hooks/useFetch';
+import { useDispatch, useSelector } from 'react-redux';
+import ModalDate from '~/pages/Payment/ModalDate';
+import { motion } from 'framer-motion';
+import ModalCustomer from '~/pages/Payment/ModalCustomer';
 const cx = classNames.bind(styles);
 
 function CardPayment() {
+    const user = useSelector((state) => state.authentication.login.currentUser);
     const location = useLocation();
     const id = location.pathname.split('/')[2];
     const { dates, options } = useContext(SearchContext);
     const [slideNumber, setSlideNumber] = useState(0);
     const [visible, setVisible] = useState(0);
     const [methodPay, setMethodPay] = useState('PAYPAL');
-
-    
 
     const setMethodCreditCard = () => {
         setMethodPay('CREDIT_CARD');
@@ -55,9 +58,10 @@ function CardPayment() {
     //
 
     const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/636ce065825a1cd1940641a2`);
+
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'USD',
+        currency: 'VND',
     });
 
     const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
@@ -70,11 +74,13 @@ function CardPayment() {
     const days = dayDifference(dates[0].endDate, dates[0].startDate);
 
     function priceStay() {
-        return data.price * days;
+        var num = data.price * days * 0.00004;
+        return Number.parseFloat(num.toFixed(2));
     }
 
-    function idPrice() {
-        return priceStay() + 50 + 10;
+    function totalPrice() {
+        var num = priceStay() + 350000 * 0.00004 + 100000 * 0.00004;
+        return Number.parseFloat(num.toFixed(2));
     }
 
     const urlPay =
@@ -85,9 +91,21 @@ function CardPayment() {
         '/' +
         priceStay() +
         '/' +
-        idPrice() +
+        totalPrice() +
         '/' +
         data.introduce;
+    // chỉnh sửa
+
+    const [visibleModalDate, setvisibleModalDate] = useState();
+    const [visibleModalCustomer, setvisibleModalCusmtomer] = useState();
+
+    const handlevisibleModalDate = () => {
+        setvisibleModalDate((visibleModalDate) => !visibleModalDate);
+    };
+
+    const handlevisibleModalCustomer = () => {
+        setvisibleModalCusmtomer((visibleModalCustomer) => !visibleModalCustomer);
+    };
 
     return (
         <div className={cx('_bdo76v7')}>
@@ -109,7 +127,7 @@ function CardPayment() {
                             <section>
                                 <div className={cx('tu9uqg8', 'dir', 'dir-ltr')}>
                                     <h2 tabIndex="-1" className={cx('_14i3z6h')} elementtiming="LCP-target">
-                                        Chuyến đi của bạn {data.name}
+                                        Chuyến đi của bạn
                                     </h2>
                                 </div>
                             </section>
@@ -135,14 +153,15 @@ function CardPayment() {
                                             <div className={cx('_jbk4n3')}>{`${format(
                                                 dates[0].startDate,
                                                 'dd/MM/yyyy',
-                                            )} to ${format(dates[0].endDate, 'dd/MM/yyyy')}`}</div>
+                                            )} đến ${format(dates[0].endDate, 'dd/MM/yyyy')}`}</div>
                                         </div>
                                         <div className={cx('_fz3zdn')}>
                                             <button
                                                 data-testid="checkout_platform.DATE_PICKER.edit"
                                                 aria-label="Chỉnh sửa ngày"
                                                 type="button"
-                                                className={cx('_15rpys7s')}
+                                                className={cx('_15rpys7s', '_fu49hrz')}
+                                                onClick={() => handlevisibleModalDate()}
                                             >
                                                 Chỉnh sửa
                                             </button>
@@ -172,14 +191,15 @@ function CardPayment() {
                                             </div>
                                             <div
                                                 className={cx('_jbk4n3')}
-                                            >{`${options.adult} adult · ${options.children} children · ${options.baby} baby · ${options.pet} pet`}</div>
+                                            >{`${options.adult} Người lớn · ${options.children} Trẻ em · ${options.baby} em bé · ${options.pet} thú cưng`}</div>
                                         </div>
                                         <div className={cx('_fz3zdn')}>
                                             <button
                                                 data-testid="checkout_platform.GUEST_PICKER.edit"
                                                 aria-label="Chỉnh sửa thông tin khách"
                                                 type="button"
-                                                className={cx('_15rpys7s')}
+                                                className={cx('_15rpys7s', '_fu49hrz')}
+                                                onClick={() => handlevisibleModalCustomer()}
                                             >
                                                 Chỉnh sửa
                                             </button>
@@ -809,22 +829,41 @@ function CardPayment() {
                                                 <span className={cx('_14d5b3i')}></span>{' '}
                                             </span>
                                         </button> */}
-                                        <form action={urlPay} method="post">
-                                            <span className={cx('tjxdvlu', 'dir', 'dir-ltr')}>
-                                                <span
-                                                    className={cx('t12u7nq4', 'dir', 'dir-ltr')}
-                                                    style={{
-                                                        backgroundPosition:
-                                                            'calc((100 - var(--mouse-x, 0)) * 1%) calc((100 - var(--mouse-y, 0)) * 1%)',
-                                                    }}
-                                                ></span>
-                                            </span>
-                                            <input
-                                                className={cx('btnpay')}
-                                                type="submit"
-                                                value="Xác nhận và thanh toán"
-                                            />
-                                        </form>
+                                        {user?.status && user !== null ? (
+                                            <form action={urlPay} method="post">
+                                                <span className={cx('tjxdvlu', 'dir', 'dir-ltr')}>
+                                                    <span
+                                                        className={cx('t12u7nq4', 'dir', 'dir-ltr')}
+                                                        style={{
+                                                            backgroundPosition:
+                                                                'calc((100 - var(--mouse-x, 0)) * 1%) calc((100 - var(--mouse-y, 0)) * 1%)',
+                                                        }}
+                                                    ></span>
+                                                </span>
+                                                <input
+                                                    className={cx('btnpay')}
+                                                    type="submit"
+                                                    value="Xác nhận và thanh toán"
+                                                />
+                                            </form>
+                                        ) : (
+                                            <form action="/signin/pay/" method="get">
+                                                <span className={cx('tjxdvlu', 'dir', 'dir-ltr')}>
+                                                    <span
+                                                        className={cx('t12u7nq4', 'dir', 'dir-ltr')}
+                                                        style={{
+                                                            backgroundPosition:
+                                                                'calc((100 - var(--mouse-x, 0)) * 1%) calc((100 - var(--mouse-y, 0)) * 1%)',
+                                                        }}
+                                                    ></span>
+                                                </span>
+                                                <input
+                                                    className={cx('btnpay')}
+                                                    type="submit"
+                                                    value="Xác nhận và thanh toán"
+                                                />
+                                            </form>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -837,6 +876,56 @@ function CardPayment() {
                     </div>
                 </div>
             </div>
+            {visibleModalDate && <div className={cx('overlay')} onClick={handlevisibleModalDate}></div>}
+            {visibleModalCustomer && <div className={cx('overlay')} onClick={handlevisibleModalCustomer}></div>}
+            {visibleModalDate && (
+                <ModalDate>
+                    <svg
+                        viewBox="0 0 32 32"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        role="presentation"
+                        focusable="false"
+                        style={{
+                            display: 'block',
+                            fill: 'none',
+                            height: '16px',
+                            width: '16px',
+                            stroke: 'currentcolor',
+                            strokeWidth: 3,
+                            overflow: 'visible',
+                        }}
+                        onClick={handlevisibleModalDate}
+                    >
+                        <path d="m6 6 20 20" />
+                        <path d="m26 6-20 20" />
+                    </svg>
+                </ModalDate>
+            )}
+            {visibleModalCustomer && (
+                <ModalCustomer>
+                <svg
+                    viewBox="0 0 32 32"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                    role="presentation"
+                    focusable="false"
+                    style={{
+                        display: 'block',
+                        fill: 'none',
+                        height: '16px',
+                        width: '16px',
+                        stroke: 'currentcolor',
+                        strokeWidth: 3,
+                        overflow: 'visible',
+                    }}
+                    onClick={handlevisibleModalCustomer}
+                >
+                    <path d="m6 6 20 20" />
+                    <path d="m26 6-20 20" />
+                </svg>
+            </ModalCustomer>
+            )}
         </div>
     );
 }
