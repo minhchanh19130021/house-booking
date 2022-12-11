@@ -221,7 +221,10 @@ function Filter(props) {
                                 key={i}
                                 rounded
                                 small
-                                className={cx('number', numberBedroom === i ? 'active' : null)}
+                                className={cx(
+                                    'number',
+                                    numberBedroom === i || (numberBedroom == '' && i == 0) ? 'active' : null,
+                                )}
                                 onClick={() => setNumberBedroom(i)}
                             >
                                 {i === 0 ? 'Bất kì' : i}
@@ -236,7 +239,10 @@ function Filter(props) {
                                 type="button"
                                 rounded
                                 small
-                                className={cx('number', numberBed === i ? 'active' : null)}
+                                className={cx(
+                                    'number',
+                                    numberBed === i || (numberBed == '' && i == 0) ? 'active' : null,
+                                )}
                                 onClick={() => setNumberBed(i)}
                             >
                                 {i === 0 ? 'Bất kì' : i}
@@ -251,7 +257,10 @@ function Filter(props) {
                                 type="button"
                                 rounded
                                 small
-                                className={cx('number', numberBathroom === i ? 'active' : null)}
+                                className={cx(
+                                    'number',
+                                    numberBathroom === i || (numberBathroom == '' && i == 0) ? 'active' : null,
+                                )}
                                 onClick={() => setNumberBathroom(i)}
                             >
                                 {i === 0 ? 'Bất kì' : i}

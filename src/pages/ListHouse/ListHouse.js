@@ -11,6 +11,7 @@ const cx = classNames.bind(styles);
 function ListHouse() {
     const [isExpandFilter, setExpandFilter] = useState(false);
     const [listHouse, setListHouse] = useState([]);
+    const [isFetch, setFetch] = useState(false);
     const [totalPagination, setTotalPagination] = useState(0);
     const [isMobile, setMobile] = useState(window.innerWidth < 850 ? true : false);
     const [queryString, setQueryString] = useState(window.location.search);
@@ -22,6 +23,7 @@ function ListHouse() {
     let currentPagination = window.location.pathname.split('/').pop();
     // get list house from params on url
     useEffect(() => {
+        window.scrollTo(0, 0);
         if (body === '{}') {
             fetch(`http://localhost:8080/api/v2/houses/city/${slug}/${currentPagination}`, {
                 method: 'GET',
@@ -32,6 +34,7 @@ function ListHouse() {
                         console.log(response);
                         setListHouse(response.data);
                         setTotalPagination(response.pagination);
+                        setFetch(true);
                     }
                 })
                 .catch((err) => {
@@ -122,15 +125,14 @@ function ListHouse() {
                             );
                         })}
                     </div>
-                    {listHouse.length === 0 ? (
-                        <p>Nothing</p>
-                    ) : (
+                    {listHouse.length === 0 && isFetch ? <h1>Không có kết quả</h1> : null}
+                    {listHouse.length !== 0 && isFetch ? (
                         <Pagination
                             totalPagination={totalPagination}
                             currentPagination={currentPagination}
                             queryString={queryString}
                         ></Pagination>
-                    )}
+                    ) : null}
                 </div>
             </div>
         </div>

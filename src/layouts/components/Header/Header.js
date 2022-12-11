@@ -2,23 +2,55 @@ import classNames from 'classnames/bind';
 import styles from '../Header/Header.module.scss';
 import Button from '~/components/Button';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import HeaderSearch from './HeaderSearch';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutFailure, logoutStart, logoutSuccess } from '~/redux/authenticationSlide';
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import useMatchMedia from 'react-use-match-media';
+import { ref, getDownloadURL } from 'firebase/storage';
+import { storage } from '~/config/firebase';
+import { setAvatar } from '~/redux/avatarSlice';
 import { googleLogout } from '@react-oauth/google';
 
 const cx = classNames.bind(styles);
 function Header() {
     const [searchModal, setSearchModal] = useState(false);
     const user = useSelector((state) => state.authentication.login.currentUser);
+    useSelector((state) => console.log(state));
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [modalMenu, setModalMenu] = useState(false);
     modalMenu ? disableBodyScroll(document) : enableBodyScroll(document);
     const isDesktopResolution = useMatchMedia('(max-width:992px)', true);
+    let avatar = useSelector((state) => state.avatar.avatar.url);
+
+    useEffect(() => {
+        if (user?._id) {
+            fetch(`http://localhost:8080/api/v1/user/get/${user?._id}`, {
+                method: 'GET',
+            })
+                .then((response) => response.json())
+                .then((response) => {
+                    if (response.success === true) {
+                        getDownloadURL(ref(storage, `user/${user._id}/${response.data[0]?.avatar}`))
+                            .then((link) => {
+                                dispatch(setAvatar({ url: link }));
+                            })
+                            .catch((error) => {
+                                dispatch(
+                                    setAvatar({
+                                        url: 'https://i.pinimg.com/originals/e2/a8/31/e2a831a40846322742739537c9aaec1c.png',
+                                    }),
+                                );
+                            });
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    }, []);
 
     const handleVisibleModal = () => {
         setSearchModal((searchModal) => !searchModal);
@@ -35,7 +67,6 @@ function Header() {
             })
                 .then((response) => response.json())
                 .then((result) => {
-                    console.log(result);
                     if (result.status) {
                         // googleLogout();
                         dispatch(logoutSuccess(result));
@@ -102,11 +133,7 @@ function Header() {
                     </Button>
                     {user?.status && user !== null ? (
                         <div className={cx('user')}>
-                            <img
-                                src="https://a0.muscache.com/im/pictures/user/feac4078-fdbd-4a28-bf73-a11bc4019781.jpg?im_w=240"
-                                alt="user-avatar"
-                                className={cx('user-avatar')}
-                            />
+                            <img src={avatar} alt="user-avatar" className={cx('user-avatar')} />
 
                             <p className={cx('username')}>Xin chào, {user?.username}</p>
                             <div className={cx('menu-user')}>
