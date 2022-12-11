@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logoutFailure, logoutStart, logoutSuccess } from '~/redux/authenticationSlide';
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import useMatchMedia from 'react-use-match-media';
+import { googleLogout } from '@react-oauth/google';
 
 const cx = classNames.bind(styles);
 function Header() {
@@ -22,7 +23,6 @@ function Header() {
     const handleVisibleModal = () => {
         setSearchModal((searchModal) => !searchModal);
     };
-
     const handleLogout = () => {
         dispatch(logoutStart());
         (async () => {
@@ -37,6 +37,7 @@ function Header() {
                 .then((result) => {
                     console.log(result);
                     if (result.status) {
+                        // googleLogout();
                         dispatch(logoutSuccess(result));
                         navigate('/signin');
                     } else {
@@ -213,7 +214,9 @@ function Header() {
                                         >
                                             Lịch sử đặt nhà
                                         </NavLink>
-                                        <NavLink onClick={handleLogout}>Đăng xuất</NavLink>
+                                        <NavLink className={cx('menu-item')} onClick={handleLogout}>
+                                            Đăng xuất
+                                        </NavLink>
                                     </div>
                                 ) : (
                                     <div className={cx('menu')}>
