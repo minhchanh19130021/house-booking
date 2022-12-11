@@ -2,21 +2,31 @@ import classNames from 'classnames/bind';
 import styles from './PersonalDetail.module.scss';
 import ProfileSidebar from '../ProfileSidebar';
 import Button from '~/components/Button';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { useState, useEffect } from 'react';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { setAvatar } from '~/redux/avatarSlice';
 
 const cx = classNames.bind(styles);
 function PersonalDetail() {
     const user = useSelector((state) => state.authentication.login.currentUser);
+    const [imageAsFile, setImageAsFile] = useState('');
+    const [imageAsUrl, setImageAsUrl] = useState('');
+    const [activeNotification, setActiveNotification] = useState(false);
+    const [notification, setNotification] = useState('');
+    const [imageChanged, setImageChanged] = useState(false);
+    const dispatch = useDispatch();
+    const avatar = useSelector((state) => state.avatar.avatar.url);
     const formik = useFormik({
         initialValues: {
-            firstname: user?.firstname,
-            lastname: user?.lastname,
-            username: user?.username,
-            birthday: user?.birthday,
-            gender: user?.gender,
-            email: user?.email,
+            firstname: '',
+            lastname: '',
+            username: '',
+            birthday: '',
+            gender: '',
+            email: '',
         },
         validationSchema: Yup.object({
             firstname: Yup.string().required('Vui lòng nhập đầy đủ'),
@@ -29,9 +39,66 @@ function PersonalDetail() {
                 .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Email không hợp lệ'),
         }),
         onSubmit: (values) => {
-            console.log(values);
+            try {
+                const storage = getStorage();
+                const storageRef = ref(storage, `user/${user._id}/${imageAsFile.name}`);
+                uploadBytesResumable(storageRef, imageAsFile);
+                values.avatar = imageAsFile.name;
+                getDownloadURL(ref(storage, `user/${user._id}/${imageAsFile.name}`))
+                    .then((link_img) => {
+                        dispatch(
+                            setAvatar({
+                                url: link_img,
+                            }),
+                        );
+                    })
+                    .catch((error) => {});
+            } catch (e) {
+                setNotification('Thay đổi không thành công');
+            }
+            fetch(`http://localhost:8080/api/v1/user/update`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(values),
+            })
+                .then((response) => response.json())
+                .then((response) => {
+                    if (response.success == true) {
+                        setNotification('Thay đổi thành công');
+                    } else {
+                        setNotification('Thay đổi không thành công');
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+            setActiveNotification(true);
         },
     });
+
+    const handleImage = (e) => {
+        const image = e.target.files[0];
+        if (e.target.files && e.target.files[0]) {
+            setImageAsUrl(URL.createObjectURL(e.target.files[0]));
+            setImageAsFile(image);
+            setImageChanged(true);
+        }
+    };
+
+    useEffect(() => {
+        fetch(`http://localhost:8080/api/v1/user/get/${user._id}`, {
+            method: 'GET',
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.success === true) {
+                    formik.setValues(response.data[0] ? response.data[0] : {});
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
 
     return (
         <div className="grid wide">
@@ -49,7 +116,7 @@ function PersonalDetail() {
                                     id="firstname"
                                     name="firstname"
                                     type="text"
-                                    value={formik.values.firstname }
+                                    value={formik.values.firstname || ''}
                                     onChange={formik.handleChange}
                                 />
 
@@ -63,7 +130,7 @@ function PersonalDetail() {
                                     id="lastname"
                                     name="lastname"
                                     type="text"
-                                    value={formik.values.lastname }
+                                    value={formik.values.lastname || ''}
                                     onChange={formik.handleChange}
                                 />
                                 {formik.errors.lastname && (
@@ -77,7 +144,7 @@ function PersonalDetail() {
                                     id="username"
                                     name="username"
                                     type="text"
-                                    value={formik.values.username}
+                                    value={formik.values.username || ''}
                                     onChange={formik.handleChange}
                                 />
                                 {formik.errors.username && (
@@ -89,12 +156,16 @@ function PersonalDetail() {
                                 <select
                                     id="gender"
                                     name="gender"
-                                    value={formik.values.gender}
+                                    value={formik.values.gender || ''}
                                     onChange={formik.handleChange}
                                 >
                                     <option value="">--Chọn giới tính--</option>
-                                    <option value="Nam">Nam</option>
-                                    <option value="Nữ">Nữ </option>
+                                    <option value="Nam" label="Nam">
+                                        Nam
+                                    </option>
+                                    <option value="Nữ" label="Nữ">
+                                        Nữ{' '}
+                                    </option>
                                 </select>
                                 {formik.errors.gender && <p className={cx('alert-message')}>{formik.errors.gender}</p>}
                             </div>
@@ -104,7 +175,7 @@ function PersonalDetail() {
                                     id="birthday"
                                     name="birthday"
                                     type="date"
-                                    value={formik.values.birthday}
+                                    value={formik.values.birthday || ''}
                                     onChange={formik.handleChange}
                                     max={new Date().toISOString().split('T')[0]}
                                 />
@@ -113,26 +184,22 @@ function PersonalDetail() {
                                 )}
                             </div>
                             <div className={cx('profile-input', 'col', 'l-12', 'm-12', 'c-12')}>
-                                <label htmlFor="email">Địa chỉ email</label>
-                                <input
-                                    id="email"
-                                    name="email"
-                                    type="text"
-                                    value={formik.values.email}
-                                    onChange={formik.handleChange}
-                                />
-                                {formik.errors.email && <p className={cx('alert-message')}>{formik.errors.email}</p>}
-                            </div>
-
-                            <div className={cx('profile-input', 'col', 'l-12', 'm-12', 'c-12')}>
                                 <label htmlFor="avatar">Thay đổi ảnh đại diện</label>
-                                <input id="avatar" name="avatar" type="file" />
+                                <input id="avatar" name="avatar" type="file" onChange={handleImage} />
                                 <span className={cx('alert-message')}></span>
+                                <img
+                                    className={cx('show_avatar')}
+                                    src={!imageChanged ? avatar : imageAsUrl}
+                                    alt="404 not found avatar"
+                                />
                             </div>
                             <div className={cx('profile-input', 'col', 'l-12', 'm-12', 'c-12')}>
                                 <Button large type="submit" className={cx('submit-info')}>
                                     Lưu Thay Đổi
                                 </Button>
+                            </div>
+                            <div className={cx('notification')}>
+                                <p className={cx(activeNotification ? 'active' : null)}>{notification}</p>
                             </div>
                         </form>
                     )}

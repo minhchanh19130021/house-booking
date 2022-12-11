@@ -33,6 +33,28 @@
 .submit-info {
     float: right;
 }
-.alert-message{
+.alert-message {
     color: var(--danger);
+}
+
+.show_avatar {
+    height: 200px;
+    width: auto;
+}
+
+.notification {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    p {
+        margin: 0;
+        padding: 0;
+        font-size: 22px;
+        color: var(--green);
+        display: none;
+    }
+    .active {
+        display: block;
+    }
 }
