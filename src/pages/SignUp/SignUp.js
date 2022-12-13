@@ -7,7 +7,6 @@ import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { registerFailure, registerStart, registerSuccess } from '~/redux/authenticationSlide';
 import { useSelector } from 'react-redux';
 import {
     loginFailure,
