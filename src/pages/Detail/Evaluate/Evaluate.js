@@ -5,7 +5,7 @@ import InfoEvaluate from './EvaluateItem/InfoEvaluate';
 
 const cx = classNames.bind(styles);
 
-function Evaluate({ children }) {
+function Evaluate({ children, ...props }) {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('summary', 'row')}>
@@ -48,38 +48,20 @@ function Evaluate({ children }) {
                 </div>
             </div>
             <div className={cx('row', 'evaluates')}>
-                <div className="col l-6 m-12 c-12">
-                    <EvaluateItem
-                        avatar="https://a0.muscache.com/im/pictures/user/21618d46-0599-40ab-a27d-5b802d21dd8f.jpg?im_w=240"
-                        name="Shason"
-                        time="tháng 11 năm 2022"
-                        content="Chỗ ở hoàn toàn tuyệt vời. Một trong những viên ngọc toàn cầu của Airbnb cho thấy vẻ đẹp thực sự của Palawan. Đồng ý với tất cả những gì mọi người đã nói. Đồ ăn, quang cảnh và chỗ ở tuyệt vời. Hòn đảo đã tổ chức một lễ sinh nhật rất đặc biệt và chúng tôi đã may mắn với thời tiết tốt để tận hưởng nó đúng cách. Vô tận đề xuất."
-                    />
-                </div>
-                <div className="col l-6 m-12 c-12">
-                    <EvaluateItem
-                        avatar="https://a0.muscache.com/im/pictures/user/21618d46-0599-40ab-a27d-5b802d21dd8f.jpg?im_w=240"
-                        name="Shason"
-                        time="tháng 11 năm 2022"
-                        content="Chỗ ở hoàn toàn tuyệt vời. Một trong những viên ngọc toàn cầu của Airbnb cho thấy vẻ đẹp thực sự của Palawan. Đồng ý với tất cả những gì mọi người đã nói. Đồ ăn, quang cảnh và chỗ ở tuyệt vời. Hòn đảo đã tổ chức một lễ sinh nhật rất đặc biệt và chúng tôi đã may mắn với thời tiết tốt để tận hưởng nó đúng cách. Vô tận đề xuất."
-                    />
-                </div>
-                <div className="col l-6 m-12 c-12">
-                    <EvaluateItem
-                        avatar="https://a0.muscache.com/im/pictures/user/21618d46-0599-40ab-a27d-5b802d21dd8f.jpg?im_w=240"
-                        name="Shason"
-                        time="tháng 11 năm 2022"
-                        content="Chỗ ở hoàn toàn tuyệt vời. Một trong những viên ngọc toàn cầu của Airbnb cho thấy vẻ đẹp thực sự của Palawan. Đồng ý với tất cả những gì mọi người đã nói. Đồ ăn, quang cảnh và chỗ ở tuyệt vời. Hòn đảo đã tổ chức một lễ sinh nhật rất đặc biệt và chúng tôi đã may mắn với thời tiết tốt để tận hưởng nó đúng cách. Vô tận đề xuất."
-                    />
-                </div>
-                <div className="col l-6 m-12 c-12">
-                    <EvaluateItem
-                        avatar="https://a0.muscache.com/im/pictures/user/21618d46-0599-40ab-a27d-5b802d21dd8f.jpg?im_w=240"
-                        name="Shason"
-                        time="tháng 11 năm 2022"
-                        content="Chỗ ở hoàn toàn tuyệt vời. Một trong những viên ngọc toàn cầu của Airbnb cho thấy vẻ đẹp thực sự của Palawan. Đồng ý với tất cả những gì mọi người đã nói. Đồ ăn, quang cảnh và chỗ ở tuyệt vời. Hòn đảo đã tổ chức một lễ sinh nhật rất đặc biệt và chúng tôi đã may mắn với thời tiết tốt để tận hưởng nó đúng cách. Vô tận đề xuất."
-                    />
-                </div>
+                {props.dataReviews?.map((e, index) => (
+                    <div className="col l-6 m-12 c-12" key={index}>
+                        <EvaluateItem
+                            avatar={
+                                `https://a0.muscache.com/im/pictures/user/21618d46-0599-40ab-a27d-5b802d21dd8f.jpg?im_w=240` ||
+                                e.user[0]?.avatar
+                            }
+                            name={e.user[0]?.username}
+                            time={e.review[0]?.create_date}
+                            content={e.review[0]?.public_review}
+                        />
+                    </div>
+                ))}
+                
                 {children}
             </div>
         </div>

@@ -15,7 +15,7 @@ import { format } from 'date-fns';
 import useFetch from '../../../hooks/useFetch';
 
 const cx = classNames.bind(styles);
-function BookingForm() {
+function BookingForm(props) {
     const [visibleGuestInfo, setVisibleGuestInfo] = useState(false);
 
     const hanldeVisibleGuestInfo = () => {
@@ -45,8 +45,6 @@ function BookingForm() {
         baby: 0,
         pet: 0,
     });
-
-    
 
     const handleOption = (name, operation) => {
         setOptions((prev) => {
@@ -108,8 +106,14 @@ function BookingForm() {
             <form className={cx('booking-form')}>
                 <div className={cx('booking-form__header')}>
                     <div className={cx('price')}>
-                        <p className={cx('old')}>{formatter.format(data.price)} / đêm</p>
-                        <p className={cx('new')}>{formatter.format(data.price)} / đêm</p>
+                        <p className={cx('old')}>{formatter.format(props.dataFromParent?.price)} / đêm</p>
+                        <p className={cx('new')}>
+                            {formatter.format(
+                                props.dataFromParent?.price -
+                                    props.dataFromParent?.price * props.dataFromParent?.discount,
+                            )}{' '}
+                            / đêm
+                        </p>
                     </div>
                     <div className={cx('star')}>
                         <p className={cx('rate')}>
@@ -125,9 +129,9 @@ function BookingForm() {
                                     clipRule="evenodd"
                                 />
                             </svg>
-                            {data.rate}
+                            {props.dataFromParent?.rate}
                         </p>
-                        <p className={cx('number')}>61 đánh giá</p>
+                        <p className={cx('number')}>{props.dataFromParent?.number_review} đánh giá</p>
                     </div>
                 </div>
                 <div className={cx('booking-form__body')}>
@@ -170,10 +174,9 @@ function BookingForm() {
                             <label onClick={hanldeVisibleGuestInfo}>
                                 <FontAwesomeIcon icon={faPerson} className="headerIcon" /> Khách
                             </label>
-                            <label
-                                onClick={hanldeVisibleGuestInfo}
-                                style={{ fontSize: 14 }}
-                            >{`${options.adult} Người lớn · ${options.children} Trẻ em · ${options.baby} Em bé · ${options.pet} Thú cưng`}</label>
+                            <label onClick={hanldeVisibleGuestInfo} style={{ fontSize: 14 }}>
+                                {`${props.dataFromParent?.detail[0].maximum_number_visitor.adult_children} Người lớn · ${props.dataFromParent?.detail[0].maximum_number_visitor.baby} Em bé  ·${props.dataFromParent?.detail[0].maximum_number_visitor.pet} Thú cưng`}
+                            </label>
                             {visibleGuestInfo && (
                                 <motion.div animate={{}} className={cx('guest-info')}>
                                     <div className={cx('guest-info__item')}>

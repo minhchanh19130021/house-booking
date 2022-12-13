@@ -2,10 +2,11 @@ import classNames from 'classnames/bind';
 import styles from './TitleHeader.module.scss';
 
 const cx = classNames.bind(styles);
-function TitleHeader() {
+function TitleHeader(props) {
     return (
         <div className={cx('title')}>
-            <h3 className={cx('name-house')}>Bungalow Bán Mở bằng tre + Instagram Hammock Net</h3>
+            <h3 className={cx('name-house')}>{props.dataFromParent?.name}</h3>
+
             <div className={cx('rate')}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                     <path
@@ -14,9 +15,12 @@ function TitleHeader() {
                         clipRule="evenodd"
                     />
                 </svg>
-                <span className={cx('number-star')}>4,57</span>
-                <span className={cx('number-rate')}>61 đánh giá</span>
-                <span className={cx('location')}>Uluwatu, Bali, Indonesia</span>
+                <span className={cx('number-star')}>{props.dataFromParent?.rate}</span>
+                <span className={cx('number-rate')}>{props.dataFromParent?.number_review} đánh giá</span>
+                <span className={cx('location')}>
+                    {props.dataFromParent?.address.number}, {props.dataFromParent?.address.district},{' '}
+                    {props.dataFromParent?.address.city}, {props.dataFromParent?.address.area}{' '}
+                </span>
             </div>
         </div>
     );

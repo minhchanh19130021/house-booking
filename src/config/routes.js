@@ -1,7 +1,7 @@
 const routes = {
     home: '/',
     contact: '/contact',
-    detail: '/detail',
+    detail: '/detail/:slug',
     signup: '/signup',
     signup_owner: '/signup-owner',
     signin: '/signin',
