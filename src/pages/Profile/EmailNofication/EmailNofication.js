@@ -2,7 +2,6 @@ import classNames from 'classnames/bind';
 import styles from './EmailNofication.module.scss';
 import ProfileSidebar from '../ProfileSidebar';
 import Button from '~/components/Button';
-
 const cx = classNames.bind(styles);
 
 function EmailNofication() {

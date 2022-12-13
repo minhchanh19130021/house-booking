@@ -31,5 +31,7 @@ const routes = {
     host_renting: '/host-renting',
     confirm_success: 'confirm-success',
     confirm_fail: 'confirm-fail',
+    // 404
+    not_found: '*',
 };
 export default routes;

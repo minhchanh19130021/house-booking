@@ -8,9 +8,11 @@ import { useFormik } from 'formik';
 import { useState, useEffect } from 'react';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { setAvatar } from '~/redux/avatarSlice';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 function PersonalDetail() {
+    const navigate = useNavigate();
     const user = useSelector((state) => state.authentication.login.currentUser);
     const [imageAsFile, setImageAsFile] = useState('');
     const [imageAsUrl, setImageAsUrl] = useState('');
@@ -58,7 +60,10 @@ function PersonalDetail() {
             }
             fetch(`http://localhost:8080/api/v1/user/update`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    token: `Bearer ${user?.accessToken}`,
+                },
                 body: JSON.stringify(values),
             })
                 .then((response) => response.json())
@@ -86,13 +91,20 @@ function PersonalDetail() {
     };
 
     useEffect(() => {
-        fetch(`http://localhost:8080/api/v1/user/get/${user._id}`, {
-            method: 'GET',
+        fetch(`http://localhost:8080/api/v1/user/get`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                token: `Bearer ${user?.accessToken}`,
+            },
+            body: JSON.stringify({ uid: user?._id ? user?._id : null }),
         })
             .then((response) => response.json())
             .then((response) => {
                 if (response.success === true) {
                     formik.setValues(response.data[0] ? response.data[0] : {});
+                } else if (response === 'Bạn chưa có mã token') {
+                    navigate('/signin');
                 }
             })
             .catch((err) => {

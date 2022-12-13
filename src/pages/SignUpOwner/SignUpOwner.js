@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '~/components/Button';
 import BasicInfo from './Form/BasicInfo';
 import Convenient from './Form/Convenient';
@@ -10,9 +10,33 @@ import Location from './Form/Location';
 import OwnerInfo from './Form/OwnerInfo';
 import Policy from './Form/Policy';
 import styles from './SignUpOwner.module.scss';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 function SignUpOwner() {
+    const navigate = useNavigate();
+    const user = useSelector((state) => state.authentication.login.currentUser);
+    useEffect(() => {
+        fetch(`http://localhost:8080/api/v1/isLogin`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                token: `Bearer ${user?.accessToken}`,
+            },
+            body: JSON.stringify({ uid: user?._id ? user?._id : null }),
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.success === true) {
+                    navigate('/');
+                } else if (response === 'Bạn chưa có mã token') {
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
     const [step, setStep] = useState(1);
 
     const handleStep = () => {

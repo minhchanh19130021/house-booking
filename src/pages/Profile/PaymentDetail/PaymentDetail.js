@@ -47,7 +47,7 @@ function PaymentDetail() {
                             />
                         </div>
 
-                        <div className={cx('profile-input', 'col', 'l-12','m-12', 'c-12')}>
+                        <div className={cx('profile-input', 'col', 'l-12', 'm-12', 'c-12')}>
                             <Button large onClick={handleModalLink} type="button">
                                 Thêm phương thức thanh toán
                             </Button>
@@ -55,17 +55,17 @@ function PaymentDetail() {
                         <div className={cx('profile-input', 'col', 'l-12')}>
                             {modalLink && (
                                 <div className={cx('profile-form', 'row')}>
-                                    <div className={cx('profile-input', 'col', 'l-6','m-12', 'c-12')}>
+                                    <div className={cx('profile-input', 'col', 'l-6', 'm-12', 'c-12')}>
                                         <label htmlFor="fullname">Họ và tên (đầy đủ, viết in hoa không dấu)</label>
                                         <input id="fullname" name="fullname" type="text" />
                                         <span className={cx('alert-message')}></span>
                                     </div>
-                                    <div className={cx('profile-input', 'col', 'l-6','m-12', 'c-12')}>
+                                    <div className={cx('profile-input', 'col', 'l-6', 'm-12', 'c-12')}>
                                         <label htmlFor="cmnd">CMND/CCCD</label>
                                         <input id="cmnd" name="cmnd" type="text" />
                                         <span className={cx('alert-message')}></span>
                                     </div>
-                                    <div className={cx('profile-input', 'col', 'l-6','m-12', 'c-12')}>
+                                    <div className={cx('profile-input', 'col', 'l-6', 'm-12', 'c-12')}>
                                         <label>Tên ngân hàng</label>
                                         <select>
                                             <option value="bidv">BIDV</option>
@@ -73,7 +73,7 @@ function PaymentDetail() {
                                             <option value="vp">VP BANK</option>
                                         </select>
                                     </div>
-                                    <div className={cx('profile-input', 'col', 'l-6','m-12', 'c-12')}>
+                                    <div className={cx('profile-input', 'col', 'l-6', 'm-12', 'c-12')}>
                                         <label>Tên chi nhánh ngân hàng</label>
                                         <select>
                                             <option value="q9">Quận 9</option>
@@ -81,12 +81,12 @@ function PaymentDetail() {
                                             <option value="bd">Bình Dương</option>
                                         </select>
                                     </div>
-                                    <div className={cx('profile-input', 'col', 'l-12','m-12', 'c-12')}>
+                                    <div className={cx('profile-input', 'col', 'l-12', 'm-12', 'c-12')}>
                                         <label htmlFor="number-card">Số tài khoản</label>
                                         <input id="number-card" name="avatar" type="text" />
                                         <span className={cx('alert-message')}></span>
                                     </div>
-                                    <div className={cx('profile-input', 'col', 'l-12','m-12', 'c-12')}>
+                                    <div className={cx('profile-input', 'col', 'l-12', 'm-12', 'c-12')}>
                                         <Button
                                             large
                                             type="button"

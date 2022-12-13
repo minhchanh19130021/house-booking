@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
     loginFailure,
     loginStart,
@@ -21,6 +22,28 @@ import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-butto
 
 const cx = classNames.bind(styles);
 function SignUp() {
+    const user = useSelector((state) => state.authentication.login.currentUser);
+    useEffect(() => {
+        fetch(`http://localhost:8080/api/v1/isLogin`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                token: `Bearer ${user?.accessToken}`,
+            },
+            body: JSON.stringify({ uid: user?._id ? user?._id : null }),
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.success === true) {
+                    navigate('/');
+                } else if (response === 'Bạn chưa có mã token') {
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [villages, setVillages] = useState();
