@@ -9,11 +9,12 @@ import { loginFailure, loginStart, loginSuccess } from '~/redux/authenticationSl
 import { setAvatar } from '~/redux/avatarSlice';
 import { useState, useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
-import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 import FacebookLogin from 'react-facebook-login';
 import axios from 'axios';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '~/config/firebase';
+import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-buttons';
 
 const cx = classNames.bind(styles);
 function SignIn() {
@@ -94,53 +95,53 @@ function SignIn() {
             })();
         },
     });
-    // const [userInfoGoogle, setUserInfoGoogle] = useState();
-    // const login = useGoogleLogin({
-    //     onSuccess: async (tokenResponse) => {
-    //         const userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
-    //             headers: { Authorization: `Bearer ${tokenResponse?.access_token}` },
-    //         });
-    //         dispatch(loginStart());
-    //         console.log(userInfoGoogle);
-    //         const ress = await fetch(`http://localhost:8080/api/v1/login-google`, {
-    //             method: 'POST',
-    //             body: JSON.stringify({
-    //                 email: userInfo?.data.email,
-    //                 firstname: userInfo?.data.family_name,
-    //                 lastname: userInfo?.data.given_name,
-    //                 username: userInfo?.data.email.split('@')[0],
-    //                 picture: userInfo?.data.picture,
-    //             }),
-    //             headers: {
-    //                 'Content-type': 'application/json; charset=UTF-8',
-    //             },
-    //         })
-    //             .then((response) => response.json())
-    //             .then((data) => {
-    //                 console.log(data);
-    //             })
-    //             .catch((err) => console.log(err));
 
-    //         // await axios({
-    //         //     method: 'POST',
-    //         //     url: 'http://localhost:8080/api/v1/login-google',
-    //         //     data: {
-    //         //         email: userInfoGoogle?.data.email,
-    //         //         firstname: userInfoGoogle?.data.family_name,
-    //         //         lastname: userInfoGoogle?.data.given_name,
-    //         //         username: userInfoGoogle?.data.email.split('@')[0],
-    //         //         picture: userInfoGoogle?.data.picture,
-    //         //     },
-    //         // }).then((response) => {
-    //         //     console.log(response);
-    //         //     dispatch(loginSuccess(response.data.user));
-    //         //     navigate('/');
-    //         // });
-    //         // console.log(userInfo);
-    //     },
-    //     onError: (errorResponse) => console.log(errorResponse),
-    // });
+    const login = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            dispatch(loginStart());
 
+            console.log(tokenResponse);
+            var userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+            });
+
+            axios({
+                method: 'POST',
+                url: 'http://localhost:8080/api/v1/login-googles',
+                data: {
+                    email: userInfo.data?.email,
+                    email_verified: userInfo.data?.email_verified,
+                    family_name: userInfo.data?.family_name,
+                    given_name: userInfo.data?.given_name,
+                    name: userInfo.data?.name,
+                    avatar: userInfo.data?.picture,
+                },
+            })
+                .then((response) => {
+                    dispatch(loginSuccess(response.data.user));
+                    navigate('/');
+                })
+                .catch(() => {
+                    dispatch(loginFailure());
+                });
+        },
+        onError: (errorResponse) => dispatch(loginFailure()),
+    });
+    const responseFacebook = (response) => {
+        dispatch(loginStart());
+        axios({
+            method: 'POST',
+            url: 'http://localhost:8080/api/v1/login-facebook',
+            data: { accessToken: response.accessToken, userID: response.id },
+        })
+            .then((response) => {
+                dispatch(loginSuccess(response.data.user));
+                navigate('/');
+            })
+            .catch(() => {
+                dispatch(loginFailure());
+            });
+    };
     return (
         <div className={cx('wrapper')}>
             <div className={cx('', 'form-login')}>
@@ -191,42 +192,27 @@ function SignIn() {
                             <p className={cx('login-orther-text')}>Hoặc tiếp tục với</p>
                         </div>
                     </div>
-                    <div className={cx('login-social')}>
-                        {/* <Button className={cx('btn-social', 'facebook')}>Facebook</Button> */}
-                        {/* <Button className={cx('btn-social', 'google')}>Google</Button> */}
-                    </div>
+
                     <div className="grid">
                         <div className="row">
-                            <div className="col l-6 m-12 c-12">
-                                <GoogleLogin
-                                    onSuccess={(credentialResponse) => {
-                                        dispatch(loginStart());
-                                        axios({
-                                            method: 'POST',
-                                            url: 'http://localhost:8080/api/v1/login-google',
-                                            data: { idToken: credentialResponse.credential },
-                                        }).then((response) => {
-                                            dispatch(loginSuccess(response.data.user));
-                                            navigate('/');
-                                        });
-                                    }}
-                                    onError={() => {
-                                        console.log('Login Failed');
-                                        dispatch(loginFailure());
-                                    }}
-                                    useOneTap
-                                />
+                            <div className="col l-12 m-12 c-12">
+                                <div className={cx('btn-social')}>
+                                    <GoogleLoginButton onClick={() => login()} className={cx('btn-social')}>
+                                        <strong> ĐĂNG NHẬP GOOGLE</strong>
+                                    </GoogleLoginButton>
+                                </div>
                             </div>
-                            <div className="col l-6 n-12 c-12">
-                                {/* <FacebookLogin
-                                    appId="1088597931155576"
-                                    autoLoad={true}
-                                    fields="name,email,picture"
-                                    onClick={componentClicked}
-                                    callback={responseFacebook}
-                                    cssClass="btn-social"
-                                    icon="fa-facebook"
-                                /> */}
+                            <div className="col l-12 m-12 c-12">
+                                <FacebookLoginButton>
+                                    <FacebookLogin
+                                        appId="5791810414235073"
+                                        fields="name,email,picture"
+                                        callback={responseFacebook}
+                                        textButton="Đăng nhập với Facebook"
+                                        size="small"
+                                        buttonStyle={{ width: '100%', height: '100%', textAlign: 'left' }}
+                                    />
+                                </FacebookLoginButton>
                             </div>
                         </div>
                     </div>

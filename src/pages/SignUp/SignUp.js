@@ -9,6 +9,17 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { registerFailure, registerStart, registerSuccess } from '~/redux/authenticationSlide';
 import { useSelector } from 'react-redux';
+import {
+    loginFailure,
+    loginStart,
+    loginSuccess,
+    registerFailure,
+    registerStart,
+    registerSuccess,
+} from '~/redux/authenticationSlide';
+import { useGoogleLogin } from '@react-oauth/google';
+import FacebookLogin from 'react-facebook-login';
+import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-buttons';
 
 const cx = classNames.bind(styles);
 function SignUp() {
@@ -170,7 +181,52 @@ function SignUp() {
             })
             .catch((error) => console.log(error));
     }, [formik.values.address.district]);
+    const login = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            dispatch(loginStart());
 
+            console.log(tokenResponse);
+            var userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+            });
+
+            axios({
+                method: 'POST',
+                url: 'http://localhost:8080/api/v1/login-googles',
+                data: {
+                    email: userInfo.data?.email,
+                    email_verified: userInfo.data?.email_verified,
+                    family_name: userInfo.data?.family_name,
+                    given_name: userInfo.data?.given_name,
+                    name: userInfo.data?.name,
+                    avatar: userInfo.data?.picture,
+                },
+            })
+                .then((response) => {
+                    dispatch(loginSuccess(response.data.user));
+                    navigate('/');
+                })
+                .catch(() => {
+                    dispatch(loginFailure());
+                });
+        },
+        onError: (errorResponse) => dispatch(loginFailure()),
+    });
+    const responseFacebook = (response) => {
+        dispatch(loginStart());
+        axios({
+            method: 'POST',
+            url: 'http://localhost:8080/api/v1/login-facebook',
+            data: { accessToken: response.accessToken, userID: response.id },
+        })
+            .then((response) => {
+                dispatch(loginSuccess(response.data.user));
+                navigate('/');
+            })
+            .catch(() => {
+                dispatch(loginFailure());
+            });
+    };
     return (
         <div className={cx('wrapper')}>
             <form className={cx('form-login')} onSubmit={formik.handleSubmit}>
@@ -399,9 +455,28 @@ function SignUp() {
                     </div>
                 </div>
 
-                <div className={cx('login-social')}>
-                    <Button className={cx('btn-social', 'facebook')}>Facebook</Button>
-                    <Button className={cx('btn-social', 'google')}>Google</Button>
+                <div className="grid">
+                    <div className="row">
+                        <div className="col l-12 m-12 c-12">
+                            <div className={cx('btn-social')}>
+                                <GoogleLoginButton onClick={() => login()} className={cx('btn-social')}>
+                                    <strong> ĐĂNG NHẬP GOOGLE</strong>
+                                </GoogleLoginButton>
+                            </div>
+                        </div>
+                        <div className="col l-12 m-12 c-12">
+                            <FacebookLoginButton>
+                                <FacebookLogin
+                                    appId="5791810414235073"
+                                    fields="name,email,picture"
+                                    callback={responseFacebook}
+                                    textButton="Đăng nhập với Facebook"
+                                    size="small"
+                                    buttonStyle={{ width: '100%', height: '100%', textAlign: 'left' }}
+                                />
+                            </FacebookLoginButton>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
