@@ -1,9 +1,10 @@
 .container {
-    margin: 0;
-    padding: 0 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 50px 12px;
     width: 100%;
-    min-height: 80vh;
-    overflow: hidden !important;
+    height: 100%;
     overflow-x: hidden !important;
     scroll-behavior: smooth;
 
@@ -16,6 +17,7 @@
             width: 100%;
             img {
                 width: 50px;
+                cursor: pointer;
             }
             span {
                 font-size: 25px;
@@ -64,6 +66,9 @@
                 width: 99.9%;
             }
         }
+    }
+    .center {
+        padding: 0 50px;
     }
     .container__review {
         .review__value-name {
@@ -200,6 +205,14 @@
         padding: 10px !important;
         font-size: 18px !important;
     }
+    .label {
+        font-size: 18px;
+        margin: 0 30px !important;
+        cursor: pointer;
+    }
+    .center {
+        padding: 0 10px !important;
+    }
 }
 .title {
     line-height: 35px;
@@ -225,10 +238,10 @@ input[type='radio']:checked:before {
     content: '';
     display: block;
     position: absolute;
-    width: 20px;
-    height: 20px;
-    top: -8px;
-    left: -7px;
+    width: 22px;
+    height: 22px;
+    top: -6px;
+    left: -5px;
     background-color: white;
     border: 1px solid rgb(27, 114, 104);
     padding: 5px;
@@ -236,11 +249,11 @@ input[type='radio']:checked:before {
 input[type='radio']:checked:after {
     content: '';
     display: block;
-    width: 20px;
-    height: 20px;
+    width: 14px;
+    height: 14px;
     position: absolute;
-    top: -15%;
-    left: -11%;
+    bottom: 5%;
+    left: -10%;
     background-color: rgb(27, 114, 104);
     border-radius: 100%;
 }

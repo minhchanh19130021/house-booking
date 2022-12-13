@@ -3,17 +3,40 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Button from '~/components/Button';
 import styles from './HistoryBooking.module.scss';
+import { ref, getDownloadURL } from 'firebase/storage';
+import { storage } from '~/config/firebase';
+import { useSelector } from 'react-redux';
 const cx = classNames.bind(styles);
 
-function HistoryItem({ avatar, nameHost, nameHouse, member, date, payment, total, thanks, voucher, is_review, oid }) {
+function HistoryItem({
+    uid,
+    avatar,
+    nameHost,
+    nameHouse,
+    member,
+    date,
+    payment,
+    total,
+    thanks,
+    voucher,
+    is_review,
+    oid,
+}) {
+    const urlAvatar = useSelector((state) => state.avatar.avatar.url);
+    const user = useSelector((state) => state.authentication.login.currentUser);
     const [review, setReview] = useState({});
     const [isGetReview, setIsGetReview] = useState(false);
+
     function getReview(e) {
         e.preventDefault();
         if (!isGetReview) {
             if (!(review == {})) {
                 fetch(`http://localhost:8080/api/v2/review/get?oid=${oid}`, {
                     method: 'GET',
+                    headers: {
+                        'Content-type': 'application/json; charset=UTF-8',
+                        token: `Bearer ${user?.accessToken}`,
+                    },
                 })
                     .then((response) => response.json())
                     .then((response) => {
@@ -39,7 +62,7 @@ function HistoryItem({ avatar, nameHost, nameHouse, member, date, payment, total
         <div className={cx('history-item', 'row')}>
             <div className="col l-1 m-1 c-12">
                 <NavLink to="#">
-                    <img src={avatar} className={cx('avatar')} alt="avatar-host" />
+                    <img src={urlAvatar} className={cx('avatar')} alt="avatar-host" />
                 </NavLink>
             </div>
             <div className="col l-11 l-11 c-12">
@@ -79,7 +102,8 @@ function HistoryItem({ avatar, nameHost, nameHouse, member, date, payment, total
 
                 <p className={cx('total-booking', 'text')}>
                     <strong>Tổng số tiền: </strong>
-                    {Array.from(JSON.stringify(20000000))
+
+                    {Array.from(total ? JSON.stringify(total) : '')
                         .reverse()
                         .map((e, i) => (i % 3 === 0 && i !== 0 ? `${e}.` : e))
                         .reverse()

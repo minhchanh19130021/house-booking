@@ -4,16 +4,42 @@ import Button from '~/components/Button';
 import styles from './SignIn.module.scss';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginFailure, loginStart, loginSuccess } from '~/redux/authenticationSlide';
-import { useState } from 'react';
+import { setAvatar } from '~/redux/avatarSlice';
+import { useState, useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import FacebookLogin from 'react-facebook-login';
 import axios from 'axios';
+import { ref, getDownloadURL } from 'firebase/storage';
+import { storage } from '~/config/firebase';
 
 const cx = classNames.bind(styles);
 function SignIn() {
+    const user = useSelector((state) => state.authentication.login.currentUser);
+
+    useEffect(() => {
+        fetch(`http://localhost:8080/api/v1/isLogin`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                token: `Bearer ${user?.accessToken}`,
+            },
+            body: JSON.stringify({ uid: user?._id ? user?._id : null }),
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.success === true) {
+                    navigate('/');
+                } else if (response === 'Bạn chưa có mã token') {
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [dataLogin, setDataLogin] = useState();
@@ -45,6 +71,17 @@ function SignIn() {
                         setDataLogin(result);
                         if (result.status === true) {
                             dispatch(loginSuccess(result));
+                            getDownloadURL(ref(storage, `user/${result?._id}/${result?.avatar}`))
+                                .then((link) => {
+                                    dispatch(setAvatar({ url: link }));
+                                })
+                                .catch((error) => {
+                                    dispatch(
+                                        setAvatar({
+                                            url: 'https://i.pinimg.com/originals/e2/a8/31/e2a831a40846322742739537c9aaec1c.png',
+                                        }),
+                                    );
+                                });
                             navigate('/personal-detail');
                         } else {
                             dispatch(loginFailure());

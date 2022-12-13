@@ -17,7 +17,6 @@ const cx = classNames.bind(styles);
 function Header() {
     const [searchModal, setSearchModal] = useState(false);
     const user = useSelector((state) => state.authentication.login.currentUser);
-    useSelector((state) => console.log(state));
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [modalMenu, setModalMenu] = useState(false);
@@ -25,14 +24,20 @@ function Header() {
     const isDesktopResolution = useMatchMedia('(max-width:992px)', true);
     let avatar = useSelector((state) => state.avatar.avatar.url);
 
+    // get avatar from firebase
     useEffect(() => {
         if (user?._id) {
-            fetch(`http://localhost:8080/api/v1/user/get/${user?._id}`, {
-                method: 'GET',
+            fetch(`http://localhost:8080/api/v1/user/get`, {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    token: `Bearer ${user?.accessToken}`,
+                },
+                body: JSON.stringify({ uid: user._id }),
             })
                 .then((response) => response.json())
                 .then((response) => {
-                    if (response.success === true) {
+                    if (response.success) {
                         getDownloadURL(ref(storage, `user/${user._id}/${response.data[0]?.avatar}`))
                             .then((link) => {
                                 dispatch(setAvatar({ url: link }));

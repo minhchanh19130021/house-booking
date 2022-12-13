@@ -4,19 +4,29 @@ import ProfileSidebar from '../ProfileSidebar';
 import styles from './HistoryBooking.module.scss';
 import HistoryItem from './HistoryItem';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 function HistoryBooking() {
+    const navigate = useNavigate();
     const user = useSelector((state) => state.authentication.login.currentUser);
     const [history, setHistory] = useState([]);
+
     useEffect(() => {
-        fetch(`http://localhost:8080/api/v2/history-booking?uid=${user._id}`, {
-            method: 'GET',
+        fetch(`http://localhost:8080/api/v2/history-booking`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                token: `Bearer ${user?.accessToken}`,
+            },
+            body: JSON.stringify({ uid: user?._id ? user?._id : null }),
         })
             .then((response) => response.json())
             .then((response) => {
                 if (response.success === true) {
                     setHistory(response.data);
+                } else if (response === 'Bạn chưa có mã token') {
+                    navigate('/signin');
                 }
             })
             .catch((err) => {
@@ -34,8 +44,10 @@ function HistoryBooking() {
                     <div className={cx('list-history')}>
                         {history.map((e, i) => {
                             let number_visitor = e?.order_detail[0]?.number_visitor;
+                            console.log(e);
                             return (
                                 <HistoryItem
+                                    uid={e?.user[0]?._id}
                                     key={i}
                                     avatar={e?.user[0]?.avatar}
                                     nameHost={`${e?.user[0]?.firstname} ${e?.user[0]?.lastname}`}
@@ -67,7 +79,7 @@ function HistoryBooking() {
                                         }`}
                                     voucher={e?.voucher}
                                     payment={e?.order_detail[0]?.payment_method}
-                                    total={e?.order_detail[0]?.price}
+                                    total={e?.total_price}
                                     is_review={e?.is_review}
                                     oid={e._id}
                                     thanks="Rất hân hạnh được phục vụ bạn trong suốt những năm qua. Chúng tôi hy vọng sẽ tiếp tục mối quan hệ này trong năm tới với sự tôn trọng và kính trọng. Chúc bạn một năm mới hạnh phúc và viên mãn."

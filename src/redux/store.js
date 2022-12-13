@@ -6,7 +6,7 @@ import storage from 'reduxjs-toolkit-persist/lib/storage';
 import thunk from 'redux-thunk';
 
 const persistConfig = {
-    key: 'root',
+    key: 'auth',
     storage,
     blacklist: ['authentication'],
 };
