@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Button from '~/components/Button';
 import BookingForm from './BookingForm';
 import DescriptionHouse from './DescriptionHouse';
@@ -11,20 +12,60 @@ import HighLightItem from './HighLightItem';
 import Host from './Host';
 import ImageHouse from './ImageHouse';
 import ProtectAdmin from './ProtectAdmin';
+import SVG from 'react-inlinesvg';
 import TitleHeader from './TitleHeader';
 
 const cx = classNames.bind(styles);
 
 function Detail() {
     const [visibleModal, setVisibleModal] = useState();
+    const { slug } = useParams();
+    const [dataDetail, setDataDetail] = useState();
+    const [dataReview, setDataReview] = useState();
 
     const handleVisibleModal = () => {
         setVisibleModal((visibleModal) => !visibleModal);
     };
+
+    useEffect(() => {
+        fetch(`http://localhost:8080/api/v2/detail`, {
+            method: 'POST',
+            body: JSON.stringify({
+                slugHome: slug?.split('=')[1],
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                console.log(response.data[0]);
+                setDataDetail(response.data[0]);
+            })
+            .catch((err) => console.log(err));
+    }, []);
+
+    useEffect(() => {
+        fetch(`http://localhost:8080/api/v2/review `, {
+            method: 'POST',
+            body: JSON.stringify({
+                idHome: `636ce065825a1cd1940641a2`,
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                setDataReview(response?.data);
+            })
+            .catch((err) => console.log(err));
+    }, []);
+
     return (
         <div className={cx('wrapper', 'grid', 'wide')}>
             <div className={cx('row', 'header')}>
-                <TitleHeader />
+                <TitleHeader dataFromParent={dataDetail} />
                 <div className={cx('action')}>
                     <Button
                         leftIcon={
@@ -69,35 +110,43 @@ function Detail() {
             <ImageHouse />
             <div className={cx('info', 'row')}>
                 <div className={cx('col', 'l-8', 'm-12', 'c-12')}>
+                    <h3 className={cx('facilities-title')}>{dataDetail?.introduce}</h3>
                     <div className={cx('info-title')}>
-                        <h3>Toàn bộ biệt thự. Chủ nhà House Of Reservations</h3>
                         <div className={cx('info-facilities')}>
-                            <span>2 khách</span>
-                            <span>2 phòng ngủ</span>
-                            <span>2 giường</span>
-                            <span>1 phòng tắm</span>
+                            <span>{dataDetail?.detail[0].maximum_number_visitor.adult_children} người lớn</span>
+                            <span>{dataDetail?.detail[0].maximum_number_visitor.baby} em bé</span>
+                            <span>{dataDetail?.detail[0].maximum_number_visitor.pet} thú cưng</span>
+
+                            <span>{dataDetail?.detail[0].number_bedroom} phòng ngủ</span>
+                            <span>{dataDetail?.detail[0].number_bed} giường</span>
+                            <span>{dataDetail?.detail[0].number_bathroom} phòng tắm</span>
                         </div>
                     </div>
                     <div className={cx('highlights')}>
                         <HighLightItem
-                            title="Tự nhận phòng"
-                            desc="Bạn có thể gặp nhân viên trực cửa để nhận phòng."
+                            title={`Số ngày đặt tối thiểu ${dataDetail?.detail[0].minimum_night} ngày`}
+                            // desc="Bạn có thể gặp nhân viên trực cửa để nhận phòng."
                             svg={
                                 <svg
-                                    viewBox="0 0 32 32"
                                     xmlns="http://www.w3.org/2000/svg"
-                                    aria-hidden="true"
-                                    role="presentation"
-                                    focusable="false"
-                                    style={{ display: 'block', height: '24px', width: '24px', fill: 'currentcolor' }}
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-6 h-6"
+                                    style={{ display: 'block', height: '24px', width: '24px' }}
                                 >
-                                    <path d="m24.3334 1.66675c1.0543745 0 1.9181663.81587127 1.9945143 1.85073677l.0054857.14926323-.00065 24.666 3.00065.00075v2h-26.66665v-2l3-.00075v-24.666c0-1.05436681.81587301-1.91816558 1.850737-1.99451429l.149263-.00548571zm-4.00065 2h-12.666l-.00075 24.66625 12.66675-.00025zm4.00065 0h-2.00065v24.666l2.00025.00025zm-7.0001 11.00002c.7363778 0 1.33333.5969522 1.33333 1.33333s-.5969522 1.33333-1.33333 1.33333-1.33333-.5969522-1.33333-1.33333.5969522-1.33333 1.33333-1.33333z" />
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+                                    />
                                 </svg>
                             }
                         />
                         <HighLightItem
-                            title="Hủy miễn phí trước 8 thg 11."
-                            desc=""
+                            title={`Số ngày đặt tối đa ${dataDetail?.detail[0].maximum_night} ngày`}
+                            // desc="Bạn có thể gặp nhân viên trực cửa để nhận phòng."
                             svg={
                                 <svg
                                     viewBox="0 0 32 32"
@@ -111,114 +160,95 @@ function Detail() {
                                 </svg>
                             }
                         />
+
+                        <HighLightItem
+                            title={`Nhận phòng ${dataDetail?.detail[0].check_in}`}
+                            // desc="Bạn có thể gặp nhân viên trực cửa để nhận phòng."
+                            svg={
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-6 h-6"
+                                    style={{ display: 'block', height: '24px', width: '24px' }}
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12"
+                                    />
+                                </svg>
+                            }
+                        />
+                        <HighLightItem
+                            title={`Trả phòng ${dataDetail?.detail[0].check_in}`}
+                            // desc="Bạn có thể gặp nhân viên trực cửa để nhận phòng."
+                            svg={
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-6 h-6"
+                                    style={{ display: 'block', height: '24px', width: '24px' }}
+
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M8.25 9.75h4.875a2.625 2.625 0 010 5.25H12M8.25 9.75L10.5 7.5M8.25 9.75L10.5 12m9-7.243V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V4.757c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0c1.1.128 1.907 1.077 1.907 2.185z"
+                                    />
+                                </svg>
+                            }
+                        />
                     </div>
-                    <div className={cx('protect')}>
+                    {/* <div className={cx('protect')}>
                         <ProtectAdmin />
-                    </div>
+                    </div> */}
                     <div className={cx('desc')}>
-                        <DescriptionHouse />
+                        <DescriptionHouse dataFromParent={dataDetail} />
                     </div>
                     <div className={cx('facilities')}>
                         <h3 className={cx('facilities-title')}>Nơi này có những gì cho bạn</h3>
                         <div className={cx('facilities-list', 'row')}>
-                            <FacilityItem
-                                icon={
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={1.5}
-                                        stroke="currentColor"
-                                        className="w-6 h-6"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 011.06 0z"
-                                        />
-                                    </svg>
-                                }
-                                title={`Wifi`}
-                            />
-                            <FacilityItem
-                                icon={
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={1.5}
-                                        stroke="currentColor"
-                                        className="w-6 h-6"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z"
-                                        />
-                                    </svg>
-                                }
-                                title={`Chỗ đỗ xe miễn phí tại nơi ở`}
-                            />
-                            <FacilityItem
-                                icon={
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={1.5}
-                                        stroke="currentColor"
-                                        className="w-6 h-6"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M7.864 4.243A7.5 7.5 0 0119.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 004.5 10.5a7.464 7.464 0 01-1.15 3.993m1.989 3.559A11.209 11.209 0 008.25 10.5a3.75 3.75 0 117.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 01-3.6 9.75m6.633-4.596a18.666 18.666 0 01-2.485 5.33"
-                                        />
-                                    </svg>
-                                }
-                                title={`Cửa ra vào có khóa vân tay`}
-                            />
-                            <FacilityItem
-                                icon={
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={1.5}
-                                        stroke="currentColor"
-                                        className="w-6 h-6"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"
-                                        />
-                                    </svg>
-                                }
-                                title={`Hỗ trợ sửa chữa 24/7`}
-                            />
+                            {dataDetail?.facilities.map((e, i) => {
+                                const mySVG = e?.icon
+                                    ?.replace(
+                                        "style={{ display: 'block', height: 24, width: 24, fill: 'currentcolor', }}",
+                                        '',
+                                    )
+                                    ?.replace('\\', '');
+                                return (
+                                    <FacilityItem key={i} title={e?.name}>
+                                        <SVG src={mySVG} />
+                                    </FacilityItem>
+                                );
+                            })}
                         </div>
                         {/* <div className={cx('facilities-more')}>Hiển thị tất cả tiện nghi</div> */}
                     </div>
                 </div>
                 <div className={cx('col', 'l-4', 'm-12', 'c-12')}>
-                    <BookingForm />
+                    <BookingForm dataFromParent={dataDetail} />
                 </div>
             </div>
 
             <div className={cx('host')}>
-                <Host />
+                <Host dataFromParent={dataDetail} />
                 <div className={cx('evaluate')}>
-                    <Evaluate>
+                    <Evaluate dataReviews={dataReview}>
                         <Button outline large onClick={handleVisibleModal}>
-                            Hiển thị tất 497 đánh giá
+                            Hiển thị tất cả đánh giá
                         </Button>
                     </Evaluate>
                 </div>
                 {visibleModal && <div className={cx('overlay')} onClick={handleVisibleModal}></div>}
 
                 {visibleModal && (
-                    <ModalEvaluate>
+                    <ModalEvaluate dataReviews={dataReview}>
                         <svg
                             viewBox="0 0 32 32"
                             xmlns="http://www.w3.org/2000/svg"
@@ -241,6 +271,21 @@ function Detail() {
                         </svg>
                     </ModalEvaluate>
                 )}
+            </div>
+            <div className="regulation">
+                <h3 className={cx('facilities-title')}>Những điều cần biết</h3>
+                <div className="row">
+                    {dataDetail?.detail[0]['regulations'].addition.map((e, index) => (
+                        <div className="col l-4 m-6 c-12" key={index}>
+                            <p className={cx('regulation-name')}>{e}</p>
+                        </div>
+                    ))}
+                    {dataDetail?.regulations_available.map((e, index) => (
+                        <div className="col l-4 m-6 c-12" key={index}>
+                            <p className={cx('regulation-name')}>{e?.name}</p>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

@@ -3,7 +3,8 @@ import Button from '~/components/Button';
 import styles from './Host.module.scss';
 
 const cx = classNames.bind(styles);
-function Host() {
+function Host(props) {
+    console.log(props.dataFromParent);
     return (
         <div className={cx('wrapper')}>
             <div className={cx('owner-header')}>
@@ -14,8 +15,8 @@ function Host() {
                     />
                 </div>
                 <div className={cx('owner-header__left')}>
-                    <h3>Chủ nhà House Of Reservations</h3>
-                    <p>Đã tham gia vào tháng 6 năm 2016</p>
+                    <h3>Chủ nhà {props.dataFromParent?.host[0].username}</h3>
+                    <p>Đã tham gia vào {props.dataFromParent?.host[0].created_at}</p>
                 </div>
             </div>
             <div className={cx('row')}>
@@ -53,7 +54,7 @@ function Host() {
                     </div>
                     <div className={cx('owner-desc')}>
                         <p>
-                            House of Booking chuyên xử lý các yêu cầu đặt phòng cho du lịch. Chúng tôi có sẵn 18 giờ mỗi
+                        {props.dataFromParent?.host[0].username} chuyên xử lý các yêu cầu đặt phòng cho du lịch. Chúng tôi có sẵn 18 giờ mỗi
                             ngày để trả lời các câu hỏi của bạn trong thời gian sớm nhất.
                         </p>
                         <p>

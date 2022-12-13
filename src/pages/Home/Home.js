@@ -169,7 +169,7 @@ function Home() {
                                             <CardHouse
                                                 avatar={e.avatar}
                                                 idHouse={e._id}
-                                                to="/detail"
+                                                to={`/detail/slug=${e.slug}`}
                                                 status={e.status ? 'open' : 'close'}
                                                 numberReview={e.number_review}
                                                 title={e.name}
@@ -180,6 +180,7 @@ function Home() {
                                                     return e;
                                                 })}
                                                 price={e.price}
+                                                
                                             />
                                         </div>
                                     );
