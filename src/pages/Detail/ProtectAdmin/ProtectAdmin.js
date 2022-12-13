@@ -1,5 +1,4 @@
 import classNames from 'classnames/bind';
-import Button from '~/components/Button';
 import styles from './ProtectAdmin.module.scss';
 
 const cx = classNames.bind(styles);
@@ -16,7 +15,6 @@ function ProtectAdmin() {
                 Mọi đặt phòng đều được bảo vệ miễn phí trong trường hợp Chủ nhà hủy, thông tin nhà/phòng cho thuê không
                 chính xác và những vấn đề khác như sự cố trong quá trình nhận phòng.
             </p>
-            <Button className={cx('protect-more')}>Tìm hiểu thêm</Button>
         </div>
     );
 }

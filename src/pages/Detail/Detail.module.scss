@@ -21,6 +21,7 @@
 }
 .info-title {
     padding: 10px 0;
+    margin-bottom: 12px;
     h3 {
         font-size: 2.2rem;
     }
@@ -37,6 +38,19 @@
     p {
         font-size: 1.6rem;
     }
+}
+.protect {
+    cursor: pointer;
+    font-weight: 700;
+    // padding: 10px;
+    // border: 1px solid var(--border-transparent);
+    border-top: 1px solid var(--border-transparent);
+    padding-top: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.introduce {
+    line-height: 3rem;
 }
 .facilities {
     padding: 12px 0;
@@ -67,6 +81,6 @@
 .owner-feedback {
     padding: 20px 0;
 }
-.regulation-name{
-   padding: 8px 0;
+.regulation-name {
+    padding: 8px 0;
 }
