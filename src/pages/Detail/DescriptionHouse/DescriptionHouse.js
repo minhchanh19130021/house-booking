@@ -3,7 +3,7 @@ import styles from './DescriptionHouse.module.scss';
 
 const cx = classNames.bind(styles);
 function DescriptionHouse(props) {
-    return <p>{props.dataFromParent?.detail[0].description}</p>;
+    return <p>{props.dataFromParent?.detail[0]?.description}</p>;
 }
 
 export default DescriptionHouse;
