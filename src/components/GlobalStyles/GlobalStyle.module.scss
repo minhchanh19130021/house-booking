@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 @import 'normalize.css';
+
 :root {
     --primary: #2e3f6e;
     --secondary: #3d528b;
@@ -33,10 +34,8 @@ html {
 body {
     font-size: 1.6rem;
     text-rendering: optimizespeed;
-    // overflow-y: overplay;
     color: var(--primary);
-    // min-height: 100%;
-
+    min-width: 300px;
     display: flex;
     height: 100%;
     flex-direction: column;

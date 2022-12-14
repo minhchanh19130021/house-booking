@@ -11,6 +11,7 @@ const routes = {
     payment:
         '/payment/:id&numberOfAdults=:nad&numberOfChildren=:ncd&numberOfInfants=:nif&checkin=:dayin&checkout=:dayout',
     payment_success: '/payment/success',
+    search: 'search/:location',
     // profile page
     profile: '/profile',
     history_booking: '/history-booking',

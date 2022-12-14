@@ -1,16 +1,36 @@
+.wrapper-form {
+    padding: 12px 20px;
+    // box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border-radius: 20px;
+}
+.wrapper-filter {
+    padding: 10px;
+    border-radius: 4px;
+    outline: none;
+    border: 1px solid var(--border-grey);
+    background: var(--grey-light);
+    color: var(--violet-light);
+    font-size: 15px;
+    margin-bottom: 12px;
+    input {
+        outline: none;
+        border: 1px solid transparent;
+        background: var(--grey-light);
+        width: 100%;
+    }
+    select {
+        outline: none;
+        border: 1px solid transparent;
+        background: var(--grey-light);
+        width: 100%;
+    }
+}
 .filter {
     margin-bottom: 20px;
     position: relative;
-    .filter__name {
-        margin: 20px 0;
-        font-size: 20px;
-        font-weight: 600;
-    }
-    .filter__icon {
-        position: absolute;
-        top: 15px;
-        left: 10px;
-    }
+    display: flex;
+    align-items: center;
+
     .filter__input {
         padding: 10px 32px;
         border-radius: 4px;
@@ -34,64 +54,8 @@
             }
         }
     }
-    .filter__price {
-        display: flex;
-        .price__icon {
-            margin: 15px 2px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .price__name {
-            margin: 15px 4px;
-            font-size: 20px;
-        }
-        .price__dash {
-            margin: 20px 3px;
-            font-size: 50px;
-            font-weight: 400;
-        }
-        .price__input {
-            width: 105px;
-            padding: 0;
-            margin: 0 5px;
-            height: 30px;
-            outline: none;
-        }
-    }
-    .filter__room {
-        .filter__room-name {
-            font-weight: 500;
-            margin: 8px 0;
-        }
-        .filter__room-number {
-            display: flex;
-            justify-content: space-between;
-            .number {
-                color: var(--black);
-                background-color: var(--white);
-                border: 1px solid var(--border-white);
-                font-weight: 400;
-                cursor: pointer;
-                text-align: center;
-                outline: none;
-                margin: 2px;
-                padding: 0;
-                padding: 7px 10px;
-                border-radius: 30px;
-                min-width: 59px;
-                font-size: 12px;
-                line-height: 16px;
-                &:hover {
-                    border-color: var(--black);
-                }
-                &.active {
-                    border: 1px solid var(--black);
-                    background-color: var(--black);
-                    color: var(--white);
-                }
-            }
-        }
-    }
+
+
     .filter__facility {
         .facility__type {
             margin: 10px 0;
@@ -169,39 +133,39 @@
     }
 }
 
-@media screen and (max-width: 850px) {
-    .contain__filter {
-        display: none;
-        position: absolute;
-        z-index: 100;
-        background-color: var(--white);
-        border: 3px solid var(--border-filter-mobile) !important;
-        width: 100% !important;
-    }
-    .contain__button-expandFilter {
-        display: block;
-    }
-    .contain__listHouse {
-        width: 100% !important;
-        padding: 0 10px;
-    }
-    .filter__facility-grid {
-        grid-template-columns: 1fr !important;
-        direction: rtl;
+// @media screen and (max-width: 850px) {
+//     .contain__filter {
+//         display: none;
+//         position: absolute;
+//         z-index: 100;
+//         background-color: var(--white);
+//         border: 3px solid var(--border-filter-mobile) !important;
+//         width: 100% !important;
+//     }
+//     .contain__button-expandFilter {
+//         display: block;
+//     }
+//     .contain__listHouse {
+//         width: 100% !important;
+//         padding: 0 10px;
+//     }
+//     .filter__facility-grid {
+//         grid-template-columns: 1fr !important;
+//         direction: rtl;
 
-        .filter__facility-choose {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            input {
-                margin: 10px;
-                width: 20px;
-                height: 20px;
-            }
-        }
-    }
-}
+//         .filter__facility-choose {
+//             display: flex;
+//             align-items: center;
+//             justify-content: space-between;
+//             width: 100%;
+//             input {
+//                 margin: 10px;
+//                 width: 20px;
+//                 height: 20px;
+//             }
+//         }
+//     }
+// }
 
 .displayContain {
     display: block !important;
@@ -218,33 +182,44 @@
     color: var(--white);
 }
 
-.range__price {
-    border: 1px solid var(--grey);
-    border-radius: 10px;
-    min-height: 56px;
-    padding-top: 5px;
-    padding-left: 5px;
-    color: var(--grey);
-    span {
-        margin: 5px;
-        font-size: 14px;
-    }
-    p {
-        display: flex;
-        span {
-            font-size: 16px;
-            color: var(--black);
-            margin-top: 6px;
-            margin-right: 0;
-        }
-    }
-    input {
-        border: none;
-    }
-}
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+.filter__room {
+    .filter__room-name {
+        font-weight: 500;
+        margin: 8px 0;
+    }
+    .filter__room-number {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        .number {
+            color: var(--black);
+            background-color: var(--white);
+            border: 1px solid var(--border-white);
+            font-weight: 400;
+            cursor: pointer;
+            text-align: center;
+            outline: none;
+            margin-bottom: 4px;
+            padding: 7px 10px;
+            border-radius: 30px;
+            font-size: 12px;
+            line-height: 16px;
+            margin-left: -4px;
+
+            &:hover {
+                border-color: var(--button);
+            }
+            &.active {
+                border: 1px solid var(--button);
+                background-color: var(--button);
+                color: var(--white);
+            }
+        }
+    }
 }

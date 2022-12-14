@@ -61,8 +61,9 @@ function ListHouse() {
     // handle responsive
     useEffect(() => {
         window.addEventListener('resize', () => {
-            if (window.innerWidth < 850) {
+            if (window.innerWidth < 1113) {
                 setMobile(true);
+                setExpandFilter(false);
             } else {
                 setMobile(false);
                 setExpandFilter(false);
@@ -71,7 +72,7 @@ function ListHouse() {
     });
 
     return (
-        <div className={cx('grid', 'wide')}>
+        <div className={cx('grid')}>
             <div className={cx('contain__button-expandFilter')}>
                 <Button
                     small
@@ -82,10 +83,14 @@ function ListHouse() {
                     Bộ lọc
                 </Button>
             </div>
-            <div className={cx('container')}>
+            <div className={cx('row')}>
                 <div
                     className={cx(
                         'contain__filter',
+                        'col',
+                        'l-3',
+                        'm-0',
+                        'c-0',
                         !isMobile ? 'displayContain' : isMobile && isExpandFilter ? 'displayContain' : 'hiddenContain',
                     )}
                 >
@@ -96,16 +101,21 @@ function ListHouse() {
                         setQueryString={setQueryString}
                     ></Filter>
                 </div>
+
                 <div
                     className={cx(
                         'contain__listHouse',
+                        'col',
+                        'l-9',
+                        'm-12',
+                        'm-12',
                         !isMobile ? 'displayContain' : isMobile && isExpandFilter ? 'hiddenContain' : 'displayContain',
                     )}
                 >
                     <div className={cx('listHouse', 'row')}>
                         {listHouse.map((e, i) => {
                             return (
-                                <div key={i} className={cx('col', 'l-4', 'm-6', 'c-12')}>
+                                <div key={i} className={cx('col', 'l-3', 'm-4', 'c-12')}>
                                     <CardHouse
                                         avatar={e.avatar}
                                         idHouse={e._id}
@@ -125,16 +135,18 @@ function ListHouse() {
                             );
                         })}
                     </div>
-                    {listHouse.length === 0 && isFetch ? <h1>Không có kết quả</h1> : null}
-                    {listHouse.length !== 0 && isFetch ? (
-                        <Pagination
-                            totalPagination={totalPagination}
-                            currentPagination={currentPagination}
-                            queryString={queryString}
-                        ></Pagination>
-                    ) : null}
                 </div>
             </div>
+            {listHouse.length === 0 && isFetch ? <h1>Không có kết quả</h1> : null}
+            {listHouse.length !== 0 && isFetch ? (
+                <div className="row">
+                    <Pagination
+                        totalPagination={totalPagination}
+                        currentPagination={currentPagination}
+                        queryString={queryString}
+                    ></Pagination>
+                </div>
+            ) : null}
         </div>
     );
 }
