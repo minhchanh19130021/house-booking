@@ -17,10 +17,10 @@ function TitleHeader(props) {
                 </svg>
                 <span className={cx('number-star')}>{props.dataFromParent?.rate}</span>
                 <span className={cx('number-rate')}>{props.dataFromParent?.number_review} đánh giá</span>
-                <span className={cx('location')}>
+                <p className={cx('location')}>
                     {props.dataFromParent?.address.number}, {props.dataFromParent?.address.district},{' '}
                     {props.dataFromParent?.address.city}, {props.dataFromParent?.address.area}{' '}
-                </span>
+                </p>
             </div>
         </div>
     );

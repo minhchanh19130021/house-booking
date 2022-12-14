@@ -55,6 +55,14 @@
         color: var(--white);
     }
 }
+@media only screen and (max-width: 600px) {
+    .logo {
+        display: none;
+    }
+    .search {
+        margin-left: 0px;
+    }
+}
 
 .content {
     display: flex;
@@ -162,7 +170,6 @@
     overflow: hidden;
     transition: all 0.8s ease;
     z-index: 10;
-
 }
 .menu-item {
     user-select: none;

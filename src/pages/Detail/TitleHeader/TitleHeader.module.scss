@@ -1,10 +1,17 @@
 .title {
     .name-house {
         font-size: 2.6rem;
+        padding: 12px 0;
+        display: block;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
     .rate {
         display: flex;
         align-items: center;
+
         svg {
             width: 20px;
             height: 20px;
@@ -17,12 +24,22 @@
             text-decoration: underline;
             margin-right: 10px;
             cursor: pointer !important;
+            width: 140px;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .location {
             cursor: pointer;
             margin-right: 10px;
             text-decoration: underline;
+            width: 100%;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
     }
 }

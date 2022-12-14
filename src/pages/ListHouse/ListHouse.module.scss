@@ -1,6 +1,7 @@
 .container {
     display: flex;
     justify-content: space-between;
+    border-top: 1px solid #333;
     .contain__filter {
         width: 30%;
         padding: 20px 40px;
@@ -34,7 +35,7 @@
     display: none !important;
 }
 
-@media screen and (max-width: 850px) {
+@media screen and (max-width: 1113px) {
     .contain__button-expandFilter {
         display: block;
     }
@@ -43,7 +44,6 @@
         position: absolute;
         z-index: 100;
         background-color: var(--white);
-        border: 3px solid var(--border-filter-mobile) !important;
         width: 100% !important;
     }
     .contain__listHouse {

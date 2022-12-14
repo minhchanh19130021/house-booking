@@ -19,7 +19,7 @@ function Pagination(props) {
                     }
                     className={cx('pagination__button-prev', 'pagination__button')}
                 >
-                    prev
+                    Trước
                 </Button>
 
                 {Number(props.currentPagination) - 1 < 1 ? null : (
@@ -54,7 +54,7 @@ function Pagination(props) {
                     }
                     className={cx('pagination__button-next', 'pagination__button')}
                 >
-                    next
+                    Tiếp
                 </Button>
             </div>
         </div>
