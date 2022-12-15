@@ -25,6 +25,8 @@ function ModalDate({ children }) {
         if (ranges[0].startDate.toDateString() !== ranges[0].endDate.toDateString()) {
             dates[0].startDate = ranges[0].startDate;
             dates[0].endDate = ranges[0].endDate;
+            localStorage.setItem("endDate", ranges[0].endDate);
+            localStorage.setItem("startDate", ranges[0].startDate);
             dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, totalPrice } });
         }
     };

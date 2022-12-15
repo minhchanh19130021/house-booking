@@ -1,7 +1,7 @@
 import { faBed, faCalendarDays, faCar, faPerson, faPlane, faTaxi } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames/bind';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import Button from '~/components/Button';
 import styles from './BookingForm.module.scss';
 import { motion } from 'framer-motion';
@@ -13,6 +13,7 @@ import 'react-date-range/dist/theme/default.css';
 import { format } from 'date-fns';
 // import { data } from 'autoprefixer';
 import useFetch from '../../../hooks/useFetch';
+import { useDispatch, useSelector } from 'react-redux';
 
 const cx = classNames.bind(styles);
 function BookingForm(props) {
@@ -25,6 +26,27 @@ function BookingForm(props) {
     const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/636ce065825a1cd1940641a2`);
 
     const [home, setHome] = useState('636ce065825a1cd1940641a2');
+    const user = useSelector((state) => state.authentication.login.currentUser);
+    const [userInfor, setUserInfor] = useState([]);
+    const [visiblePayByPoint, setVisiblePayByPoint] = useState(false);
+    useEffect(() => {
+        fetch(`http://localhost:8080/api/v1/user/get/638c56fe8693fbfdd908508b`, {
+            method: 'GET',
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.success === true) {
+                    setUserInfor(response.data[0]);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+    const [payPoint, setPayPoint] = useState(0);
+    // const [bonusPoint, setBonusPoint] = useState(0);
+    
+
     const [goToCheckout, setGoToCheckout] = useState(true);
     const [openDate, setOpenDate] = useState(false);
     const today = new Date();
@@ -61,7 +83,9 @@ function BookingForm(props) {
     const idh = '636ce065825a1cd1940641a2';
 
     const handleSearch = () => {
-        dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, goToCheckout } });
+        var bonusPoint = userInfor.bonus_point;
+        // localStorage.setItem('bonusPoint', bonus);
+        dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, payPoint, bonusPoint } });
         navigate(
             '/payment/' +
                 idh +
@@ -75,7 +99,7 @@ function BookingForm(props) {
                 dates[0].startDate +
                 '&checkout=' +
                 dates[0].endDate,
-            { state: { home, dates, options } },
+            
         );
     };
 
@@ -373,7 +397,7 @@ function BookingForm(props) {
                                         outline
                                         type="button"
                                     >
-                                        Đóng
+                                        Đóng 
                                     </Button>
                                 </motion.div>
                             )}
