@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 
-function CardHouse({ avatar, idHouse, numberReview, img, rate, title, location, desc, facilities, price, status, to }) {
+function CardHouse({ avatar, idHouse, numberReview, rate, title, location, desc, facilities, price, status, to }) {
     const [linkImg, setLinkImg] = useState(
         'https://preview.redd.it/zcgs03lgoy351.png?width=288&format=png&auto=webp&s=d9bf4b46713d7fdbf11b82a8e364ceee79724a9c',
     );
@@ -136,7 +136,14 @@ function CardHouse({ avatar, idHouse, numberReview, img, rate, title, location, 
                     </div>
                 </div>
                 <div className={cx('footer')}>
-                    <span>{price} VNĐ / đêm</span>
+                    <span>
+                        {Array.from(JSON.stringify(price))
+                            .reverse()
+                            .map((e, i) => (i % 3 === 0 && i !== 0 ? e + '.' : e))
+                            .reverse()
+                            .join('')}{' '}
+                        VNĐ / đêm
+                    </span>
                     <div className={cx('function')}>
                         <NavLink to="">
                             <svg

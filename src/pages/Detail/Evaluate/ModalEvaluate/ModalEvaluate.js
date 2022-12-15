@@ -5,7 +5,6 @@ import InfoEvaluate from '../EvaluateItem/InfoEvaluate';
 
 const cx = classNames.bind(styles);
 function ModalEvaluate({ children, ...props }) {
-
     return (
         <div className={cx('modal-evaluate')}>
             {children}
@@ -24,8 +23,8 @@ function ModalEvaluate({ children, ...props }) {
                             fillRule="evenodd"
                         />
                     </svg>
-                    <h2 className={cx('total-star')}>4,97</h2>
-                    <h2 className={cx('total-evaluate')}> 497 đánh giá</h2>
+                    <h2 className={cx('total-star')}>{props.rates?.experience}</h2>
+                    <h2 className={cx('total-evaluate')}> {props.totalReview} đánh giá</h2>
                 </div>
                 <div className={cx('col', 'l-8', 'm-12', 'c-12', 'modal-header__search')}>
                     <input type="text" placeholder="Tìm kiếm đánh giá" />
@@ -35,22 +34,32 @@ function ModalEvaluate({ children, ...props }) {
                 <div className={cx('col', 'l-4', 'm-12', 'c-12')}>
                     <div className="row">
                         <div className="col l-12 m-12 c-12">
-                            <InfoEvaluate title="Nhân viên gần gũi" value={88} rate={7.4} />
+                            <InfoEvaluate
+                                title="Giao tiếp"
+                                value={(props?.rates?.communication / 5) * 100}
+                                rate={props?.rates?.communication}
+                            />{' '}
                         </div>
                         <div className="col l-12 m-12 c-12">
-                            <InfoEvaluate title="Sạch sẽ" value={89} rate={8.4} />
+                            <InfoEvaluate
+                                title="Sạch sẽ"
+                                value={(props?.rates?.cleanliness / 5) * 100}
+                                rate={props?.rates?.cleanliness}
+                            />{' '}
                         </div>
                         <div className="col l-12 m-12 c-12">
-                            <InfoEvaluate title="Liên lạc" value={67} rate={9.2} />
+                            <InfoEvaluate
+                                title="Chính xác"
+                                value={(props?.rates?.accurate / 5) * 100}
+                                rate={props?.rates?.accurate}
+                            />{' '}
                         </div>
                         <div className="col l-12 m-12 c-12">
-                            <InfoEvaluate title="chất lượng giá cả" value={94} rate={6.4} />
-                        </div>
-                        <div className="col l-12 m-12 c-12">
-                            <InfoEvaluate title="Địa điểm" value={81} rate={8.2} />
-                        </div>
-                        <div className="col l-12 m-12 c-12">
-                            <InfoEvaluate title="Nhân viên gần gũi" value={61} rate={7.5} />
+                            <InfoEvaluate
+                                title="Vị trí"
+                                value={(props?.rates?.location / 5) * 100}
+                                rate={props?.rates?.location}
+                            />{' '}
                         </div>
                     </div>
                 </div>
@@ -65,7 +74,7 @@ function ModalEvaluate({ children, ...props }) {
                                     }
                                     name={e.user[0]?.username}
                                     time={e.review[0]?.create_date}
-                                    content={e.review[0]?.public_review}
+                                    content={e.review?.public_review}
                                 />
                             </div>
                         ))}

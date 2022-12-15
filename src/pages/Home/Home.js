@@ -161,7 +161,7 @@ function Home() {
                                             <CardHouse
                                                 avatar={e.avatar}
                                                 idHouse={e._id}
-                                                to={`/detail/slug=${e.slug}`}
+                                                to={`/detail/${e.slug}`}
                                                 status={e.status ? 'open' : 'close'}
                                                 numberReview={e.number_review}
                                                 title={e.name}
@@ -196,7 +196,7 @@ function Home() {
                                             <CardHouse
                                                 avatar={home.avatar}
                                                 idHouse={home._id}
-                                                to="/detail"
+                                                to={`/detail/${e.slug}`}
                                                 status={home.status ? 'open' : 'close'}
                                                 numberReview={home.number_review}
                                                 title={home.name}

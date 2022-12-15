@@ -1,5 +1,5 @@
 .wrapper-form {
-    padding: 12px 20px;
+    padding: 12px 0px;
     // box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     border-radius: 20px;
 }
@@ -28,8 +28,6 @@
 .filter {
     margin-bottom: 20px;
     position: relative;
-    display: flex;
-    align-items: center;
 
     .filter__input {
         padding: 10px 32px;
@@ -54,7 +52,6 @@
             }
         }
     }
-
 
     .filter__facility {
         .facility__type {
@@ -206,7 +203,7 @@ input::-webkit-inner-spin-button {
             text-align: center;
             outline: none;
             margin-bottom: 4px;
-            padding: 7px 10px;
+            padding: 7px 0px;
             border-radius: 30px;
             font-size: 12px;
             line-height: 16px;
@@ -221,5 +218,54 @@ input::-webkit-inner-spin-button {
                 color: var(--white);
             }
         }
+    }
+}
+
+.filter__name {
+    margin: 5px 0;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.filter__star {
+    input[type='checkbox'] {
+        position: relative;
+        cursor: pointer;
+        margin: 0 4px;
+    }
+    input[type='checkbox']:before {
+        content: '';
+        display: block;
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-radius: 100%;
+        top: -3px;
+        left: -3px;
+        background-color: #e9e9e9;
+    }
+    input[type='checkbox']:checked:before {
+        content: '';
+        display: block;
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        top: -7px;
+        left: -5px;
+        background-color: white;
+        border: 1px solid var(--button);
+        padding: 5px;
+    }
+
+    input[type='checkbox']:checked:after {
+        content: '';
+        display: block;
+        width: 14px;
+        height: 14px;
+        position: absolute;
+        bottom: 2px;
+        left: -1px;
+        background-color: var(--button);
+        border-radius: 100%;
     }
 }

@@ -23,28 +23,38 @@ function Evaluate({ children, ...props }) {
                             fillRule="evenodd"
                         />
                     </svg>
-                    <p className={cx('total-star')}>8,6</p>
-                    <p className={cx('total-evaluate')}> 497 đánh giá</p>
+                    <p className={cx('total-star')}>{props.rates?.experience}</p>
+                    <p className={cx('total-evaluate')}> {props.totalReview} đánh giá</p>
                 </div>
             </div>
             <div className={cx('row', 'categories')}>
                 <div className={cx('col', 'categories-item', 'l-6', 'm-6', 'c-6')}>
-                    <InfoEvaluate title="Nhân viên gần gũi" value={88} rate={7.4} />
+                    <InfoEvaluate
+                        title="Giao tiếp"
+                        value={(Number(props?.rates?.communication ? props?.rates?.communication : 0) / 5) * 100}
+                        rate={props?.rates?.communication}
+                    />
                 </div>
                 <div className={cx('col', 'categories-item', 'l-6', 'm-6', 'c-6')}>
-                    <InfoEvaluate title="Sạch sẽ" value={89} rate={8.4} />
+                    <InfoEvaluate
+                        title="Sạch sẽ"
+                        value={(Number(props?.rates?.cleanliness ? props?.rates?.cleanliness : 0) / 5) * 100}
+                        rate={props?.rates?.cleanliness}
+                    />
                 </div>
                 <div className={cx('col', 'categories-item', 'l-6', 'm-6', 'c-6')}>
-                    <InfoEvaluate title="Liên lạc" value={67} rate={9.2} />
+                    <InfoEvaluate
+                        title="Chính xác"
+                        value={(Number(props?.rates?.accurate ? props?.rates?.accurate : 0) / 5) * 100}
+                        rate={props?.rates?.accurate}
+                    />
                 </div>
                 <div className={cx('col', 'categories-item', 'l-6', 'm-6', 'c-6')}>
-                    <InfoEvaluate title="chất lượng giá cả" value={94} rate={6.4} />
-                </div>
-                <div className={cx('col', 'categories-item', 'l-6', 'm-6', 'c-6')}>
-                    <InfoEvaluate title="Địa điểm" value={81} rate={8.2} />
-                </div>
-                <div className={cx('col', 'categories-item', 'l-6', 'm-6', 'c-6')}>
-                    <InfoEvaluate title="Nhân viên gần gũi" value={61} rate={7.5} />
+                    <InfoEvaluate
+                        title="Vị trí"
+                        value={(Number(props?.rates?.location ? props?.rates?.location : 0) / 5) * 100}
+                        rate={props?.rates?.location}
+                    />
                 </div>
             </div>
             <div className={cx('row', 'evaluates')}>
@@ -57,11 +67,11 @@ function Evaluate({ children, ...props }) {
                             }
                             name={e.user[0]?.username}
                             time={e.review[0]?.create_date}
-                            content={e.review[0]?.public_review}
+                            content={e?.review?.public_review}
                         />
                     </div>
                 ))}
-                
+
                 {children}
             </div>
         </div>
