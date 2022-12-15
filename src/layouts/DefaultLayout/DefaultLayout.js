@@ -105,7 +105,6 @@ function DefaultLayout({ children }) {
             setAllowRender(true);
         }
     }, [location]);
-    console.log(children);
 
     return (
         allowRender && (

@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 
-function CardHouse({ avatar, idHouse, numberReview, img, rate, title, location, desc, facilities, price, status, to }) {
+function CardHouse({ avatar, idHouse, numberReview, rate, title, location, desc, facilities, price, status, to }) {
     const [linkImg, setLinkImg] = useState(
         'https://preview.redd.it/zcgs03lgoy351.png?width=288&format=png&auto=webp&s=d9bf4b46713d7fdbf11b82a8e364ceee79724a9c',
     );

@@ -11,7 +11,7 @@
     max-height: var(--size);
     border-radius: 20px;
     padding: 20px;
-    overflow: hidden;
+    overflow: scroll;
     transition: all 0.8s ease;
     svg {
         cursor: pointer;
@@ -44,8 +44,6 @@
     }
 
     .list-evaluate {
-        overflow: scroll;
-        overflow-x: hidden;
         height: calc(var(--size) - 100px);
         padding-bottom: 20px;
     }

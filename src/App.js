@@ -13,7 +13,7 @@ function App() {
                 <Routes>
                     <Route path="forgot-password/:id/:token" element={<ForgotPassword />} />
                     <Route path="*" element={<PageNotFound />} />;
-                    <Route path="/review/:oid" element={<Review />} />;
+                    <Route path="/review" element={<Review />} />;
                     {publicRoutes.map((route, index) => {
                         const Page = route.component;
                         let Layout = DefaultLayout;

@@ -19,7 +19,7 @@ const routes = {
     personal_detail: '/personal-detail',
     preference: '/preference',
     security: '/security',
-    review: '/review/:oid',
+    review: '/review/:oid/:hid',
     get_review: '/get_review',
     // profile host
     profile_host: '/profile-host',

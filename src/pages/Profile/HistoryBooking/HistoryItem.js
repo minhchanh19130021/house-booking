@@ -3,13 +3,11 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Button from '~/components/Button';
 import styles from './HistoryBooking.module.scss';
-import { ref, getDownloadURL } from 'firebase/storage';
-import { storage } from '~/config/firebase';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 const cx = classNames.bind(styles);
 
 function HistoryItem({
-    uid,
     avatar,
     nameHost,
     nameHouse,
@@ -21,12 +19,18 @@ function HistoryItem({
     voucher,
     is_review,
     oid,
+    hid,
+    numberReview,
 }) {
+    const navigate = useNavigate();
     const urlAvatar = useSelector((state) => state.avatar.avatar.url);
     const user = useSelector((state) => state.authentication.login.currentUser);
     const [review, setReview] = useState({});
     const [isGetReview, setIsGetReview] = useState(false);
 
+    function toReview() {
+        navigate('/review', { state: { hid: hid, oid: oid, numberReview: numberReview } });
+    }
     function getReview(e) {
         e.preventDefault();
         if (!isGetReview) {
@@ -115,7 +119,7 @@ function HistoryItem({
                         {is_review ? (
                             <Button onClick={getReview}>Xem đánh giá</Button>
                         ) : (
-                            <Button href={`/review/${oid}`}>Đánh giá</Button>
+                            <Button onClick={toReview}>Đánh giá</Button>
                         )}
                         <Button>Liên hệ chủ nhà</Button>
                     </div>

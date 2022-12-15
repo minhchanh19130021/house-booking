@@ -31,7 +31,6 @@ function ListHouse() {
                 .then((response) => response.json())
                 .then((response) => {
                     if (response.success === true) {
-                        console.log(response);
                         setListHouse(response.data);
                         setTotalPagination(response.pagination);
                         setFetch(true);
@@ -48,7 +47,6 @@ function ListHouse() {
             })
                 .then((response) => response.json())
                 .then((response) => {
-                    console.log(response);
                     setListHouse(response.data);
                     setTotalPagination(response.pagination);
                 })
@@ -109,7 +107,7 @@ function ListHouse() {
                                     <CardHouse
                                         avatar={e.avatar}
                                         idHouse={e._id}
-                                        to="/detail"
+                                        to={`/detail/${e.slug}`}
                                         status={e.status ? 'open' : 'close'}
                                         numberReview={e.number_review}
                                         title={e.name}

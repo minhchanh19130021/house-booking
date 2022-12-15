@@ -44,7 +44,6 @@ function HistoryBooking() {
                     <div className={cx('list-history')}>
                         {history.map((e, i) => {
                             let number_visitor = e?.order_detail[0]?.number_visitor;
-                            console.log(e);
                             return (
                                 <HistoryItem
                                     uid={e?.user[0]?._id}
@@ -52,6 +51,7 @@ function HistoryBooking() {
                                     avatar={e?.user[0]?.avatar}
                                     nameHost={`${e?.user[0]?.firstname} ${e?.user[0]?.lastname}`}
                                     nameHouse={e?.home[0]?.name}
+                                    numberReview={e?.home[0]?.number_review}
                                     member={`${number_visitor?.adults ? number_visitor.adults : 0} người lớn - ${
                                         number_visitor?.child ? number_visitor.child : 0
                                     } trẻ em - ${number_visitor?.baby ? number_visitor.baby : 0} em bé - ${
@@ -82,6 +82,7 @@ function HistoryBooking() {
                                     total={e?.total_price}
                                     is_review={e?.is_review}
                                     oid={e._id}
+                                    hid={e?.home[0]?._id}
                                     thanks="Rất hân hạnh được phục vụ bạn trong suốt những năm qua. Chúng tôi hy vọng sẽ tiếp tục mối quan hệ này trong năm tới với sự tôn trọng và kính trọng. Chúc bạn một năm mới hạnh phúc và viên mãn."
                                 />
                             );
