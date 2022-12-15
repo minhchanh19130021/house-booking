@@ -62,9 +62,8 @@ function Detail() {
             .then((response) => {
                 setDataDetail(response.data[0]);
                 let images = response.data[0]?.detail[0]?.image;
-                images.unshift(response.data[0].avatar);
+                images?.unshift(response.data[0].avatar);
                 getImageFromFirebase(response.data[0]?._id, images, 0);
-                console.log(response.data[0]);
             })
             .catch((err) => console.log(err));
     }, []);

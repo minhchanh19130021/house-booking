@@ -141,7 +141,7 @@ function Filter(props) {
                 </select>
             </div>
             <div className={cx('filter')}>
-                {/* <p className={cx('filter__name')}>Xếp hạng sao</p> */}
+                <p className={cx('filter__name')}>Xếp hạng sao</p>
                 <ul className={cx('filter__star')}>
                     {Array.from({ length: 3 }, (element, index) => {
                         return (
@@ -193,15 +193,13 @@ function Filter(props) {
                             name="maxPrice"
                         ></input>
                     </div>
-
-                    <p className={cx('price__dash')}>-</p>
                 </div>
             </div>
             <div className={cx('wrapper-filter')}>
                 <div className={cx('filter__room')}>
                     <p className={cx('filter__room-name')}>Phòng ngủ</p>
                     <div className={cx('filter__room-number')}>
-                        {Array.from({ length: 4 }, (e, i) => (
+                        {Array.from({ length: 3 }, (e, i) => (
                             <Button
                                 type="button"
                                 key={i}
@@ -219,7 +217,7 @@ function Filter(props) {
                     </div>
                     <p className={cx('filter__room-name')}>Giường</p>
                     <div className={cx('filter__room-number')}>
-                        {Array.from({ length: 4 }, (e, i) => (
+                        {Array.from({ length: 3 }, (e, i) => (
                             <Button
                                 key={i}
                                 type="button"
@@ -237,7 +235,7 @@ function Filter(props) {
                     </div>
                     <p className={cx('filter__room-name')}>Phòng tắm</p>
                     <div className={cx('filter__room-number')}>
-                        {Array.from({ length: 4 }, (e, i) => (
+                        {Array.from({ length: 3 }, (e, i) => (
                             <Button
                                 key={i}
                                 type="button"

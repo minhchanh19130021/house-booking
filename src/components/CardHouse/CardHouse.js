@@ -136,7 +136,14 @@ function CardHouse({ avatar, idHouse, numberReview, rate, title, location, desc,
                     </div>
                 </div>
                 <div className={cx('footer')}>
-                    <span>{price} VNĐ / đêm</span>
+                    <span>
+                        {Array.from(JSON.stringify(price))
+                            .reverse()
+                            .map((e, i) => (i % 3 === 0 && i !== 0 ? e + '.' : e))
+                            .reverse()
+                            .join('')}{' '}
+                        VNĐ / đêm
+                    </span>
                     <div className={cx('function')}>
                         <NavLink to="">
                             <svg

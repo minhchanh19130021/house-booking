@@ -13,7 +13,7 @@ function CardBest({ bg, title, desc, link }) {
                     <div className={cx('overlay')}></div>
                 </div>
                 <div className={cx('description')}>
-                    <NavLink className={cx('link')}>{title}</NavLink>
+                    <p className={cx('link')}>{title}</p>
                     <p>{desc}</p>
                 </div>
             </div>
