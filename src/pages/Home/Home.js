@@ -51,7 +51,7 @@ function Home() {
             <div className={cx('bg-banner', 'grid')}>
                 <div className={cx('overlay')}></div>
                 <img src="https://townhub.kwst.net/images/bg/hero/1.jpg" alt="home-banner" className={cx('grid')} />
-                {/* <SearchHome /> */}
+                <SearchHome />
             </div>
             <div className={cx('location-best', 'grid', 'wide')}>
                 <div className={cx('location-best__title')}>
@@ -133,14 +133,6 @@ function Home() {
                 <div className={cx('popular-title')}>
                     <h1>Khám phá thêm nhà cho thuê du lịch</h1>
                     <div className={cx('divide')}></div>
-                    {/* <p>
-                        Proin dapibus nisl ornare diam varius tempus. Aenean a quam luctus, finibus tellus ut, convallis
-                        eros sollicitudin turpis.Proin dapibus nisl ornare diam varius tempus. Aenean a quam luctus,
-                        finibus tellus ut, convallis eros sollicitudin turpis.Proin dapibus nisl ornare diam varius
-                        tempus. Aenean a quam luctus, finibus tellus ut, convallis eros sollicitudin turpis.Proin
-                        dapibus nisl ornare diam varius tempus. Aenean a quam luctus, finibus tellus ut, convallis eros
-                        sollicitudin turpis.
-                    </p> */}
                 </div>
                 <div className={cx('convenient')}>
                     <div className={cx('tabs')}>
@@ -180,7 +172,6 @@ function Home() {
                                                     return e;
                                                 })}
                                                 price={e.price}
-                                                
                                             />
                                         </div>
                                     );

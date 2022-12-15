@@ -27,6 +27,7 @@ import Review from '~/pages/Review';
 import Payment from '~/pages/Payment';
 import PaymentSuccess from '~/pages/PaymentSuccess';
 import PageNotFound from '~/pages/PageNotFound';
+import Search from '~/pages/Search';
 
 const publicRoutes = [
     { path: config.routes.home, component: Home },
@@ -64,6 +65,7 @@ const publicRoutes = [
 
     // // 404
     // { path: config.routes.not_found, component: PageNotFound },
+    { path: config.routes.search, component: Search },
 ];
 const privateRoutes = [];
 export { publicRoutes, privateRoutes };

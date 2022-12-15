@@ -19,6 +19,7 @@
             width: 100%;
             height: 200px !important;
             object-fit: cover;
+            object-position: center;
         }
     }
 
@@ -119,12 +120,22 @@
             font-size: 2rem;
             font-weight: 700;
             color: var(--primary);
+            display: block;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .location {
             display: flex;
             align-items: center;
             margin-top: 4px;
+            display: block;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
             svg {
                 color: var(--button);
                 margin-right: 4px;
@@ -150,6 +161,7 @@
         .facilities {
             display: flex;
             align-items: center;
+            flex-wrap: wrap;
             padding: 10px 0px;
 
             p {
@@ -182,6 +194,7 @@
         .function {
             display: flex;
             align-items: center;
+            flex-wrap: wrap;
 
             svg {
                 color: var(--button);

@@ -116,24 +116,17 @@ function Filter(props) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div className={cx('filter')}>
-                <span className={cx('filter__icon')}>
-                    <i className="fa-solid fa-bookmark"></i>
-                </span>
+        <form className={cx('wrapper-form')} onSubmit={handleSubmit}>
+            <div className={cx('wrapper-filter')}>
                 <input
                     name="name"
-                    className={cx('filter__input')}
                     type={'text'}
                     value={searchName}
                     onChange={(e) => setSearchName(e.currentTarget.value)}
-                    placeholder="what are you looking?"
+                    placeholder="Bạn cần tìm gì?"
                 />
             </div>
-            <div className={cx('filter')}>
-                <span className={cx('filter__icon')}>
-                    <i className="fa-solid fa-list"></i>
-                </span>
+            <div className={cx('wrapper-filter')}>
                 <select
                     className={cx('filter__input')}
                     name="city"
@@ -148,7 +141,7 @@ function Filter(props) {
                 </select>
             </div>
             <div className={cx('filter')}>
-                <p className={cx('filter__name')}>Xếp hạng sao</p>
+                {/* <p className={cx('filter__name')}>Xếp hạng sao</p> */}
                 <ul className={cx('filter__star')}>
                     {Array.from({ length: 3 }, (element, index) => {
                         return (
@@ -174,44 +167,37 @@ function Filter(props) {
             <div className={cx('filter')}>
                 <div className={cx('filter__date')}></div>
             </div>
-            <div className={cx('filter')}>
+            <div className={cx('')}>
                 <div className={cx('filter__price')}>
                     {/* <span className={cx('price__icon')}>
                         <i className="fa-solid fa-hand-holding-dollar"></i>
                     </span>
                     <p className={cx('price__name')}>Giá</p> */}
-                    <div className={cx('range__price')}>
-                        <span>giá tối thiểu</span>
-                        <p>
-                            <span>Đ</span>
-                            <input
-                                min={0}
-                                type={'number'}
-                                className={cx('price__input')}
-                                value={fromPrice || ''}
-                                onChange={(e) => setFromPrice(e.currentTarget.value)}
-                                name="minPrice"
-                            ></input>
-                        </p>
+                    <div className={cx('wrapper-filter')}>
+                        <label>Giá tối thiểu</label>
+                        <input
+                            min={0}
+                            type={'number'}
+                            value={fromPrice || ''}
+                            onChange={(e) => setFromPrice(e.currentTarget.value)}
+                            name="minPrice"
+                        ></input>
                     </div>
+                    <div className={cx('wrapper-filter')}>
+                        <label>Giá tối đa</label>
+                        <input
+                            min={0}
+                            type={'number'}
+                            value={toPrice || ''}
+                            onChange={(e) => setToPrice(e.currentTarget.value)}
+                            name="maxPrice"
+                        ></input>
+                    </div>
+
                     <p className={cx('price__dash')}>-</p>
-                    <div className={cx('range__price')}>
-                        <span>giá tối đa</span>
-                        <p>
-                            <span>Đ</span>
-                            <input
-                                min={0}
-                                type={'number'}
-                                className={cx('price__input')}
-                                value={toPrice || ''}
-                                onChange={(e) => setToPrice(e.currentTarget.value)}
-                                name="maxPrice"
-                            ></input>
-                        </p>
-                    </div>
                 </div>
             </div>
-            <div className={cx('filter')}>
+            <div className={cx('wrapper-filter')}>
                 <div className={cx('filter__room')}>
                     <p className={cx('filter__room-name')}>Phòng ngủ</p>
                     <div className={cx('filter__room-number')}>
@@ -382,13 +368,8 @@ function Filter(props) {
                 </div>
             </div>
             <div className={cx('filter')}>
-                <Button
-                    to=""
-                    rounded
-                    className={cx('filter__button')}
-                    leftIcon={<i className="fa-solid fa-magnifying-glass"></i>}
-                >
-                    <span>Search</span>
+                <Button rounded className={cx('filter__button')}>
+                    <span>Tìm kiếm</span>
                 </Button>
             </div>
             <div className={cx('filter__reset')}>
