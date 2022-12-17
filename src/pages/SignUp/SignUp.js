@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Button from '~/components/Button';
 import styles from './SignUp.module.scss';
-import { ErrorMessage, useFormik } from 'formik';
+import { ErrorMessage, Formik, useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -152,7 +152,52 @@ function SignUp() {
             })();
         },
     });
-
+    const validationSchema = Yup.object({
+        firstname: Yup.string().required('Vui lòng nhập đầy đủ'),
+        lastname: Yup.string().required('Vui lòng nhập đầy đủ'),
+        username: Yup.string()
+            .required('Tên đăng nhập không hợp lệ')
+            .min(8, 'Tên đăng nhập phải có ít nhất có 6 ký tự')
+            .max(15, 'Tên đăng nhập chứa nhiều nhất 15 ký tự')
+            .matches(
+                /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/,
+                'Tên đăng nhập chỉ chứa các kí tự cho phép gồm: chữ in hoa, chữ in thường, chữ số (a-z, A-Z, 0-9), dấu gạch dưới, dấu gạch ngang và dấu chấm. Tên đăng nhập phải bắt đầu hoặc kết thúc bằng chữ cái hoặc chữ số và phải chứa ít nhất một chữ cái.',
+            ),
+        birthday: Yup.string().required('Vui lòng nhập đầy đủ'),
+        gender: Yup.string().required('Vui lòng nhập đầy đủ'),
+        email: Yup.string()
+            .required('Vui lòng nhập đầy đủ')
+            .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Email không hợp lệ'),
+        password: Yup.string()
+            .required('Vui lòng nhập đầy đủ')
+            .min(6, 'Mật khẩu của bạn ít nhất phải có 8 kí tự')
+            .max(16, 'Mật khẩu của bạn chỉ được tối đa 16 kí tự'),
+        confirmedPassword: Yup.string()
+            .required('Vui lòng nhập đầy đủ')
+            .oneOf([Yup.ref('password'), null], 'Mật khẩu chưa khớp'),
+        address: Yup.object().shape({
+            city: Yup.string()
+                .required('Vui lòng chọn thành phô')
+                .default(null)
+                .nullable()
+                .test((value) => value === null || value),
+            district: Yup.string()
+                .required('Vui lòng nhập đầy đủ')
+                .default(null)
+                .nullable()
+                .test((value) => value === null || value),
+            village: Yup.string()
+                .required('Vui lòng nhập đầy đủ')
+                .default(null)
+                .nullable()
+                .test((value) => value === null || value),
+            specifically: Yup.string()
+                .required('Vui lòng nhập đầy đủ')
+                .default(null)
+                .nullable()
+                .test((value) => value === null || value),
+        }),
+    });
     useEffect(() => {
         axios
             .get(`https://provinces.open-api.vn/api/?depth=1`)
@@ -226,6 +271,7 @@ function SignUp() {
                 dispatch(loginFailure());
             });
     };
+
     return (
         <div className={cx('wrapper')}>
             <form className={cx('form-login')} onSubmit={formik.handleSubmit}>
@@ -244,12 +290,12 @@ function SignUp() {
                         <input
                             name="firstname"
                             id="firstname"
-                            value={formik.values.firstname.trim()}
+                            value={formik.values.firstname}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             type="text"
                         />
-
-                        {formik.errors.firstname && formik.touched.firstname && (
+                        {formik.touched.firstname && formik.errors.firstname && (
                             <p className={cx('alert-message')}>{formik.errors.firstname}</p>
                         )}
                     </div>
@@ -260,9 +306,10 @@ function SignUp() {
                             id="lastname"
                             value={formik.values.lastname.trim()}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             type="text"
                         />
-                        {formik.errors.lastname && formik.touched.lastname && (
+                        {formik.touched.lastname && formik.errors.lastname && (
                             <p className={cx('alert-message')}>{formik.errors.lastname}</p>
                         )}
                     </div>
@@ -275,9 +322,10 @@ function SignUp() {
                             id="username"
                             value={formik.values.username.trim()}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             type="text"
                         />
-                        {formik.errors.username && formik.touched.username && (
+                        {formik.touched.username && formik.errors.username && (
                             <p className={cx('alert-message')}>{formik.errors.username}</p>
                         )}
                     </div>
@@ -290,6 +338,7 @@ function SignUp() {
                             id="birthday"
                             value={formik.values.birthday.trim()}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             type="date"
                             max={new Date().toISOString().split('T')[0]}
                         />
@@ -299,12 +348,18 @@ function SignUp() {
                     </div>
                     <div className={cx('form-group', 'col', 'l-6', 'm-6', 'c-12')}>
                         <label>Giới tính</label>
-                        <select name="gender" value={formik.values.gender} onChange={formik.handleChange}>
+
+                        <select
+                            name="gender"
+                            value={formik.values.gender}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        >
                             <option value="">---Chọn giới tính---</option>
                             <option value="Nam">Nam</option>
                             <option value="Nữ">Nữ </option>
                         </select>
-                        {formik.errors.gender && formik.touched.gender && (
+                        {formik.touched.gender && formik.errors.gender && (
                             <p className={cx('alert-message')}>{formik.errors.gender}</p>
                         )}
                     </div>
@@ -317,9 +372,10 @@ function SignUp() {
                             id="email"
                             value={formik.values.email.trim()}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             type="email"
                         />
-                        {formik.errors.email && formik.touched.email && (
+                        {formik.touched.email && formik.errors.email && (
                             <p className={cx('alert-message')}>{formik.errors.email}</p>
                         )}
                     </div>
@@ -332,6 +388,7 @@ function SignUp() {
                             id="password"
                             value={formik.values.password.trim()}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             type="password"
                         />
                         {formik.errors.password && formik.touched.password && (
@@ -347,6 +404,7 @@ function SignUp() {
                             id="confirmedPassword"
                             value={formik.values.confirmedPassword.trim()}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             type="password"
                         />
                         {formik.errors.confirmedPassword && formik.touched.confirmedPassword && (
@@ -362,6 +420,7 @@ function SignUp() {
                             id="address.city"
                             value={formik.values.address.city.trim()}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                         >
                             <option value="">--Chọn huyện--</option>
 
@@ -386,6 +445,7 @@ function SignUp() {
                             id="address.district"
                             value={formik.values.address.district}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                         >
                             <option value="">--Chọn huyện--</option>
                             {districts?.map((district) => (
@@ -405,6 +465,7 @@ function SignUp() {
                             id="address.village"
                             value={formik.values.address.village}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                         >
                             <option value="">--Chọn xã--</option>
 
@@ -431,6 +492,7 @@ function SignUp() {
                             id="address.specifically"
                             value={formik.values.address.specifically.trim()}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             type="text"
                         />
                         {formik.errors?.address?.specifically && formik.touched.address?.specifically && (
@@ -462,7 +524,7 @@ function SignUp() {
                     </div>
                 </div>
 
-                <div className={cx('row')}>
+                {/* <div className={cx('row')}>
                     <div className={cx('col', 'l-12', 'm-12', 'c-12')}>
                         <p className={cx('login-orther-text')}>Hoặc tiếp tục với</p>
                     </div>
@@ -490,7 +552,7 @@ function SignUp() {
                             </FacebookLoginButton>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </form>
         </div>
     );

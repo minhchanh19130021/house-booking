@@ -4,11 +4,11 @@ import Button from '~/components/Button';
 import styles from './SignUpOwner.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { ErrorMessage, Field, Form, Formik, useFormik } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { registerFailure, registerStart, registerSuccess } from '~/redux/authenticationSlide';
 import axios from 'axios';
 import { getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import { sub } from 'date-fns/fp';
 
 const cx = classNames.bind(styles);
 function SignUpOwner() {
@@ -149,14 +149,12 @@ function SignUpOwner() {
                 })
                     .then((response) => response.json())
                     .then((data) => {
-                        // console.log(data);
+                        console.log(data);
                         setStatusRegister(data);
-                        // if (data.status === true) {
-                        //     dispatch(registerSuccess());
-                        navigate('/signin');
-                        // } else {
-                        //     dispatch(registerFailure());
-                        // }
+                        if (data.status === true) {
+                            navigate('/signin');
+                        }
+
                         return data;
                     })
                     .catch((err) => console.log(err));
@@ -171,10 +169,10 @@ function SignUpOwner() {
         setCurrentStep((prev) => prev - 1);
     };
     const stepOneValidationSchema = Yup.object({
-        name: Yup.string().required(),
+        name: Yup.string().required('Vui lòng nhập trường này').min(8, 'Tên nhà phải có ít nhất 8 ký tự'),
         segmentation: Yup.string().required(),
-        introduce: Yup.string().required(),
-        description: Yup.string().required(),
+        introduce: Yup.string().required('Vui lòng nhập trường này').min(30, 'Tên nhà phải có ít nhất 30 ký tự'),
+        description: Yup.string().required('Vui lòng nhập trường này').min(50, 'Tên nhà phải có ít nhất 50 ký tự'),
     });
     const stepTwoValidationSchema = Yup.object({
         city: Yup.string().required(),
@@ -203,15 +201,25 @@ function SignUpOwner() {
         specifically: Yup.string().required(),
     });
     const stepSixValidationSchema = Yup.object({
-        firstname: Yup.string().required(),
-        lastname: Yup.string().required(),
-        username: Yup.string().required(),
-        birthday: Yup.string().required(),
-        gender: Yup.string().required(),
+        firstname: Yup.string().required('Vui lòng nhập trường này'),
+        lastname: Yup.string().required('Vui lòng nhập trường này'),
+        username: Yup.string()
+            .required('Vui lòng nhập trường này')
+            .min(8, 'Tên đăng nhập ít nhất 8 ký tự')
+            .max(20, 'Tên đăng nhập tối đa 20 ký tự'),
+        birthday: Yup.date()
+            .required('Vui lòng nhập trường này')
+            .max(sub({ years: 18 }, new Date()), 'Chủ nhà phải trên 18 tuổi'),
+        gender: Yup.string().required('Vui lòng nhập trường này'),
         email: Yup.string()
-            .required()
+            .required('Vui lòng nhập trường này')
             .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Email không hợp lệ'),
-        phone: Yup.string().required(),
+        phone: Yup.string()
+            .required('Vui lòng nhập trường này')
+            .matches(
+                /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
+                'Số điện thoại không hợp lệ',
+            ),
     });
     useEffect(() => {
         axios
@@ -266,7 +274,7 @@ function SignUpOwner() {
         return () => {
             img02 && URL.revokeObjectURL(img02.preview);
         };
-    }, [setImg02]);
+    }, [img02]);
     useEffect(() => {
         return () => {
             img03 && URL.revokeObjectURL(img03.preview);
@@ -293,7 +301,6 @@ function SignUpOwner() {
         image.preview = URL.createObjectURL(image);
         setImg01(image);
 
-        // console.log(image.name);
         data.images.push(image.name);
     };
     const handleImage02 = (e) => {
@@ -316,7 +323,6 @@ function SignUpOwner() {
         }
         image.preview = URL.createObjectURL(image);
         setImg03(image);
-        // console.log(image.name);
         data.images.push(image.name);
     };
     const handleImage04 = (e) => {
@@ -328,7 +334,6 @@ function SignUpOwner() {
         }
         image.preview = URL.createObjectURL(image);
         setImg04(image);
-        // console.log(image.name);
         data.images.push(image.name);
     };
     const handleImage05 = (e) => {
@@ -340,7 +345,6 @@ function SignUpOwner() {
         }
         image.preview = URL.createObjectURL(image);
         setImg05(image);
-        // console.log(image.name);
         data.images.push(image.name);
     };
 
@@ -365,12 +369,9 @@ function SignUpOwner() {
                                 <div className={cx('form-group', 'col', 'l-12', 'm-12', 'c-12')}>
                                     <label htmlFor="name">Tên chỗ cho thuê</label>
                                     <Field name="name" id="name-house" type="text" />
-                                    <ErrorMessage
-                                        name="name"
-                                        render={(msg) => (
-                                            <div className={cx('alert-message')}>{`Vui lòng nhập trường này`}</div>
-                                        )}
-                                    />
+                                    <ErrorMessage name="name">
+                                        {(msg) => <div className={cx('alert-message')}>{msg}</div>}
+                                    </ErrorMessage>
                                 </div>
                                 <div className={cx('form-group', 'col', 'l-12', 'm-12', 'c-12')}>
                                     <label>Phân khúc</label>
@@ -390,22 +391,16 @@ function SignUpOwner() {
                                 <div className={cx('form-group', 'col', 'l-12', 'm-12', 'c-12')}>
                                     <label htmlFor="introduce">Giới thiệu nhà của bạn</label>
                                     <Field as="textarea" name="introduce" id="introduce" type="text"></Field>
-                                    <ErrorMessage
-                                        name="introduce"
-                                        render={(msg) => (
-                                            <div className={cx('alert-message')}>{`Vui lòng nhập trường này`}</div>
-                                        )}
-                                    />
+                                    <ErrorMessage name="introduce">
+                                        {(msg) => <div className={cx('alert-message')}>{msg}</div>}
+                                    </ErrorMessage>
                                 </div>
                                 <div className={cx('form-group', 'col', 'l-12', 'm-12', 'c-12')}>
                                     <label htmlFor="description">Mô tả nhà của bạn</label>
                                     <Field as="textarea" name="description" id="description" type="text"></Field>
-                                    <ErrorMessage
-                                        name="description"
-                                        render={(msg) => (
-                                            <div className={cx('alert-message')}>{`Vui lòng nhập trường này`}</div>
-                                        )}
-                                    />
+                                    <ErrorMessage name="description">
+                                        {(msg) => <div className={cx('alert-message')}>{msg}</div>}
+                                    </ErrorMessage>
                                 </div>
 
                                 <div className={cx('form-group', 'col', 'l-12', 'm-12', 'c-12')}>
@@ -869,7 +864,7 @@ function SignUpOwner() {
                                     <span className={cx('alert-message')}></span>
                                 </div>
                                 <div className={cx('stock-img', 'col', 'l-12', 'm-12', 'c-12')}>
-                                    <label>Kho ảnh của bạn</label>
+                                    <strong>Kho ảnh của bạn</strong>
                                     <div className="row">
                                         <div className="col l-4 m-4 c-4">
                                             {img01 && (
@@ -933,32 +928,23 @@ function SignUpOwner() {
                                 <div className={cx('form-group', 'col', 'l-6', 'm-6', 'c-12')}>
                                     <label htmlFor="firstname">Họ</label>
                                     <Field name="firstname" id="firstname" type="text" />
-                                    <ErrorMessage
-                                        name="firstname"
-                                        render={(msg) => (
-                                            <div className={cx('alert-message')}>{`Vui lòng nhập trường này`}</div>
-                                        )}
-                                    />
+                                    <ErrorMessage name="firstname">
+                                        {(msg) => <div className={cx('alert-message')}>{msg}</div>}
+                                    </ErrorMessage>
                                 </div>
                                 <div className={cx('form-group', 'col', 'l-6', 'm-6', 'c-12')}>
                                     <label htmlFor="lastname">Tên</label>
                                     <Field name="lastname" id="lastname" type="text" />
-                                    <ErrorMessage
-                                        name="lastname"
-                                        render={(msg) => (
-                                            <div className={cx('alert-message')}>{`Vui lòng nhập trường này`}</div>
-                                        )}
-                                    />
+                                    <ErrorMessage name="lastname">
+                                        {(msg) => <div className={cx('alert-message')}>{msg}</div>}
+                                    </ErrorMessage>
                                 </div>
                                 <div className={cx('form-group', 'col', 'l-12', 'm-6', 'c-12')}>
                                     <label htmlFor="username">Tên đăng nhập</label>
                                     <Field name="username" id="username" type="text" />
-                                    <ErrorMessage
-                                        name="username"
-                                        render={(msg) => (
-                                            <div className={cx('alert-message')}>{`Vui lòng nhập trường này`}</div>
-                                        )}
-                                    />
+                                    <ErrorMessage name="username">
+                                        {(msg) => <div className={cx('alert-message')}>{msg}</div>}
+                                    </ErrorMessage>
                                 </div>
                                 <div className={cx('form-group', 'col', 'l-6', 'm-6', 'c-12')}>
                                     <label htmlFor="birthday">Ngày sinh</label>
@@ -968,12 +954,9 @@ function SignUpOwner() {
                                         type="date"
                                         max={new Date().toISOString().split('T')[0]}
                                     />
-                                    <ErrorMessage
-                                        name="birthday"
-                                        render={(msg) => (
-                                            <div className={cx('alert-message')}>{`Vui lòng nhập trường này`}</div>
-                                        )}
-                                    />
+                                    <ErrorMessage name="birthday">
+                                        {(msg) => <div className={cx('alert-message')}>{msg}</div>}
+                                    </ErrorMessage>
                                 </div>
                                 <div className={cx('form-group', 'col', 'l-6', 'm-12', 'c-12')}>
                                     <label>Giới tính</label>
@@ -992,31 +975,25 @@ function SignUpOwner() {
                                 <div className={cx('form-group', 'col', 'l-12', 'm-12', 'c-12')}>
                                     <label htmlFor="email">Địa chỉ email</label>
                                     <Field name="email" type="text" />
-                                    <ErrorMessage
-                                        name="email"
-                                        render={(msg) => (
-                                            <div className={cx('alert-message')}>{`Vui lòng nhập trường này`}</div>
-                                        )}
-                                    />
+                                    <ErrorMessage name="email">
+                                        {(msg) => <div className={cx('alert-message')}>{msg}</div>}
+                                    </ErrorMessage>
                                 </div>
                                 <div className={cx('form-group', 'col', 'l-12', 'm-12', 'c-12')}>
                                     <label htmlFor="phone">Số điện thoại</label>
                                     <Field name="phone" type="number" />
-                                    <ErrorMessage
-                                        name="phone"
-                                        render={(msg) => (
-                                            <div className={cx('alert-message')}>{`Vui lòng nhập trường này`}</div>
-                                        )}
-                                    />
+                                    <ErrorMessage name="phone">
+                                        {(msg) => <div className={cx('alert-message')}>{msg}</div>}
+                                    </ErrorMessage>
                                 </div>
 
-                                <div className={cx('form-group', 'col', 'l-12', 'm-12', 'c-12')}>
+                                {/* <div className={cx('form-group', 'col', 'l-12', 'm-12', 'c-12')}>
                                     <label>Hình thức thanh toán mong muốn</label>
                                     <Field name="payment_method" as="select">
                                         <option value="">--Chọn hình thức--</option>
                                         <option value="Paypal">Paypal</option>
                                     </Field>
-                                </div>
+                                </div> */}
                                 <div className={cx('form-group', 'col', 'l-12', 'm-12', 'c-12')}>
                                     <Button type="button" onClick={() => props.prev(values)}>
                                         Quay lại
