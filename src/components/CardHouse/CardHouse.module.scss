@@ -156,6 +156,7 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            height: 40px;
         }
 
         .facilities {
@@ -163,6 +164,7 @@
             align-items: center;
             flex-wrap: wrap;
             padding: 10px 0px;
+            height: 60px;
 
             p {
                 font-weight: 700;

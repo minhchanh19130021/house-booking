@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Button from '~/components/Button';
 import styles from './SignUp.module.scss';
-import { useFormik } from 'formik';
+import { ErrorMessage, useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -249,7 +249,9 @@ function SignUp() {
                             type="text"
                         />
 
-                        {formik.errors.firstname && <p className={cx('alert-message')}>{formik.errors.firstname}</p>}
+                        {formik.errors.firstname && formik.touched.firstname && (
+                            <p className={cx('alert-message')}>{formik.errors.firstname}</p>
+                        )}
                     </div>
                     <div className={cx('form-group', 'col', 'l-6', 'm-6', 'c-12')}>
                         <label htmlFor="lastname">Tên*</label>
@@ -260,7 +262,9 @@ function SignUp() {
                             onChange={formik.handleChange}
                             type="text"
                         />
-                        {formik.errors.lastname && <p className={cx('alert-message')}>{formik.errors.lastname}</p>}
+                        {formik.errors.lastname && formik.touched.lastname && (
+                            <p className={cx('alert-message')}>{formik.errors.lastname}</p>
+                        )}
                     </div>
                 </div>
                 <div className={cx('row')}>
@@ -273,7 +277,9 @@ function SignUp() {
                             onChange={formik.handleChange}
                             type="text"
                         />
-                        {formik.errors.username && <p className={cx('alert-message')}>{formik.errors.username}</p>}
+                        {formik.errors.username && formik.touched.username && (
+                            <p className={cx('alert-message')}>{formik.errors.username}</p>
+                        )}
                     </div>
                 </div>
                 <div className={cx('row')}>
@@ -287,7 +293,9 @@ function SignUp() {
                             type="date"
                             max={new Date().toISOString().split('T')[0]}
                         />
-                        {formik.errors.birthday && <p className={cx('alert-message')}>{formik.errors.birthday}</p>}
+                        {formik.errors.birthday && formik.touched.birthday && (
+                            <p className={cx('alert-message')}>{formik.errors.birthday}</p>
+                        )}
                     </div>
                     <div className={cx('form-group', 'col', 'l-6', 'm-6', 'c-12')}>
                         <label>Giới tính</label>
@@ -296,7 +304,9 @@ function SignUp() {
                             <option value="Nam">Nam</option>
                             <option value="Nữ">Nữ </option>
                         </select>
-                        {formik.errors.gender && <p className={cx('alert-message')}>{formik.errors.gender}</p>}
+                        {formik.errors.gender && formik.touched.gender && (
+                            <p className={cx('alert-message')}>{formik.errors.gender}</p>
+                        )}
                     </div>
                 </div>
                 <div className={cx('row')}>
@@ -309,7 +319,9 @@ function SignUp() {
                             onChange={formik.handleChange}
                             type="email"
                         />
-                        {formik.errors.email && <p className={cx('alert-message')}>{formik.errors.email}</p>}
+                        {formik.errors.email && formik.touched.email && (
+                            <p className={cx('alert-message')}>{formik.errors.email}</p>
+                        )}
                     </div>
                 </div>
                 <div className={cx('row')}>
@@ -322,7 +334,9 @@ function SignUp() {
                             onChange={formik.handleChange}
                             type="password"
                         />
-                        {formik.errors.password && <p className={cx('alert-message')}>{formik.errors.password}</p>}
+                        {formik.errors.password && formik.touched.password && (
+                            <p className={cx('alert-message')}>{formik.errors.password}</p>
+                        )}
                     </div>
                 </div>
                 <div className={cx('row')}>
@@ -335,7 +349,7 @@ function SignUp() {
                             onChange={formik.handleChange}
                             type="password"
                         />
-                        {formik.errors.confirmedPassword && (
+                        {formik.errors.confirmedPassword && formik.touched.confirmedPassword && (
                             <p className={cx('alert-message')}>{formik.errors.confirmedPassword}</p>
                         )}
                     </div>
@@ -361,7 +375,7 @@ function SignUp() {
                                 </option>
                             ))}
                         </select>
-                        {formik.errors?.address?.city && (
+                        {formik.errors?.address?.city && formik.touched.address?.city && (
                             <p className={cx('alert-message')}>{formik.errors?.address?.city}</p>
                         )}
                     </div>
@@ -380,7 +394,7 @@ function SignUp() {
                                 </option>
                             ))}
                         </select>
-                        {formik.errors?.address?.district && (
+                        {formik.errors?.address?.district && formik.touched.address?.district && (
                             <p className={cx('alert-message')}>{formik.errors?.address.district}</p>
                         )}
                     </div>
@@ -404,7 +418,7 @@ function SignUp() {
                                 </option>
                             ))}
                         </select>
-                        {formik.errors?.address?.village && (
+                        {formik.errors?.address?.village && formik.touched.address?.village && (
                             <p className={cx('alert-message')}>{formik.errors?.address?.village}</p>
                         )}
                     </div>
@@ -419,7 +433,7 @@ function SignUp() {
                             onChange={formik.handleChange}
                             type="text"
                         />
-                        {formik.errors?.address?.specifically && (
+                        {formik.errors?.address?.specifically && formik.touched.address?.specifically && (
                             <p className={cx('alert-message')}>{formik.errors?.address?.specifically}</p>
                         )}
                     </div>

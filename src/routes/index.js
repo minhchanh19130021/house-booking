@@ -39,6 +39,7 @@ const publicRoutes = [
     { path: config.routes.new_password, component: NewPassword },
 
     { path: config.routes.signup_owner, component: SignUpOwner },
+
     { path: config.routes.listHouse, component: ListHouse },
     { path: config.routes.payment, component: Payment },
     { path: config.routes.payment_success, component: PaymentSuccess },
