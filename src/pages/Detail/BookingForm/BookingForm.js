@@ -13,9 +13,11 @@ import 'react-date-range/dist/theme/default.css';
 import { format } from 'date-fns';
 // import { data } from 'autoprefixer';
 import useFetch from '../../../hooks/useFetch';
+import { useSelector } from 'react-redux';
 
 const cx = classNames.bind(styles);
 function BookingForm(props) {
+    const user = useSelector((state) => state.authentication.login.currentUser);
     const [visibleGuestInfo, setVisibleGuestInfo] = useState(false);
 
     const hanldeVisibleGuestInfo = () => {
@@ -45,6 +47,8 @@ function BookingForm(props) {
         baby: 0,
         pet: 0,
     });
+
+    const [isDisplayFromCart, setIsDisplayFromCart] = useState(false);
 
     const handleOption = (name, operation) => {
         setOptions((prev) => {
@@ -77,6 +81,47 @@ function BookingForm(props) {
                 dates[0].endDate,
             { state: { home, dates, options } },
         );
+    };
+
+    const handleContinueWatch = (e) => {
+        setIsDisplayFromCart(false);
+    };
+
+    const handleToCheckout = (e) => {
+        navigate('/cart');
+    };
+
+    const handleAddToCart = (e) => {
+        e.preventDefault();
+        let cartDetailToAdd = {};
+        const createDate = new Date().toISOString();
+        cartDetailToAdd.create_date = createDate;
+        cartDetailToAdd.hid = idh;
+        cartDetailToAdd.number_visitor = {
+            adult: options.adult,
+            children: options.children,
+            baby: options.baby,
+            pet: options.pet,
+        };
+        cartDetailToAdd.check_in = dates[0].startDate;
+        cartDetailToAdd.checkout = dates[0].endDate;
+        cartDetailToAdd.uid = user?._id;
+        cartDetailToAdd.is_booked = false;
+        fetch(`http://localhost:8080/api/v2/cart/put`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', token: `Bearer ${user?.accessToken}` },
+            body: JSON.stringify(cartDetailToAdd),
+        })
+            .then((response) => {
+                if (response.status === 200) {
+                    setIsDisplayFromCart(true);
+                } else {
+                    alert('Thêm vào giỏ hàng thất bại');
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
 
     const formatter = new Intl.NumberFormat('en-US', {
@@ -175,7 +220,7 @@ function BookingForm(props) {
                                 <FontAwesomeIcon icon={faPerson} className="headerIcon" /> Khách
                             </label>
                             <label onClick={hanldeVisibleGuestInfo} style={{ fontSize: 14 }}>
-                                {`${props.dataFromParent?.detail[0].maximum_number_visitor.adult_children} Người lớn · ${props.dataFromParent?.detail[0].maximum_number_visitor.baby} Em bé  ·${props.dataFromParent?.detail[0].maximum_number_visitor.pet} Thú cưng`}
+                                {`${props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children} Người lớn · ${props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby} Em bé  ·${props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet} Thú cưng`}
                             </label>
                             {visibleGuestInfo && (
                                 <motion.div animate={{}} className={cx('guest-info')}>
@@ -393,6 +438,9 @@ function BookingForm(props) {
                     <Button type="submit" className={cx('btn-booking')} onClick={handleSearch}>
                         Đặt Phòng
                     </Button>
+                    <Button type="button" className={cx('btn-cart')} onClick={handleAddToCart}>
+                        Thêm vào giỏ hàng
+                    </Button>
                     <div className={cx('price-detail')}>
                         <div className={cx('price-item')}>
                             <p className={cx('price-item__title')}>Tiền phòng ({days} đêm) </p>
@@ -431,6 +479,17 @@ function BookingForm(props) {
             >
                 Báo cáo nhà/phòng cho thuê này
             </Button>
+            <div className={cx('contain__cart', isDisplayFromCart ? 'active' : null)}>
+                <p>Thêm vào giỏ hàng thành công</p>
+                <div className={cx('contain__button')}>
+                    <button className={cx('button', 'refuse__button')} onClick={handleContinueWatch}>
+                        Tiếp tục xem phòng
+                    </button>
+                    <button className={cx('button', 'confirm__button')} onClick={handleToCheckout}>
+                        Kiểm tra giỏ hàng của bạn
+                    </button>
+                </div>
+            </div>
         </>
     );
 }

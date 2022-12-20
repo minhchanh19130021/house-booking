@@ -159,7 +159,8 @@ function Home() {
                                     return (
                                         <div key={i} className={cx('col', 'l-4', 'm-6', 'c-12')}>
                                             <CardHouse
-                                                avatar={e.avatar}
+                                                folder_image={e?.folder_image}
+                                                avatar={e?.avatar}
                                                 idHouse={e._id}
                                                 to={`/detail/${e.slug}`}
                                                 status={e.status ? 'open' : 'close'}
@@ -194,6 +195,7 @@ function Home() {
                                     return (
                                         <div key={i} className={cx('col', 'l-4', 'm-6', 'c-12')}>
                                             <CardHouse
+                                                folder_image={home?.folder_image}
                                                 avatar={home.avatar}
                                                 idHouse={home._id}
                                                 to={`/detail/${e.slug}`}

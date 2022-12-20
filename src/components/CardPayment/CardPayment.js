@@ -71,6 +71,7 @@ function CardPayment() {
         return diffDays;
     }
 
+    console.log(dates[0].endDate);
     const days = dayDifference(dates[0].endDate, dates[0].startDate);
 
     function priceStay() {
@@ -904,27 +905,27 @@ function CardPayment() {
             )}
             {visibleModalCustomer && (
                 <ModalCustomer>
-                <svg
-                    viewBox="0 0 32 32"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                    role="presentation"
-                    focusable="false"
-                    style={{
-                        display: 'block',
-                        fill: 'none',
-                        height: '16px',
-                        width: '16px',
-                        stroke: 'currentcolor',
-                        strokeWidth: 3,
-                        overflow: 'visible',
-                    }}
-                    onClick={handlevisibleModalCustomer}
-                >
-                    <path d="m6 6 20 20" />
-                    <path d="m26 6-20 20" />
-                </svg>
-            </ModalCustomer>
+                    <svg
+                        viewBox="0 0 32 32"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true"
+                        role="presentation"
+                        focusable="false"
+                        style={{
+                            display: 'block',
+                            fill: 'none',
+                            height: '16px',
+                            width: '16px',
+                            stroke: 'currentcolor',
+                            strokeWidth: 3,
+                            overflow: 'visible',
+                        }}
+                        onClick={handlevisibleModalCustomer}
+                    >
+                        <path d="m6 6 20 20" />
+                        <path d="m26 6-20 20" />
+                    </svg>
+                </ModalCustomer>
             )}
         </div>
     );

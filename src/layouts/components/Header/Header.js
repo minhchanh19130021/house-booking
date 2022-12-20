@@ -233,7 +233,13 @@ function Header() {
                                             Xin chào! {user?.username}
                                         </NavLink>
                                         <NavLink
-                                            to="/personal-detail"
+                                            to={
+                                                user.type === 'host'
+                                                    ? '/statistical'
+                                                    : user.type === 'visitor'
+                                                    ? '/personal-detail'
+                                                    : '/'
+                                            }
                                             className={cx('menu-item')}
                                             onClick={() => setModalMenu(false)}
                                         >
