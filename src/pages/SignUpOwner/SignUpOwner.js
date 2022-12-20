@@ -151,11 +151,11 @@ function SignUpOwner() {
                     .then((data) => {
                         console.log(data);
                         setStatusRegister(data);
-                        if (data.status === true) {
-                            setTimeout(() => {
-                                navigate('/signin');
-                            }, 2000);
-                        }
+                        // if (data.status === true) {
+                        //     setTimeout(() => {
+                        //         navigate('/signin');
+                        //     }, 2000);
+                        // }
 
                         return data;
                     })
