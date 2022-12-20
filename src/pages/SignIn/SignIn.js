@@ -10,11 +10,10 @@ import { setAvatar } from '~/redux/avatarSlice';
 import { useState, useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { useGoogleLogin } from '@react-oauth/google';
-import FacebookLogin from 'react-facebook-login';
 import axios from 'axios';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '~/config/firebase';
-import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-buttons';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 
 const cx = classNames.bind(styles);
 function SignIn() {
@@ -155,68 +154,81 @@ function SignIn() {
                         <div className="col l-12 m-12 c-12">
                             {dataLogin?.status === false && <p className={cx('warning')}>{dataLogin?.msg}</p>}
                         </div>
+                        <div className={cx('form-group', 'col', 'l-12', 'm-12', 'c-12')}>
+                            <label htmlFor="username">Tên đăng nhập*</label>
+                            <input
+                                name="username"
+                                id="username"
+                                type="text"
+                                value={formik.values.username}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                            {formik.errors.username && formik.touched.username && (
+                                <p className={cx('alert-message')}>{formik.errors.username}</p>
+                            )}
+                        </div>
+                        <div className={cx('form-group', 'col', 'l-12', 'm-12', 'c-12')}>
+                            <label htmlFor="password">Mật khẩu *</label>
+                            <input
+                                name="password"
+                                id="password"
+                                type="password"
+                                value={formik.values.password}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                            {formik.touched.password && formik.errors.password && (
+                                <p className={cx('alert-message')}>{formik.errors.password}</p>
+                            )}
+                        </div>
+                        <div className={cx('col', 'l-12', 'm-12', 'c-12')}>
+                            <Button large type="submit">
+                                Đăng Nhập
+                            </Button>
+                        </div>
                     </div>
-                    <div className={cx('form-group')}>
-                        <label htmlFor="username">Tên đăng nhập*</label>
-                        <input
-                            name="username"
-                            id="username"
-                            type="text"
-                            value={formik.values.username}
-                            onChange={formik.handleChange}
-                        />
-                        {formik.errors.username && <p className={cx('alert-message')}>{formik.errors.username}</p>}
-                    </div>
-                    <div className={cx('form-group')}>
-                        <label htmlFor="password">Mật khẩu *</label>
-                        <input
-                            name="password"
-                            id="password"
-                            type="password"
-                            value={formik.values.password}
-                            onChange={formik.handleChange}
-                        />
-                        {formik.errors.password && <p className={cx('alert-message')}>{formik.errors.password}</p>}
-                    </div>
-                    <Button large type="submit">
-                        Đăng Nhập
-                    </Button>
                     <div className={cx('function')}>
-                        <NavLink to="/signup">Tạo tài khoản</NavLink>
+                        <NavLink to="/signup">Đăng ký tài khoản</NavLink>
                         <NavLink to="/forgot-password" className={cx('forgot-password')}>
                             Quên mật khẩu?
                         </NavLink>
                     </div>
-                    <div className={cx('row')}>
-                        <div className={cx('col', 'l-12', 'm-12', 'c-12')}>
-                            <p className={cx('login-orther-text')}>Hoặc tiếp tục với</p>
-                        </div>
-                    </div>
-
-                    <div className="grid">
-                        <div className="row">
-                            <div className="col l-12 m-12 c-12">
-                                <div className={cx('btn-social')}>
-                                    <GoogleLoginButton onClick={() => login()} className={cx('btn-social')}>
-                                        <strong> ĐĂNG NHẬP GOOGLE</strong>
-                                    </GoogleLoginButton>
-                                </div>
-                            </div>
-                            <div className="col l-12 m-12 c-12">
-                                <FacebookLoginButton>
-                                    <FacebookLogin
-                                        appId="5791810414235073"
-                                        fields="name,email,picture"
-                                        callback={responseFacebook}
-                                        textButton="Đăng nhập với Facebook"
-                                        size="small"
-                                        buttonStyle={{ width: '100%', height: '100%', textAlign: 'left' }}
-                                    />
-                                </FacebookLoginButton>
-                            </div>
-                        </div>
-                    </div>
                 </form>
+                <div className="grid">
+                    <div className="row">
+                        <div className="col l-12 m-12 c-12">
+                            <button onClick={() => login()} className={cx('google')}>
+                                <img
+                                    className={cx('google-img')}
+                                    src="https://cdn-icons-png.flaticon.com/512/300/300221.png"
+                                    alt=""
+                                />
+                                Đăng nhập google
+                            </button>
+                        </div>
+                        <div className="col l-12 m-12 c-12">
+                            <FacebookLogin
+                                appId="5791810414235073"
+                                fields="name,email,picture"
+                                callback={responseFacebook}
+                                textButton="Đăng nhập với Facebook"
+                                size="small"
+                                buttonStyle={{ width: '100%', height: '100%', textAlign: 'left' }}
+                                render={(renderProps) => (
+                                    <button className={cx('google')} onClick={renderProps.onClick}>
+                                        <img
+                                            className={cx('google-img')}
+                                            src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
+                                            alt=""
+                                        />
+                                        Đăng nhập facebook
+                                    </button>
+                                )}
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

@@ -17,8 +17,7 @@ import {
     registerSuccess,
 } from '~/redux/authenticationSlide';
 import { useGoogleLogin } from '@react-oauth/google';
-import FacebookLogin from 'react-facebook-login';
-import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-buttons';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { sub } from 'date-fns/fp';
 
 const cx = classNames.bind(styles);
@@ -146,7 +145,6 @@ function SignUp() {
                         if (data.status === true) {
                             dispatch(registerSuccess());
 
-                          
                             formik.values.firstname = '';
                             formik.values.lastname = '';
                             formik.values.username = '';
@@ -160,7 +158,7 @@ function SignUp() {
                             formik.values.address.village = '';
                             formik.values.address.specifically = '';
                             setTimeout(() => {
-                                  navigate('/signin');
+                                navigate('/signin');
                             }, 5000);
                         } else {
                             dispatch(registerFailure());
@@ -487,49 +485,49 @@ function SignUp() {
                         </Button>
                     </div>
                 </div>
-                <div className={cx('row')}>
-                    <div className={cx('form-group', 'col', 'l-8', 'm-12', 'c-12')}>
-                        <span>
-                            Bạn đã có tài khoản?
-                            <NavLink to="/signin" className={cx('link-signin')}>
-                                Đăng nhập
-                            </NavLink>
-                        </span>
+                <div className={cx('row', 'function')}>
+                    <div className={cx('form-group', 'col')}>
+                        <span>Bạn đã có tài khoản? </span>
+                        <NavLink to="/signin" className={cx('link-signin')}>
+                            Đăng nhập
+                        </NavLink>
                     </div>
-                    <div className={cx('form-group', 'col', 'l-4', 'm-12', 'c-12')}>
-                        <NavLink to="/signin" className={cx('forgot-link')}>
+                    <div className={cx('form-group', 'col')}>
+                        <NavLink to="/forgot-password" className={cx('forgot-link')}>
                             Quên mật khẩu
                         </NavLink>
                     </div>
                 </div>
-
-                <div className={cx('row')}>
-                    <div className={cx('col', 'l-12', 'm-12', 'c-12')}>
-                        <p className={cx('login-orther-text')}>Hoặc tiếp tục với</p>
+                <div className="row">
+                    <div className="col l-12 m-12 c-12">
+                        <button onClick={() => login()} className={cx('google')}>
+                            <img
+                                className={cx('google-img')}
+                                src="https://cdn-icons-png.flaticon.com/512/300/300221.png"
+                                alt=""
+                            />
+                            Đăng nhập google
+                        </button>
                     </div>
-                </div>
-
-                <div className="grid">
-                    <div className="row">
-                        <div className="col l-12 m-12 c-12">
-                            <div className={cx('btn-social')}>
-                                <GoogleLoginButton onClick={() => login()} className={cx('btn-social')}>
-                                    <strong> ĐĂNG NHẬP GOOGLE</strong>
-                                </GoogleLoginButton>
-                            </div>
-                        </div>
-                        <div className="col l-12 m-12 c-12">
-                            <FacebookLoginButton>
-                                <FacebookLogin
-                                    appId="5791810414235073"
-                                    fields="name,email,picture"
-                                    callback={responseFacebook}
-                                    textButton="Đăng nhập với Facebook"
-                                    size="small"
-                                    buttonStyle={{ width: '100%', height: '100%', textAlign: 'left' }}
-                                />
-                            </FacebookLoginButton>
-                        </div>
+                    <div className="col l-12 m-12 c-12">
+                        <FacebookLogin
+                            appId="5791810414235073"
+                            fields="name,email,picture"
+                            callback={responseFacebook}
+                            textButton="Đăng nhập với Facebook"
+                            size="small"
+                            buttonStyle={{ width: '100%', height: '100%', textAlign: 'left' }}
+                            render={(renderProps) => (
+                                <button className={cx('google')} onClick={renderProps.onClick}>
+                                    <img
+                                        className={cx('google-img')}
+                                        src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
+                                        alt=""
+                                    />
+                                    Đăng nhập facebook
+                                </button>
+                            )}
+                        />
                     </div>
                 </div>
             </form>
