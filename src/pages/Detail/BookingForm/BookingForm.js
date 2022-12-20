@@ -13,7 +13,6 @@ import 'react-date-range/dist/theme/default.css';
 import { format } from 'date-fns';
 // import { data } from 'autoprefixer';
 import useFetch from '../../../hooks/useFetch';
-import { useSelector } from 'react-redux';
 import { useDispatch, useSelector } from 'react-redux';
 
 const cx = classNames.bind(styles);
@@ -28,7 +27,6 @@ function BookingForm(props) {
     const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/636ce065825a1cd1940641a2`);
 
     const [home, setHome] = useState('636ce065825a1cd1940641a2');
-    const user = useSelector((state) => state.authentication.login.currentUser);
     const [userInfor, setUserInfor] = useState([]);
     const [visiblePayByPoint, setVisiblePayByPoint] = useState(false);
     useEffect(() => {
