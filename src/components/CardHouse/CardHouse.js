@@ -41,7 +41,7 @@ function CardHouse({
                     <img src={linkImg} alt="thumbnail" />
                 </NavLink>
                 <div className={cx('thumbnail-content')}>
-                    <div className={cx('border-status')}>
+                    {/* <div className={cx('border-status')}>
                         <Button
                             className={cx(`${status}`)}
                             leftIcon={
@@ -80,7 +80,7 @@ function CardHouse({
                         >
                             {status === 'open' ? 'Đang mở' : 'Đã đóng cửa'}
                         </Button>
-                    </div>
+                    </div> */}
                     <div className={cx('rate')}>
                         <button>{rate}</button>
                         <div className={cx('star-rate')}>
@@ -168,7 +168,7 @@ function CardHouse({
                             .join('')}{' '}
                         VNĐ / đêm
                     </span>
-                    <div className={cx('function')}>
+                    {/* <div className={cx('function')}>
                         <NavLink to="">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -222,7 +222,7 @@ function CardHouse({
                                 />
                             </svg>
                         </NavLink>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

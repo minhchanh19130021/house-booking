@@ -68,7 +68,7 @@ function ProfileHostSidebar() {
                         </svg>
                     }
                 />
-                <SidebarItem
+                {/* <SidebarItem
                     title="Thêm nhà mới"
                     to={config.routes.host_new}
                     icon={
@@ -87,7 +87,7 @@ function ProfileHostSidebar() {
                             />
                         </svg>
                     }
-                />
+                /> */}
                 <SidebarItem
                     title="Nhà đang cho thuê"
                     to={config.routes.host_renting}

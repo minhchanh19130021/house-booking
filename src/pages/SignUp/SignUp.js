@@ -17,8 +17,8 @@ import {
     registerSuccess,
 } from '~/redux/authenticationSlide';
 import { useGoogleLogin } from '@react-oauth/google';
-import FacebookLogin from 'react-facebook-login';
-import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-buttons';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import { sub } from 'date-fns/fp';
 
 const cx = classNames.bind(styles);
 function SignUp() {
@@ -74,20 +74,22 @@ function SignUp() {
             lastname: Yup.string().required('Vui lòng nhập đầy đủ'),
             username: Yup.string()
                 .required('Tên đăng nhập không hợp lệ')
-                .min(8, 'Tên đăng nhập phải có ít nhất có 6 ký tự')
+                .min(8, 'Tên đăng nhập phải có ít nhất có 8 ký tự')
                 .max(15, 'Tên đăng nhập chứa nhiều nhất 15 ký tự')
                 .matches(
                     /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/,
                     'Tên đăng nhập chỉ chứa các kí tự cho phép gồm: chữ in hoa, chữ in thường, chữ số (a-z, A-Z, 0-9), dấu gạch dưới, dấu gạch ngang và dấu chấm. Tên đăng nhập phải bắt đầu hoặc kết thúc bằng chữ cái hoặc chữ số và phải chứa ít nhất một chữ cái.',
                 ),
-            birthday: Yup.string().required('Vui lòng nhập đầy đủ'),
+            birthday: Yup.date()
+                .required('Vui lòng nhập đầy đủ')
+                .max(sub({ years: 18 }, new Date()), 'Người dùng phải trên 18 tuổi'),
             gender: Yup.string().required('Vui lòng nhập đầy đủ'),
             email: Yup.string()
                 .required('Vui lòng nhập đầy đủ')
                 .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Email không hợp lệ'),
             password: Yup.string()
                 .required('Vui lòng nhập đầy đủ')
-                .min(6, 'Mật khẩu của bạn ít nhất phải có 8 kí tự')
+                .min(6, 'Mật khẩu của bạn ít nhất phải có 6 kí tự')
                 .max(16, 'Mật khẩu của bạn chỉ được tối đa 16 kí tự'),
             confirmedPassword: Yup.string()
                 .required('Vui lòng nhập đầy đủ')
@@ -137,12 +139,27 @@ function SignUp() {
                     },
                 })
                     .then((response) => response.json())
-                    .then((data) => {
+                    .then(async (data) => {
                         console.log(data);
                         setDataRegister(data);
                         if (data.status === true) {
                             dispatch(registerSuccess());
-                            navigate('/signin');
+
+                            formik.values.firstname = '';
+                            formik.values.lastname = '';
+                            formik.values.username = '';
+                            formik.values.birthday = '';
+                            formik.values.gender = '';
+                            formik.values.email = '';
+                            formik.values.password = '';
+                            formik.values.confirmedPassword = '';
+                            formik.values.address.city = '';
+                            formik.values.address.district = '';
+                            formik.values.address.village = '';
+                            formik.values.address.specifically = '';
+                            setTimeout(() => {
+                                navigate('/signin');
+                            }, 5000);
                         } else {
                             dispatch(registerFailure());
                         }
@@ -226,6 +243,7 @@ function SignUp() {
                 dispatch(loginFailure());
             });
     };
+
     return (
         <div className={cx('wrapper')}>
             <form className={cx('form-login')} onSubmit={formik.handleSubmit}>
@@ -238,29 +256,39 @@ function SignUp() {
                         {dataRegister?.status === false && <p className={cx('warning')}>{dataRegister?.msg}</p>}
                     </div>
                 </div>
+                <div className="row">
+                    <div className="col l-12 m-12 c-12">
+                        {dataRegister?.status === true && <p className={cx('success')}>{dataRegister?.msg}</p>}
+                    </div>
+                </div>
                 <div className={cx('row')}>
                     <div className={cx('form-group', 'col', 'l-6', 'm-6', 'c-12')}>
                         <label htmlFor="firstname">Họ</label>
                         <input
                             name="firstname"
                             id="firstname"
-                            value={formik.values.firstname.trim()}
+                            value={formik.values.firstname}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             type="text"
                         />
-
-                        {formik.errors.firstname && <p className={cx('alert-message')}>{formik.errors.firstname}</p>}
+                        {formik.touched.firstname && formik.errors.firstname && (
+                            <p className={cx('alert-message')}>{formik.errors.firstname}</p>
+                        )}
                     </div>
                     <div className={cx('form-group', 'col', 'l-6', 'm-6', 'c-12')}>
-                        <label htmlFor="lastname">Tên*</label>
+                        <label htmlFor="lastname">Tên</label>
                         <input
                             name="lastname"
                             id="lastname"
-                            value={formik.values.lastname.trim()}
+                            value={formik.values.lastname}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             type="text"
                         />
-                        {formik.errors.lastname && <p className={cx('alert-message')}>{formik.errors.lastname}</p>}
+                        {formik.touched.lastname && formik.errors.lastname && (
+                            <p className={cx('alert-message')}>{formik.errors.lastname}</p>
+                        )}
                     </div>
                 </div>
                 <div className={cx('row')}>
@@ -269,34 +297,48 @@ function SignUp() {
                         <input
                             name="username"
                             id="username"
-                            value={formik.values.username.trim()}
+                            value={formik.values.username}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             type="text"
                         />
-                        {formik.errors.username && <p className={cx('alert-message')}>{formik.errors.username}</p>}
+                        {formik.touched.username && formik.errors.username && (
+                            <p className={cx('alert-message')}>{formik.errors.username}</p>
+                        )}
                     </div>
                 </div>
                 <div className={cx('row')}>
                     <div className={cx('form-group', 'col', 'l-6', 'm-6', 'c-12')}>
-                        <label htmlFor="birthday">Ngày sinh*</label>
+                        <label htmlFor="birthday">Ngày sinh</label>
                         <input
                             name="birthday"
                             id="birthday"
-                            value={formik.values.birthday.trim()}
+                            value={formik.values.birthday}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             type="date"
                             max={new Date().toISOString().split('T')[0]}
                         />
-                        {formik.errors.birthday && <p className={cx('alert-message')}>{formik.errors.birthday}</p>}
+                        {formik.errors.birthday && formik.touched.birthday && (
+                            <p className={cx('alert-message')}>{formik.errors.birthday}</p>
+                        )}
                     </div>
                     <div className={cx('form-group', 'col', 'l-6', 'm-6', 'c-12')}>
                         <label>Giới tính</label>
-                        <select name="gender" value={formik.values.gender} onChange={formik.handleChange}>
+
+                        <select
+                            name="gender"
+                            value={formik.values.gender}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        >
                             <option value="">---Chọn giới tính---</option>
                             <option value="Nam">Nam</option>
                             <option value="Nữ">Nữ </option>
                         </select>
-                        {formik.errors.gender && <p className={cx('alert-message')}>{formik.errors.gender}</p>}
+                        {formik.touched.gender && formik.errors.gender && (
+                            <p className={cx('alert-message')}>{formik.errors.gender}</p>
+                        )}
                     </div>
                 </div>
                 <div className={cx('row')}>
@@ -305,11 +347,14 @@ function SignUp() {
                         <input
                             name="email"
                             id="email"
-                            value={formik.values.email.trim()}
+                            value={formik.values.email}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             type="email"
                         />
-                        {formik.errors.email && <p className={cx('alert-message')}>{formik.errors.email}</p>}
+                        {formik.touched.email && formik.errors.email && (
+                            <p className={cx('alert-message')}>{formik.errors.email}</p>
+                        )}
                     </div>
                 </div>
                 <div className={cx('row')}>
@@ -318,11 +363,14 @@ function SignUp() {
                         <input
                             name="password"
                             id="password"
-                            value={formik.values.password.trim()}
+                            value={formik.values.password}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             type="password"
                         />
-                        {formik.errors.password && <p className={cx('alert-message')}>{formik.errors.password}</p>}
+                        {formik.errors.password && formik.touched.password && (
+                            <p className={cx('alert-message')}>{formik.errors.password}</p>
+                        )}
                     </div>
                 </div>
                 <div className={cx('row')}>
@@ -331,11 +379,12 @@ function SignUp() {
                         <input
                             name="confirmedPassword"
                             id="confirmedPassword"
-                            value={formik.values.confirmedPassword.trim()}
+                            value={formik.values.confirmedPassword}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             type="password"
                         />
-                        {formik.errors.confirmedPassword && (
+                        {formik.errors.confirmedPassword && formik.touched.confirmedPassword && (
                             <p className={cx('alert-message')}>{formik.errors.confirmedPassword}</p>
                         )}
                     </div>
@@ -346,8 +395,9 @@ function SignUp() {
                         <select
                             name="address.city"
                             id="address.city"
-                            value={formik.values.address.city.trim()}
+                            value={formik.values.address.city}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                         >
                             <option value="">--Chọn huyện--</option>
 
@@ -361,7 +411,7 @@ function SignUp() {
                                 </option>
                             ))}
                         </select>
-                        {formik.errors?.address?.city && (
+                        {formik.errors?.address?.city && formik.touched.address?.city && (
                             <p className={cx('alert-message')}>{formik.errors?.address?.city}</p>
                         )}
                     </div>
@@ -372,6 +422,7 @@ function SignUp() {
                             id="address.district"
                             value={formik.values.address.district}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                         >
                             <option value="">--Chọn huyện--</option>
                             {districts?.map((district) => (
@@ -380,7 +431,7 @@ function SignUp() {
                                 </option>
                             ))}
                         </select>
-                        {formik.errors?.address?.district && (
+                        {formik.errors?.address?.district && formik.touched.address?.district && (
                             <p className={cx('alert-message')}>{formik.errors?.address.district}</p>
                         )}
                     </div>
@@ -391,6 +442,7 @@ function SignUp() {
                             id="address.village"
                             value={formik.values.address.village}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                         >
                             <option value="">--Chọn xã--</option>
 
@@ -404,7 +456,7 @@ function SignUp() {
                                 </option>
                             ))}
                         </select>
-                        {formik.errors?.address?.village && (
+                        {formik.errors?.address?.village && formik.touched.address?.village && (
                             <p className={cx('alert-message')}>{formik.errors?.address?.village}</p>
                         )}
                     </div>
@@ -415,11 +467,12 @@ function SignUp() {
                         <textarea
                             name="address.specifically"
                             id="address.specifically"
-                            value={formik.values.address.specifically.trim()}
+                            value={formik.values.address.specifically}
                             onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
                             type="text"
                         />
-                        {formik.errors?.address?.specifically && (
+                        {formik.errors?.address?.specifically && formik.touched.address?.specifically && (
                             <p className={cx('alert-message')}>{formik.errors?.address?.specifically}</p>
                         )}
                     </div>
@@ -432,49 +485,49 @@ function SignUp() {
                         </Button>
                     </div>
                 </div>
-                <div className={cx('row')}>
-                    <div className={cx('form-group', 'col', 'l-8', 'm-12', 'c-12')}>
-                        <span>
-                            Bạn đã có tài khoản?
-                            <NavLink to="/signin" className={cx('link-signin')}>
-                                Đăng nhập
-                            </NavLink>
-                        </span>
+                <div className={cx('row', 'function')}>
+                    <div className={cx('form-group', 'col')}>
+                        <span>Bạn đã có tài khoản? </span>
+                        <NavLink to="/signin" className={cx('link-signin')}>
+                            Đăng nhập
+                        </NavLink>
                     </div>
-                    <div className={cx('form-group', 'col', 'l-4', 'm-12', 'c-12')}>
-                        <NavLink to="/signin" className={cx('forgot-link')}>
+                    <div className={cx('form-group', 'col')}>
+                        <NavLink to="/forgot-password" className={cx('forgot-link')}>
                             Quên mật khẩu
                         </NavLink>
                     </div>
                 </div>
-
-                <div className={cx('row')}>
-                    <div className={cx('col', 'l-12', 'm-12', 'c-12')}>
-                        <p className={cx('login-orther-text')}>Hoặc tiếp tục với</p>
+                <div className="row">
+                    <div className="col l-12 m-12 c-12">
+                        <button onClick={() => login()} className={cx('google')}>
+                            <img
+                                className={cx('google-img')}
+                                src="https://cdn-icons-png.flaticon.com/512/300/300221.png"
+                                alt=""
+                            />
+                            Đăng nhập google
+                        </button>
                     </div>
-                </div>
-
-                <div className="grid">
-                    <div className="row">
-                        <div className="col l-12 m-12 c-12">
-                            <div className={cx('btn-social')}>
-                                <GoogleLoginButton onClick={() => login()} className={cx('btn-social')}>
-                                    <strong> ĐĂNG NHẬP GOOGLE</strong>
-                                </GoogleLoginButton>
-                            </div>
-                        </div>
-                        <div className="col l-12 m-12 c-12">
-                            <FacebookLoginButton>
-                                <FacebookLogin
-                                    appId="5791810414235073"
-                                    fields="name,email,picture"
-                                    callback={responseFacebook}
-                                    textButton="Đăng nhập với Facebook"
-                                    size="small"
-                                    buttonStyle={{ width: '100%', height: '100%', textAlign: 'left' }}
-                                />
-                            </FacebookLoginButton>
-                        </div>
+                    <div className="col l-12 m-12 c-12">
+                        <FacebookLogin
+                            appId="5791810414235073"
+                            fields="name,email,picture"
+                            callback={responseFacebook}
+                            textButton="Đăng nhập với Facebook"
+                            size="small"
+                            buttonStyle={{ width: '100%', height: '100%', textAlign: 'left' }}
+                            render={(renderProps) => (
+                                <button className={cx('google')} onClick={renderProps.onClick}>
+                                    <img
+                                        className={cx('google-img')}
+                                        src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
+                                        alt=""
+                                    />
+                                    Đăng nhập facebook
+                                </button>
+                            )}
+                        />
                     </div>
                 </div>
             </form>

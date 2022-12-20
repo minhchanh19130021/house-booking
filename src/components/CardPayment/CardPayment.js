@@ -16,9 +16,10 @@ const cx = classNames.bind(styles);
 
 function CardPayment() {
     const user = useSelector((state) => state.authentication.login.currentUser);
+    const { dispatch } = useContext(SearchContext);
     const location = useLocation();
     const id = location.pathname.split('/')[2];
-    const { dates, options } = useContext(SearchContext);
+    const { home, dates, options, payPoint } = useContext(SearchContext);
     const [slideNumber, setSlideNumber] = useState(0);
     const [visible, setVisible] = useState(0);
     const [methodPay, setMethodPay] = useState('PAYPAL');
@@ -79,8 +80,23 @@ function CardPayment() {
         return Number.parseFloat(num.toFixed(2));
     }
 
+    function pricePoint() {
+        var num
+        // var point = localStorage.getItem("payPoint");
+        if(payPoint > 0){
+            num = 1000 * payPoint  * 0.00004;
+
+        }
+        else {
+            num = 0;
+        }
+        return Number.parseFloat(num.toFixed(2));
+    }
+
+
+
     function totalPrice() {
-        var num = priceStay() + 350000 * 0.00004 + 100000 * 0.00004;
+        var num = priceStay() + 350000 * 0.00004 + 100000 * 0.00004 - pricePoint();
         return Number.parseFloat(num.toFixed(2));
     }
 
@@ -93,6 +109,8 @@ function CardPayment() {
         priceStay() +
         '/' +
         totalPrice() +
+        '/' +
+        pricePoint() +
         '/' +
         data.introduce;
     // chỉnh sửa
@@ -247,7 +265,7 @@ function CardPayment() {
                                                                     elementtiming="LCP-target"
                                                                     className={cx('_14i3z6h')}
                                                                 >
-                                                                    Thanh toán bằng
+                                                                    Thanh toán bằng 
                                                                 </h2>
                                                             </div>
                                                             <div className={cx('_1nc6ity')}>
@@ -322,7 +340,7 @@ function CardPayment() {
                                                                     elementtiming="LCP-target"
                                                                     className={cx('_14i3z6h')}
                                                                 >
-                                                                    Thanh toán bằng
+                                                                    Thanh toán bằng 
                                                                 </h2>
                                                             </div>
                                                             <div>
@@ -865,6 +883,7 @@ function CardPayment() {
                                                 />
                                             </form>
                                         )}
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -927,6 +946,7 @@ function CardPayment() {
                     </svg>
                 </ModalCustomer>
             )}
+            <a className={cx('_fu49hrz')} href='/payment/success'>paysuccess</a>
         </div>
     );
 }

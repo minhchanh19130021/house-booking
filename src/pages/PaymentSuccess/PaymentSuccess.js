@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useContext, useState, useEffect } from 'react';
 import { SearchContext } from '../../context/SearchContext';
 import useFetch from '../../hooks/useFetch';
+import { format } from 'date-fns';
 import { date } from 'yup';
 const cx = classNames.bind(styles);
 function PaymentSuccess() {
@@ -13,9 +14,9 @@ function PaymentSuccess() {
     const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/636ce065825a1cd1940641a2`);
     const uid = user.id;
     const { dispatch } = useContext(SearchContext);
-    const { home, dates, options, goToCheckout } = useContext(SearchContext);
+    const { home, dates, options, payPoint, bonusPoint} = useContext(SearchContext);
     const [listVoucher, setListVoucher] = useState([]);
-    const [dataBooking, setDataRegisterBooking] = useState();
+    
     const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
     function dayDifference(date1, date2) {
         const timeDiff = Math.abs(date2.getTime() - date1.getTime());
@@ -24,20 +25,23 @@ function PaymentSuccess() {
     }
     const days = dayDifference(dates[0].endDate, dates[0].startDate);
     const homePrice = data.price * days;
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'VND',
+    });
+
+    function pricePoint() {
+        return payPoint * 1000;
+    }
+
     function total() {
-        return homePrice + 350000 + 100000;
-    }
-
-    function makeid() {
-        var text = '';
-        var char_list = 'abcdefghijklmnopqrstuvwxyz0123456789';
-        for (var i = 0; i < 24; i++) {
-            text += char_list.charAt(Math.floor(Math.random() * char_list.length));
+        if (payPoint > 0) {
+            return homePrice + 350000 + 100000 - pricePoint();
+        } else {
+            return homePrice + 350000 + 100000;
         }
-        return text;
     }
 
-    // const orderId = makeid();
     (async () => {
         await fetch('http://localhost:8080/api/v1/newBooking', {
             method: 'POST',
@@ -48,7 +52,12 @@ function PaymentSuccess() {
                 payment_method: 'PayPal',
                 checkin: dates[0].startDate,
                 checkout: dates[0].endDate,
-                number_visitor: options,
+                number_visitor: {
+                    adults: options.adult,
+                    child: options.children,
+                    baby: options.baby,
+                    pet: options.pet,
+                },
                 voucher: listVoucher,
                 price: data.price,
             }),
@@ -58,47 +67,53 @@ function PaymentSuccess() {
         }).catch((err) => {
             console.log(err);
         });
+
     })();
 
-    // useEffect(() => {
-    //     fetch(`http://localhost:8080/api/v1/getIdOrders`, {
-    //         method: 'GET',
-    //     })
-    //         .then((response) => response.json())
-    //         .then((response) => {
-    //             if (response.success === true) {
-    //                 setListOrders(response.data);
-    //             }
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         });
-    // }, []);
-
-    // (async () => {
-    //     await fetch('http://localhost:8080/api/v1/addOrdersDetail', {
-    //         method: 'POST',
-    //         body: JSON.stringify({
-    //             payment_method: 'PayPal',
-    //             checkin: dates[0].startDate,
-    //             checkout: dates[0].endDate,
-    //             number_visitor: options,
-    //             voucher: listVoucher,
-    //             oid: listOrders[listOrders.length - 1],
-    //             price: data.price,
-    //         }),
-    //         headers: {
-    //             'Content-type': 'application/json; charset=UTF-8',
-    //         },
-    //     }).catch((err) => {
-    //         console.log(err);
-    //     });
-    // })();
-
-    const formatter = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'VND',
-    });
+    (async () => {
+        if (payPoint > 0) {
+            await fetch(`http://localhost:8080/api/v1/user/updateBonusPoint`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    _id: user._id,
+                    bonus_point: 0,
+                }),
+            })
+                .then((response) => response.json())
+                .then((response) => {
+                    if (response.success == true) {
+                        console.log('Thay đổi thành công');
+                    } else {
+                        console.log('Thay đổi không thành công');
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        } else {
+            // console.log(userInfor.bonus_point);
+            await fetch(`http://localhost:8080/api/v1/user/updateBonusPoint`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    _id: user._id,
+                    bonus_point:  Math.floor(total() / 100000)+Number.parseInt(bonusPoint),
+                }),
+            })
+                .then((response) => response.json())
+                .then((response) => {
+                    if (response.success == true) {
+                        console.log('Thay đổi thành công1');
+                    } else {
+                        console.log('Thay đổi không thành công1');
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    })();
 
     const creatDate = new Date().toUTCString();
 
@@ -291,7 +306,7 @@ function PaymentSuccess() {
                                                     margin: 0,
                                                 }}
                                             >
-                                                Thanh toán thành công!
+                                                Thanh toán thành công! 
                                             </h2>
                                         </td>
                                     </tr>
@@ -336,7 +351,7 @@ function PaymentSuccess() {
                                                                 padding: 10,
                                                             }}
                                                         >
-                                                            Xác nhận đặt phòng #
+                                                            Xác nhận đặt phòng # {user.bonus_point}
                                                         </td>
                                                         <td
                                                             width="25%"
@@ -437,6 +452,38 @@ function PaymentSuccess() {
                                                             {formatter.format(100000)}
                                                         </td>
                                                     </tr>
+                                                    {payPoint > 0 && (
+                                                        <tr>
+                                                            <td
+                                                                width="75%"
+                                                                align="left"
+                                                                style={{
+                                                                    fontFamily:
+                                                                        'Open Sans, Helvetica, Arial, sans-serif',
+                                                                    fontSize: 16,
+                                                                    fontWeight: 400,
+                                                                    lineHeight: '24px',
+                                                                    padding: '5px 10px',
+                                                                }}
+                                                            >
+                                                                Số điểm tích lũy đã dùng
+                                                            </td>
+                                                            <td
+                                                                width="25%"
+                                                                align="left"
+                                                                style={{
+                                                                    fontFamily:
+                                                                        'Open Sans, Helvetica, Arial, sans-serif',
+                                                                    fontSize: 16,
+                                                                    fontWeight: 400,
+                                                                    lineHeight: '24px',
+                                                                    padding: '5px 10px',
+                                                                }}
+                                                            >
+                                                                -{formatter.format(pricePoint())}
+                                                            </td>
+                                                        </tr>
+                                                    )}
                                                 </tbody>
                                             </table>
                                         </td>

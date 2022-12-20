@@ -23,9 +23,17 @@ function ModalDate({ children }) {
         // options.children = operation === 'i' ? newOptions[name] + 1 : newOptions[name] - 1;
         // options.baby = operation === 'i' ? newOptions[name] + 1 : newOptions[name] - 1;
         // options.pet = operation === 'i' ? newOptions[name] + 1 : newOptions[name] - 1;
+        setNewOptions((prev) => {
+            return {
+                ...prev,
+                [name]: operation === 'i' ? newOptions[name] + 1 : newOptions[name] - 1,
+            };
+        });
+       
         switch (name) {
             case 'adult':
                 options.adult =  (operation === 'i' ? newOptions.adult + 1 : newOptions.adult - 1);
+
                 break;
             case 'children':
                 options.children =  (operation === 'i' ? newOptions.children + 1 : newOptions.children - 1);
@@ -39,13 +47,10 @@ function ModalDate({ children }) {
             default:
             console.log("lỗi modalcustomer")
         }
+
+        localStorage.setItem("options", JSON.stringify(options));
+       
         dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options} });
-        setNewOptions((prev) => {
-            return {
-                ...prev,
-                [name]: operation === 'i' ? newOptions[name] + 1 : newOptions[name] - 1,
-            };
-        });
     };
     const [visibleGuestInfo, setVisibleGuestInfo] = useState(false);
 

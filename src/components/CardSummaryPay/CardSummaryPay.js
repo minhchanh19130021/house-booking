@@ -3,18 +3,40 @@ import { useLocation, NavLink } from 'react-router-dom';
 import styles from './CardSummaryPay.module.scss';
 import useFetch from '../../hooks/useFetch';
 import { SearchContext } from '../../context/SearchContext';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '~/config/firebase';
 import ImageHouse from '~/pages/Detail/ImageHouse';
+import Switch from 'react-switch';
+import userEvent from '@testing-library/user-event';
+import { useDispatch, useSelector } from 'react-redux';
 
 const cx = classNames.bind(styles);
 
 function CardSummaryPay() {
+    const user = useSelector((state) => state.authentication.login.currentUser);
     const location = useLocation();
     const id = location.pathname.split('/')[2];
     const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/636ce065825a1cd1940641a2`);
-    const { dates, options } = useContext(SearchContext);
+    const [userInfor, setUserInfor] = useState([]);
+    // const [payPoint, setPayPoint] = useState(0);
+
+    const [visiblePayByPoint, setVisiblePayByPoint] = useState(false);
+    useEffect(() => {
+        fetch(`http://localhost:8080/api/v1/user/get/638c56fe8693fbfdd908508b`, {
+            method: 'GET',
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.success === true) {
+                    setUserInfor(response.data[0]);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+    const { home, dates, options } = useContext(SearchContext);
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'VND',
@@ -28,6 +50,9 @@ function CardSummaryPay() {
     }
 
     function totalPrice() {
+        if (visiblePayByPoint) {
+            return data.price * days + 350000 + 100000 - pricePoint();
+        }
         return data.price * days + 350000 + 100000;
     }
 
@@ -48,6 +73,34 @@ function CardSummaryPay() {
             .catch((error) => {});
     };
     getImageFromFirebase('636ce065825a1cd1940641a2');
+    const { dispatch } = useContext(SearchContext);
+    if (!visiblePayByPoint) {
+        localStorage.setItem('payPoint', 0);
+       
+
+    }
+
+
+    const handleChange = () => {
+        if (!visiblePayByPoint) {
+            var payPoint = userInfor.bonus_point;
+            localStorage.setItem('payPoint', payPoint);
+            dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, payPoint } });
+        } else {
+            var payPoint = 0;
+            localStorage.setItem('payPoint', payPoint);
+            dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, payPoint } });
+        }
+    };
+
+    const handleOnChange = () => {
+        setVisiblePayByPoint((visiblePayByPoint) => !visiblePayByPoint);
+        handleChange();
+    };
+
+    function pricePoint() {
+        return userInfor.bonus_point * 1000;
+    }
 
     return (
         <div className={cx('_ai1he2')}>
@@ -244,6 +297,98 @@ function CardSummaryPay() {
                                                         >
                                                             <span>{formatter.format(priceStay())}</span>
                                                         </div>
+                                                    </div>
+                                                </div>
+                                                <div className={cx('_64pbdv')}>
+                                                    <div className={cx('_dmn8hc')}>
+                                                        <div className={cx('_10d7v0r')}>
+                                                            <button type="button" className={cx('_101nvu7m')}>
+                                                                <div className={cx('_12hv04d')}>Phí vệ sinh</div>
+                                                            </button>
+                                                        </div>
+                                                        <div
+                                                            data-testid="price-item-CLEANING_FEE"
+                                                            className={cx('_t65zql')}
+                                                        >
+                                                            <span> {formatter.format(100000)}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className={cx('_64pbdv')}>
+                                                    <div className={cx('_dmn8hc')}>
+                                                        <div className={cx('_10d7v0r')}>
+                                                            <button type="button" className={cx('_101nvu7m')}>
+                                                                <div className={cx('_12hv04d')}>Phí dịch vụ</div>
+                                                            </button>
+                                                        </div>
+                                                        <div
+                                                            data-testid="price-item-AIRBNB_GUEST_FEE"
+                                                            className={cx('_t65zql')}
+                                                        >
+                                                            <span> {formatter.format(350000)}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {visiblePayByPoint && (
+                                                    <div className={cx('_64pbdv')}>
+                                                        <div className={cx('_dmn8hc')}>
+                                                            <div className={cx('_10d7v0r')}>
+                                                                <button type="button" className={cx('_101nvu7m')}>
+                                                                    <div className={cx('_12hv04d')}>
+                                                                        Số điểm tích lũy đã dùng
+                                                                    </div>
+                                                                </button>
+                                                            </div>
+                                                            <div
+                                                                data-testid="price-item-AIRBNB_GUEST_FEE"
+                                                                className={cx('_t65zql')}
+                                                            >
+                                                                <span> -{formatter.format(pricePoint())}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                <div className={cx('_jbgt15')}></div>
+
+                                                {userInfor.bonus_point > 0 && (
+                                                    <div className={cx('_dmn8hc')}>
+                                                        <div className={cx('_1x5uynhu')}>
+                                                            Dùng {userInfor.bonus_point} điểm tích lũy
+                                                            {/* <button
+                                                                id="MowebCurrencyPicker_trigger"
+                                                                aria-label="Loại tiền tệ hiện tại: (₫). Thay đổi loại tiền tệ thanh toán"
+                                                                type="button"
+                                                                className={cx('_15rpys7s')}
+                                                            >
+                                                                (₫)
+                                                            </button> */}
+                                                        </div>
+                                                        <div data-testid="price-item-total" className={cx('_j1143kl')}>
+                                                            <span>
+                                                                <Switch
+                                                                    checked={visiblePayByPoint}
+                                                                    className="react-switch"
+                                                                    id="normal-switch"
+                                                                    onChange={() => handleOnChange()}
+                                                                />
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                <div className={cx('_dmn8hc')} style={{ marginTop: 10 }}>
+                                                    <div className={cx('_1x5uynhu')}>
+                                                        Tổng
+                                                        <button
+                                                            id="MowebCurrencyPicker_trigger"
+                                                            aria-label="Loại tiền tệ hiện tại: (₫). Thay đổi loại tiền tệ thanh toán"
+                                                            type="button"
+                                                            className={cx('_15rpys7s')}
+                                                        >
+                                                            (₫)
+                                                        </button>
+                                                    </div>
+                                                    <div data-testid="price-item-total" className={cx('_j1143kl')}>
+                                                        <span>{formatter.format(totalPrice())}</span>
                                                     </div>
                                                 </div>
                                                 <div className={cx('_64pbdv')}>

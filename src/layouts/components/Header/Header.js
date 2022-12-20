@@ -11,7 +11,7 @@ import useMatchMedia from 'react-use-match-media';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '~/config/firebase';
 import { setAvatar } from '~/redux/avatarSlice';
-import { googleLogout } from '@react-oauth/google';
+import { motion } from 'framer-motion';
 
 const cx = classNames.bind(styles);
 function Header() {
@@ -202,7 +202,7 @@ function Header() {
             )}
             {searchModal && <HeaderSearch />}
             {isDesktopResolution && (
-                <div className={cx('right-mobile')}>
+                <motion className={cx('right-mobile')}>
                     <button className={cx('btn-bar')} onClick={() => setModalMenu(true)}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -272,7 +272,11 @@ function Header() {
                                         >
                                             Đăng ký
                                         </NavLink>
-                                        <NavLink to="" className={cx('menu-item')} onClick={() => setModalMenu(false)}>
+                                        <NavLink
+                                            to="/signup-owner"
+                                            className={cx('menu-item')}
+                                            onClick={() => setModalMenu(false)}
+                                        >
                                             Đăng ký chủ nhà
                                         </NavLink>
                                         <div className={cx('menu-button')} onClick={() => setModalMenu(false)}>
@@ -283,7 +287,7 @@ function Header() {
                             </div>
                         </div>
                     )}
-                </div>
+                </motion>
             )}
         </div>
     );

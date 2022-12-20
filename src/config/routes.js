@@ -4,6 +4,7 @@ const routes = {
     detail: '/detail/:slug',
     signup: '/signup',
     signup_owner: '/signup-owner',
+
     signin: '/signin',
     forgot_password: '/forgot-password',
     listHouse: '/listHouse/city/:slug/:currentPagination',

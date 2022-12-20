@@ -13,6 +13,8 @@ function Home() {
     const [visible, setVisible] = useState(1);
     const [listNewestHome, setListNewestHome] = useState([]);
     const [listBestSellingHome, setListBestSellingHome] = useState([]);
+    const [listMostViewedHome, setListMostViewedHome] = useState([]); 
+    const [listSuggestionHome, setListSuggestionHome] = useState([]); 
     const toggleTab = (index) => {
         setVisible(index);
     };
@@ -39,6 +41,32 @@ function Home() {
             .then((response) => {
                 if (response.success === true) {
                     setListBestSellingHome(response.data);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        // get most viewed
+        fetch(`http://localhost:8080/api/v2/houses/most_viewed`, {
+            method: 'GET',
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.success === true) {
+                    setListMostViewedHome(response.data);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+           // get suggestion 
+        fetch(`http://localhost:8080/api/v2/houses/suggestion `, {
+            method: 'GET',
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.success === true) {
+                    setListSuggestionHome(response.data);
                 }
             })
             .catch((err) => {
@@ -145,6 +173,9 @@ function Home() {
                         <div className={cx({ 'tab-item': true, active: visible === 3 })} onClick={() => toggleTab(3)}>
                             Xem nhiều nhất
                         </div>
+                        <div className={cx({ 'tab-item': true, active: visible === 4 })} onClick={() => toggleTab(4)}>
+                            Gợi ý
+                        </div>
                     </div>
                     {visible === 1 && (
                         <div className={cx('tab-content', 'grid', 'wide')}>
@@ -216,8 +247,7 @@ function Home() {
                             </div>
                         </div>
                     )}
-
-                    {visible === 3 && (
+                      {visible === 3 && (
                         <div className={cx('tab-content', 'grid', 'wide')}>
                             <div
                                 className={cx({
@@ -226,6 +256,64 @@ function Home() {
                                     active: visible === 3,
                                 })}
                             >
+                                {listMostViewedHome.map((e, i) => {
+                                    return (
+                                        <div key={i} className={cx('col', 'l-4', 'm-6', 'c-12')}>
+                                        <CardHouse
+                                            avatar={e.avatar}
+                                            idHouse={e._id}
+                                            to={`/detail/${e.slug}`}
+                                            status={e.status ? 'open' : 'close'}
+                                            numberReview={e.number_review}
+                                            title={e.name}
+                                            location={`${e.address.city} ${e.address.district} ${e.address.number}`}
+                                            desc={e.introduce}
+                                            rate={e.rate}
+                                            facilities={e.outstanding_facilities.map((e, i) => {
+                                                return e;
+                                            })}
+                                            price={e.price}
+                                        />
+                                    </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+
+                    {visible === 4 && (
+                        <div className={cx('tab-content', 'grid', 'wide')}>
+                            <div
+                                className={cx({
+                                    row: true,
+                                    'tab-pane': true,
+                                    active: visible === 4,
+                                })}
+                            >
+                                {listSuggestionHome.map((e, i) => {
+                                    let home = e.homes.home_id[0];
+                                    return (
+                                        <div key={i} className={cx('col', 'l-4', 'm-6', 'c-12')}>
+                                            <CardHouse
+                                                avatar={home.avatar}
+                                                idHouse={home._id}
+                                                to={`/detail/${e.slug}`}
+                                                status={home.status ? 'open' : 'close'}
+                                                numberReview={home.number_review}
+                                                title={home.name}
+                                                location={`${home.address.city} ${home.address.district} ${home.address.number}`}
+                                                desc={home.introduce}
+                                                rate={home.rate}
+                                                facilities={e.homes.outstanding_facilities.map((e, i) => {
+                                                    return e;
+                                                })}
+                                                price={home.price}
+                                            />
+                                        </div>
+                                    );
+                                })}
+                            
+
                                 {/* <div className={cx('col', 'l-4', 'm-6', 'c-12')}>
                                     <CardHouse
                                         to="/detail"
