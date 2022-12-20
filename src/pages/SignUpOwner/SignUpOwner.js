@@ -152,7 +152,9 @@ function SignUpOwner() {
                         console.log(data);
                         setStatusRegister(data);
                         if (data.status === true) {
-                            navigate('/signin');
+                            setTimeout(() => {
+                                navigate('/signin');
+                            }, 2000);
                         }
 
                         return data;
