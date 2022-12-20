@@ -32,18 +32,18 @@ function Detail() {
         setVisibleModal((visibleModal) => !visibleModal);
     };
 
-    function getImageFromFirebase(uid, images, indexImage) {
-        getDownloadURL(ref(storage, `house/${uid}/${images[indexImage]}`))
+    function getImageFromFirebase(folder_image, images, indexImage) {
+        getDownloadURL(ref(storage, `house/${folder_image}/${images[indexImage]}`))
             .then((url) => {
                 setLinkImg((oldUrl) => [...oldUrl, url]);
-                if (images.length !== indexImage) {
-                    getImageFromFirebase(uid, images, (indexImage += 1));
+                if (5 !== indexImage) {
+                    getImageFromFirebase(folder_image, images, (indexImage += 1));
                 }
             })
             .catch((error) => {
                 setLinkImg((oldUrl) => [...oldUrl, imageNotFound]);
                 if (images.length !== indexImage) {
-                    getImageFromFirebase(uid, images, (indexImage += 1));
+                    getImageFromFirebase(folder_image, images, (indexImage += 1));
                 }
             });
     }
@@ -61,9 +61,10 @@ function Detail() {
             .then((response) => response.json())
             .then((response) => {
                 setDataDetail(response.data[0]);
-                let images = response.data[0]?.detail[0]?.image;
-                images?.unshift(response.data[0].avatar);
-                getImageFromFirebase(response.data[0]?._id, images, 0);
+                let images = response.data[0]?.detail[0] ? response.data[0]?.detail[0]?.image : [];
+                images?.unshift(response.data[0]?.avatar);
+                console.log(response.data[0]);
+                getImageFromFirebase(response.data[0]?.folder_image, images, 0);
             })
             .catch((err) => console.log(err));
     }, []);
@@ -135,13 +136,13 @@ function Detail() {
                     <h3 className={cx('introduce')}>{dataDetail?.introduce}</h3>
                     <div className={cx('info-title')}>
                         <div className={cx('info-facilities')}>
-                            <span>{dataDetail?.detail[0].maximum_number_visitor?.adult_children} người lớn</span>
-                            <span>{dataDetail?.detail[0].maximum_number_visitor?.baby} em bé</span>
-                            <span>{dataDetail?.detail[0].maximum_number_visitor?.pet} thú cưng</span>
+                            <span>{dataDetail?.detail[0]?.maximum_number_visitor?.adult_children} người lớn</span>
+                            <span>{dataDetail?.detail[0]?.maximum_number_visitor?.baby} em bé</span>
+                            <span>{dataDetail?.detail[0]?.maximum_number_visitor?.pet} thú cưng</span>
 
-                            <span>{dataDetail?.detail[0].number_bedroom} phòng ngủ</span>
-                            <span>{dataDetail?.detail[0].number_bed} giường</span>
-                            <span>{dataDetail?.detail[0].number_bathroom} phòng tắm</span>
+                            <span>{dataDetail?.detail[0]?.number_bedroom} phòng ngủ</span>
+                            <span>{dataDetail?.detail[0]?.number_bed} giường</span>
+                            <span>{dataDetail?.detail[0]?.number_bathroom} phòng tắm</span>
                         </div>
                     </div>
                     <div className={cx('highlights')}>
@@ -325,14 +326,16 @@ function Detail() {
             <div className="regulation">
                 <h3 className={cx('facilities-title')}>Những điều cần biết</h3>
                 <div className="">
-                    {dataDetail?.detail[0]['regulations']?.addition.map((e, index) => (
+                    {dataDetail?.detail[0]
+                        ? dataDetail?.detail[0]['regulations']?.addition?.map((e, index) => (
+                              <div className="col l-4 m-6 c-12" key={index}>
+                                  <p className={cx('regulation-name')}>{e}</p>
+                              </div>
+                          ))
+                        : null}
+                    {/* {dataDetail?.regulations_available?.map((e, index) => (
                         <div className="col l-4 m-6 c-12" key={index}>
-                            <p className={cx('regulation-name')}>{e}</p>
-                        </div>
-                    ))}
-                    {dataDetail?.regulations_available?.map((e, index) => (
-                        <div className="col l-4 m-6 c-12" key={index}>
-                            {/* <span className={cx('regulation-icon')}>
+                            <span className={cx('regulation-icon')}>
                                 <SVG
                                     src={e?.icon
                                         ?.replace(
@@ -341,10 +344,10 @@ function Detail() {
                                         )
                                         ?.replace('\\', '')}
                                 />
-                            </span> */}
+                            </span>
                             <p className={cx('regulation-name')}>{e?.name}</p>
                         </div>
-                    ))}
+                    ))} */}
                 </div>
             </div>
         </div>

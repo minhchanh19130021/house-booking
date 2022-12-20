@@ -67,7 +67,6 @@ function SignIn() {
                 })
                     .then((response) => response.json())
                     .then((result) => {
-                        console.log(result);
                         setDataLogin(result);
                         if (result.status === true) {
                             dispatch(loginSuccess(result));
@@ -99,7 +98,6 @@ function SignIn() {
         onSuccess: async (tokenResponse) => {
             dispatch(loginStart());
 
-            console.log(tokenResponse);
             var userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
                 headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
             });

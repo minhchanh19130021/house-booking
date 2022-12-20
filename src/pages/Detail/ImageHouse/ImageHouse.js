@@ -72,7 +72,7 @@ function ImageHouse(props) {
                 <div className={cx('row', 'img-section')}>
                     <div className={cx('col', 'l-6', 'm-12', 'c-12')}>
                         <img
-                            src="https://a0.muscache.com/im/pictures/6d4b8668-20d2-4c45-8de6-4378d7bf9239.jpg?im_w=1200"
+                            src={props.images[0] ? props.images[0] : props.imageNotFound}
                             alt="img-house"
                             className={cx('thumbnail-bg')}
                         />

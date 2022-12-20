@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useEffect, useReducer } from 'react';
 
 const INITIAL_STATE = {
   home: localStorage.getItem("home") || undefined,
@@ -42,24 +42,27 @@ const SearchReducer = (state, action) => {
 };
 
 export const SearchContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(SearchReducer, INITIAL_STATE);
+    const [state, dispatch] = useReducer(SearchReducer, INITIAL_STATE);
 
   useEffect(() => {
     localStorage.setItem("home", state.home);
   }, [state.home]);
 
-  // useEffect(() => {
-  //   localStorage.setItem("dates", JSON.stringify(state.dates));
-  // }, [state.dates]);
+    // useEffect(() => {
+    //   localStorage.setItem("dates", JSON.stringify(state.dates));
+    // }, [state.dates]);
 
-  useEffect(() => {
-    localStorage.setItem("endDate", state.dates[0].endDate);
-  }, [state.dates]);
+    useEffect(() => {
+        localStorage.setItem('endDate', state.dates[0].endDate);
+    }, [state.dates]);
 
-  useEffect(() => {
-    localStorage.setItem("startDate", state.dates[0].startDate);
-  }, [state.dates]);
+    useEffect(() => {
+        localStorage.setItem('startDate', state.dates[0].startDate);
+    }, [state.dates]);
 
+    useEffect(() => {
+        localStorage.setItem('options', JSON.stringify(state.options));
+    }, [state.options]);
 
 
   useEffect(() => {
@@ -90,22 +93,3 @@ export const SearchContextProvider = ({ children }) => {
     </SearchContext.Provider>
   );
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -35,5 +35,7 @@ const routes = {
     confirm_fail: 'confirm-fail',
     // 404
     not_found: '*',
+    // cart
+    cart: '/cart',
 };
 export default routes;

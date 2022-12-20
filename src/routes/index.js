@@ -23,11 +23,10 @@ import HostManage from '~/pages/ProfileHost/HostManage';
 import HostNew from '~/pages/ProfileHost/HostNew';
 import HostRenting from '~/pages/ProfileHost/HostRenting';
 import ConfirmSuccess, { ConfirmFail } from '~/pages/ConfirmSuccess';
-import Review from '~/pages/Review';
 import Payment from '~/pages/Payment';
 import PaymentSuccess from '~/pages/PaymentSuccess';
-import PageNotFound from '~/pages/PageNotFound';
 import Search from '~/pages/Search';
+import Cart from '~/pages/Cart';
 
 const publicRoutes = [
     { path: config.routes.home, component: Home },
@@ -62,11 +61,9 @@ const publicRoutes = [
     { path: config.routes.host_manage, component: HostManage },
     { path: config.routes.host_new, component: HostNew },
     { path: config.routes.host_renting, component: HostRenting },
-    // { path: config.routes.review, component: Review },
 
-    // // 404
-    // { path: config.routes.not_found, component: PageNotFound },
     { path: config.routes.search, component: Search },
+    { path: config.routes.cart, component: Cart },
 ];
 const privateRoutes = [];
 export { publicRoutes, privateRoutes };

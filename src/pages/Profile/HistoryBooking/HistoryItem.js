@@ -93,7 +93,7 @@ function HistoryItem({
                 </p>
                 {voucher?.length !== 0 ? (
                     <div className={cx('text', 'container__voucher')}>
-                        {voucher.map((e, i) => {
+                        {voucher?.map((e, i) => {
                             return (
                                 <div className={cx('voucher')} key={i}>
                                     <p>{e?.name}</p>

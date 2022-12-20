@@ -1,0 +1,194 @@
+.container {
+    width: 100%;
+    background-color: white;
+    border: 1px solid rgb(213, 217, 226);
+    border-radius: 9px;
+    margin: 10px 0;
+    .container_cart {
+        .top {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            position: relative;
+            .information-home {
+                display: flex;
+
+                img {
+                    height: 200px;
+                }
+                .information {
+                    margin: 0 20px;
+                    .location {
+                        padding: 0 5px;
+                        color: var(--grey);
+                    }
+                    .location-name {
+                        color: var(--grey);
+                        margin-left: 5px;
+                    }
+                    .star {
+                        color: var(--yellow);
+                        margin: 10px 0;
+                    }
+                    .rate {
+                        margin: 10px 0;
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-items: center;
+                        .point {
+                            font-size: 14px;
+                            line-height: 17px;
+                            font-weight: 600;
+                            color: rgb(255, 255, 255);
+                            margin: 0px;
+                            border-radius: 4px;
+                            background-color: rgb(62, 108, 234);
+                            padding: 4px 10px;
+                        }
+                        .idea {
+                            color: rgb(62, 108, 234);
+                            margin: 0 5px;
+                            font-size: 14px;
+                            line-height: 17px;
+                            font-weight: 600;
+                        }
+                        .number {
+                            color: rgb(112, 112, 112);
+                            font-size: 14px;
+                            margin-top: 1px;
+                        }
+                    }
+                }
+            }
+            .delete {
+                background-color: transparent;
+                border: none;
+                font-size: 25px;
+                cursor: pointer;
+                margin-top: 8px;
+                margin-left: 25px;
+                z-index: 1000;
+            }
+            .text {
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+        .bottom {
+            width: 100%;
+            cursor: pointer;
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 10px;
+            .book {
+                .book-info {
+                    color: rgb(62, 108, 234);
+                    margin-left: 5px;
+                }
+                .date {
+                    color: rgb(112, 112, 112);
+                    font: 14px;
+                    margin-top: 10px;
+                    margin-left: 5px;
+                }
+            }
+            .price {
+                color: black;
+                font-size: 18px;
+                font-weight: 500;
+            }
+            .tax {
+                color: rgb(112, 112, 112);
+                font-size: 14px;
+            }
+        }
+    }
+}
+
+// input[type='checkbox'] {
+//     position: relative;
+//     cursor: pointer;
+// }
+
+// input[type='checkbox']:checked:before {
+//     content: '';
+//     display: block;
+//     position: absolute;
+//     width: 22px;
+//     height: 22px;
+//     top: -44%;
+//     left: -33%;
+//     background-color: white;
+//     border: 1px solid rgb(27, 114, 104);
+//     border-radius: 100%;
+//     padding: 5px;
+// }
+// input[type='checkbox']:checked:after {
+//     content: '';
+//     display: block;
+//     width: 14px;
+//     height: 14px;
+//     position: absolute;
+//     bottom: 5%;
+//     left: -1%;
+//     background-color: rgb(27, 114, 104);
+//     border-radius: 100%;
+// }
+
+@media screen and (max-width: 850px) {
+    img {
+        height: auto !important;
+        width: 100%;
+    }
+    .information-home {
+        flex-wrap: wrap;
+    }
+    .top {
+        flex-wrap: wrap;
+        justify-content: flex-end !important;
+    }
+}
+
+.active {
+    background-color: rgb(199, 215, 253);
+}
+
+.active-border-top {
+    border-top: 1px solid rgb(112, 112, 112);
+}
+.active-border-top-2 {
+    border-top: none !important;
+}
+
+.none-click {
+    cursor: no-drop !important;
+}
+
+.notify-none-active {
+    margin-left: 8px;
+    margin-top: 10px;
+    color: rgb(215, 76, 76);
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.checkout {
+    position: relative;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    background-color: rgb(62, 108, 234);
+    color: rgb(255, 255, 255);
+    box-shadow: rgb(0 0 0 / 20%) 0px 1px 3px 1px;
+    transition: all 0.15s ease-in-out 0s;
+    width: 100%;
+    margin-top: 5px;
+    &:hover {
+        background-color: rgb(12, 47, 143);
+    }
+}

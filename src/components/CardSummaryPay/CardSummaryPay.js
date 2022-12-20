@@ -76,10 +76,7 @@ function CardSummaryPay() {
     const { dispatch } = useContext(SearchContext);
     if (!visiblePayByPoint) {
         localStorage.setItem('payPoint', 0);
-       
-
     }
-
 
     const handleChange = () => {
         if (!visiblePayByPoint) {
@@ -350,7 +347,7 @@ function CardSummaryPay() {
                                                 )}
                                                 <div className={cx('_jbgt15')}></div>
 
-                                                {userInfor.bonus_point > 0 && (
+                                                {userInfor?.bonus_point > 0 && (
                                                     <div className={cx('_dmn8hc')}>
                                                         <div className={cx('_1x5uynhu')}>
                                                             Dùng {userInfor.bonus_point} điểm tích lũy
@@ -376,6 +373,53 @@ function CardSummaryPay() {
                                                     </div>
                                                 )}
                                                 <div className={cx('_dmn8hc')} style={{ marginTop: 10 }}>
+                                                    <div className={cx('_1x5uynhu')}>
+                                                        Tổng
+                                                        <button
+                                                            id="MowebCurrencyPicker_trigger"
+                                                            aria-label="Loại tiền tệ hiện tại: (₫). Thay đổi loại tiền tệ thanh toán"
+                                                            type="button"
+                                                            className={cx('_15rpys7s')}
+                                                        >
+                                                            (₫)
+                                                        </button>
+                                                    </div>
+                                                    <div data-testid="price-item-total" className={cx('_j1143kl')}>
+                                                        <span>{formatter.format(totalPrice())}</span>
+                                                    </div>
+                                                </div>
+                                                <div className={cx('_64pbdv')}>
+                                                    <div className={cx('_dmn8hc')}>
+                                                        <div className={cx('_10d7v0r')}>
+                                                            <button type="button" className={cx('_101nvu7m')}>
+                                                                <div className={cx('_12hv04d')}>Phí vệ sinh</div>
+                                                            </button>
+                                                        </div>
+                                                        <div
+                                                            data-testid="price-item-CLEANING_FEE"
+                                                            className={cx('_t65zql')}
+                                                        >
+                                                            <span> {formatter.format(100000)}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className={cx('_64pbdv')}>
+                                                    <div className={cx('_dmn8hc')}>
+                                                        <div className={cx('_10d7v0r')}>
+                                                            <button type="button" className={cx('_101nvu7m')}>
+                                                                <div className={cx('_12hv04d')}>Phí dịch vụ</div>
+                                                            </button>
+                                                        </div>
+                                                        <div
+                                                            data-testid="price-item-AIRBNB_GUEST_FEE"
+                                                            className={cx('_t65zql')}
+                                                        >
+                                                            <span> {formatter.format(350000)}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className={cx('_jbgt15')}></div>
+                                                <div className={cx('_dmn8hc')}>
                                                     <div className={cx('_1x5uynhu')}>
                                                         Tổng
                                                         <button

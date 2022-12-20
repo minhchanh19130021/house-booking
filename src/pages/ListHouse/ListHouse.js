@@ -107,6 +107,7 @@ function ListHouse() {
                             return (
                                 <div key={i} className={cx('col', 'l-4', 'm-6', 'c-12')}>
                                     <CardHouse
+                                        folder_image={e.folder_image}
                                         avatar={e.avatar}
                                         idHouse={e._id}
                                         to={`/detail/${e.slug}`}

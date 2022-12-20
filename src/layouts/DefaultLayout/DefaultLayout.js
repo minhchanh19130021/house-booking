@@ -29,6 +29,7 @@ function DefaultLayout({ children }) {
                 config.routes.email_nofication,
                 config.routes.profile,
                 config.routes.review,
+                config.routes.cart,
             ]
                 .map((e) => e.split('/')?.[1])
                 .includes(location.pathname.split('/')[1])
@@ -44,12 +45,13 @@ function DefaultLayout({ children }) {
                 .then((response) => response.json())
                 .then((response) => {
                     if (response.success === true) {
-                        if (user.type === 'host') {
+                        if (user.type !== 'visitor') {
                             setAllowRender(true);
                             alert('Chủ nhà không có quyền truy cập vào profile du khách');
                             navigate(config.routes.statistical);
+                        } else {
+                            setAllowRender(true);
                         }
-                        setAllowRender(true);
                     } else if (response === 'Bạn chưa có mã token') {
                         setAllowRender(true);
                         navigate('/signin');
@@ -85,12 +87,13 @@ function DefaultLayout({ children }) {
                 .then((response) => response.json())
                 .then((response) => {
                     if (response.success === true) {
-                        if (user?.type === 'visitor') {
+                        if (user?.type !== 'host') {
                             setAllowRender(true);
                             alert('Quyền khách không được phép vào profile của chủ nhà');
                             navigate(config.routes.personal_detail);
+                        } else {
+                            setAllowRender(true);
                         }
-                        setAllowRender(true);
                     } else if (response === 'Bạn chưa có mã token') {
                         setAllowRender(true);
                         navigate('/signin');

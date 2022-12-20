@@ -9,12 +9,25 @@ import { useState } from 'react';
 
 const cx = classNames.bind(styles);
 
-function CardHouse({ avatar, idHouse, numberReview, rate, title, location, desc, facilities, price, status, to }) {
+function CardHouse({
+    folder_image,
+    avatar,
+    idHouse,
+    numberReview,
+    rate,
+    title,
+    location,
+    desc,
+    facilities,
+    price,
+    status,
+    to,
+}) {
     const [linkImg, setLinkImg] = useState(
         'https://preview.redd.it/zcgs03lgoy351.png?width=288&format=png&auto=webp&s=d9bf4b46713d7fdbf11b82a8e364ceee79724a9c',
     );
     let getImageFromFirebase = (_id) => {
-        getDownloadURL(ref(storage, `house/${_id}/${avatar}`))
+        getDownloadURL(ref(storage, `house/${folder_image}/${avatar}`))
             .then((url) => {
                 setLinkImg(url);
             })
@@ -130,7 +143,14 @@ function CardHouse({ avatar, idHouse, numberReview, rate, title, location, desc,
                                     "style={{ display: 'block', height: 24, width: 24, fill: 'currentcolor', }}",
                                     '',
                                 )
-                                ?.replace('\\', '');
+                                ?.replace('block', '')
+                                ?.replace('""', '')
+                                ?.replace('"currentcolor",', '')
+                                ?.replace(',', '')
+                                ?.replace('}}', '')
+                                ?.replace('\\', '')
+                                ?.replace('width: 24, ', '')
+                                ?.replace('height: 24, ', '');
                             return (
                                 <div key={i} className={cx('items')} title={e.name}>
                                     <SVG src={mySVG} />
