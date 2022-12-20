@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Button from '~/components/Button';
 import styles from './SignUp.module.scss';
-import { ErrorMessage, Formik, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -19,6 +19,7 @@ import {
 import { useGoogleLogin } from '@react-oauth/google';
 import FacebookLogin from 'react-facebook-login';
 import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-buttons';
+import { sub } from 'date-fns/fp';
 
 const cx = classNames.bind(styles);
 function SignUp() {
@@ -74,20 +75,22 @@ function SignUp() {
             lastname: Yup.string().required('Vui lòng nhập đầy đủ'),
             username: Yup.string()
                 .required('Tên đăng nhập không hợp lệ')
-                .min(8, 'Tên đăng nhập phải có ít nhất có 6 ký tự')
+                .min(8, 'Tên đăng nhập phải có ít nhất có 8 ký tự')
                 .max(15, 'Tên đăng nhập chứa nhiều nhất 15 ký tự')
                 .matches(
                     /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/,
                     'Tên đăng nhập chỉ chứa các kí tự cho phép gồm: chữ in hoa, chữ in thường, chữ số (a-z, A-Z, 0-9), dấu gạch dưới, dấu gạch ngang và dấu chấm. Tên đăng nhập phải bắt đầu hoặc kết thúc bằng chữ cái hoặc chữ số và phải chứa ít nhất một chữ cái.',
                 ),
-            birthday: Yup.string().required('Vui lòng nhập đầy đủ'),
+            birthday: Yup.date()
+                .required('Vui lòng nhập đầy đủ')
+                .max(sub({ years: 18 }, new Date()), 'Người dùng phải trên 18 tuổi'),
             gender: Yup.string().required('Vui lòng nhập đầy đủ'),
             email: Yup.string()
                 .required('Vui lòng nhập đầy đủ')
                 .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Email không hợp lệ'),
             password: Yup.string()
                 .required('Vui lòng nhập đầy đủ')
-                .min(6, 'Mật khẩu của bạn ít nhất phải có 8 kí tự')
+                .min(6, 'Mật khẩu của bạn ít nhất phải có 6 kí tự')
                 .max(16, 'Mật khẩu của bạn chỉ được tối đa 16 kí tự'),
             confirmedPassword: Yup.string()
                 .required('Vui lòng nhập đầy đủ')
@@ -137,12 +140,28 @@ function SignUp() {
                     },
                 })
                     .then((response) => response.json())
-                    .then((data) => {
+                    .then(async (data) => {
                         console.log(data);
                         setDataRegister(data);
                         if (data.status === true) {
                             dispatch(registerSuccess());
-                            navigate('/signin');
+
+                          
+                            formik.values.firstname = '';
+                            formik.values.lastname = '';
+                            formik.values.username = '';
+                            formik.values.birthday = '';
+                            formik.values.gender = '';
+                            formik.values.email = '';
+                            formik.values.password = '';
+                            formik.values.confirmedPassword = '';
+                            formik.values.address.city = '';
+                            formik.values.address.district = '';
+                            formik.values.address.village = '';
+                            formik.values.address.specifically = '';
+                            setTimeout(() => {
+                                  navigate('/signin');
+                            }, 5000);
                         } else {
                             dispatch(registerFailure());
                         }
@@ -152,52 +171,7 @@ function SignUp() {
             })();
         },
     });
-    const validationSchema = Yup.object({
-        firstname: Yup.string().required('Vui lòng nhập đầy đủ'),
-        lastname: Yup.string().required('Vui lòng nhập đầy đủ'),
-        username: Yup.string()
-            .required('Tên đăng nhập không hợp lệ')
-            .min(8, 'Tên đăng nhập phải có ít nhất có 6 ký tự')
-            .max(15, 'Tên đăng nhập chứa nhiều nhất 15 ký tự')
-            .matches(
-                /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/,
-                'Tên đăng nhập chỉ chứa các kí tự cho phép gồm: chữ in hoa, chữ in thường, chữ số (a-z, A-Z, 0-9), dấu gạch dưới, dấu gạch ngang và dấu chấm. Tên đăng nhập phải bắt đầu hoặc kết thúc bằng chữ cái hoặc chữ số và phải chứa ít nhất một chữ cái.',
-            ),
-        birthday: Yup.string().required('Vui lòng nhập đầy đủ'),
-        gender: Yup.string().required('Vui lòng nhập đầy đủ'),
-        email: Yup.string()
-            .required('Vui lòng nhập đầy đủ')
-            .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Email không hợp lệ'),
-        password: Yup.string()
-            .required('Vui lòng nhập đầy đủ')
-            .min(6, 'Mật khẩu của bạn ít nhất phải có 8 kí tự')
-            .max(16, 'Mật khẩu của bạn chỉ được tối đa 16 kí tự'),
-        confirmedPassword: Yup.string()
-            .required('Vui lòng nhập đầy đủ')
-            .oneOf([Yup.ref('password'), null], 'Mật khẩu chưa khớp'),
-        address: Yup.object().shape({
-            city: Yup.string()
-                .required('Vui lòng chọn thành phô')
-                .default(null)
-                .nullable()
-                .test((value) => value === null || value),
-            district: Yup.string()
-                .required('Vui lòng nhập đầy đủ')
-                .default(null)
-                .nullable()
-                .test((value) => value === null || value),
-            village: Yup.string()
-                .required('Vui lòng nhập đầy đủ')
-                .default(null)
-                .nullable()
-                .test((value) => value === null || value),
-            specifically: Yup.string()
-                .required('Vui lòng nhập đầy đủ')
-                .default(null)
-                .nullable()
-                .test((value) => value === null || value),
-        }),
-    });
+
     useEffect(() => {
         axios
             .get(`https://provinces.open-api.vn/api/?depth=1`)
@@ -284,6 +258,11 @@ function SignUp() {
                         {dataRegister?.status === false && <p className={cx('warning')}>{dataRegister?.msg}</p>}
                     </div>
                 </div>
+                <div className="row">
+                    <div className="col l-12 m-12 c-12">
+                        {dataRegister?.status === true && <p className={cx('success')}>{dataRegister?.msg}</p>}
+                    </div>
+                </div>
                 <div className={cx('row')}>
                     <div className={cx('form-group', 'col', 'l-6', 'm-6', 'c-12')}>
                         <label htmlFor="firstname">Họ</label>
@@ -300,11 +279,11 @@ function SignUp() {
                         )}
                     </div>
                     <div className={cx('form-group', 'col', 'l-6', 'm-6', 'c-12')}>
-                        <label htmlFor="lastname">Tên*</label>
+                        <label htmlFor="lastname">Tên</label>
                         <input
                             name="lastname"
                             id="lastname"
-                            value={formik.values.lastname.trim()}
+                            value={formik.values.lastname}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             type="text"
@@ -320,7 +299,7 @@ function SignUp() {
                         <input
                             name="username"
                             id="username"
-                            value={formik.values.username.trim()}
+                            value={formik.values.username}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             type="text"
@@ -332,11 +311,11 @@ function SignUp() {
                 </div>
                 <div className={cx('row')}>
                     <div className={cx('form-group', 'col', 'l-6', 'm-6', 'c-12')}>
-                        <label htmlFor="birthday">Ngày sinh*</label>
+                        <label htmlFor="birthday">Ngày sinh</label>
                         <input
                             name="birthday"
                             id="birthday"
-                            value={formik.values.birthday.trim()}
+                            value={formik.values.birthday}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             type="date"
@@ -370,7 +349,7 @@ function SignUp() {
                         <input
                             name="email"
                             id="email"
-                            value={formik.values.email.trim()}
+                            value={formik.values.email}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             type="email"
@@ -386,7 +365,7 @@ function SignUp() {
                         <input
                             name="password"
                             id="password"
-                            value={formik.values.password.trim()}
+                            value={formik.values.password}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             type="password"
@@ -402,7 +381,7 @@ function SignUp() {
                         <input
                             name="confirmedPassword"
                             id="confirmedPassword"
-                            value={formik.values.confirmedPassword.trim()}
+                            value={formik.values.confirmedPassword}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             type="password"
@@ -418,7 +397,7 @@ function SignUp() {
                         <select
                             name="address.city"
                             id="address.city"
-                            value={formik.values.address.city.trim()}
+                            value={formik.values.address.city}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                         >
@@ -490,7 +469,7 @@ function SignUp() {
                         <textarea
                             name="address.specifically"
                             id="address.specifically"
-                            value={formik.values.address.specifically.trim()}
+                            value={formik.values.address.specifically}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             type="text"
@@ -524,7 +503,7 @@ function SignUp() {
                     </div>
                 </div>
 
-                {/* <div className={cx('row')}>
+                <div className={cx('row')}>
                     <div className={cx('col', 'l-12', 'm-12', 'c-12')}>
                         <p className={cx('login-orther-text')}>Hoặc tiếp tục với</p>
                     </div>
@@ -552,7 +531,7 @@ function SignUp() {
                             </FacebookLoginButton>
                         </div>
                     </div>
-                </div> */}
+                </div>
             </form>
         </div>
     );

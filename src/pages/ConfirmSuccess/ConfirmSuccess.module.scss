@@ -1,16 +1,17 @@
 .wrapper {
-    // box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-
+   
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     width: 700px;
     height: 100%;
     display: flex;
     align-items: center;
     margin: 0 auto;
     flex-direction: column;
-    padding: 20px;
+    padding: 100px 20px;
     border-radius: 12px;
 }
 .status-img {
-    width: 218px;
+    width: 128px;
     text-align: center;
+    margin-bottom: 20px;
 }

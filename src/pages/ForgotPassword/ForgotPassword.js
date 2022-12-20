@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './ForgotPassword.module.scss';
 import Button from '~/components/Button';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useState } from 'react';
@@ -10,6 +10,7 @@ const cx = classNames.bind(styles);
 
 function ForgotPassword() {
     const [dataReset, setDataReset] = useState();
+    const navigate = useNavigate();
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -30,8 +31,13 @@ function ForgotPassword() {
                 })
                     .then((response) => response.json())
                     .then((data) => {
-                        console.log(data);
                         setDataReset(data);
+                        if (data.status === true) {
+                            formik.values.email = '';
+                            setTimeout(() => {
+                                navigate('/signin');
+                            }, 3000);
+                        }
                         return data;
                     })
                     .catch((err) => console.log(err));
