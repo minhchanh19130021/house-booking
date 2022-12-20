@@ -76,10 +76,7 @@ function CardSummaryPay() {
     const { dispatch } = useContext(SearchContext);
     if (!visiblePayByPoint) {
         localStorage.setItem('payPoint', 0);
-       
-
     }
-
 
     const handleChange = () => {
         if (!visiblePayByPoint) {
@@ -350,7 +347,7 @@ function CardSummaryPay() {
                                                 )}
                                                 <div className={cx('_jbgt15')}></div>
 
-                                                {userInfor.bonus_point > 0 && (
+                                                {userInfor?.bonus_point > 0 && (
                                                     <div className={cx('_dmn8hc')}>
                                                         <div className={cx('_1x5uynhu')}>
                                                             Dùng {userInfor.bonus_point} điểm tích lũy

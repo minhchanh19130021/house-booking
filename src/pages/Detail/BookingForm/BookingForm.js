@@ -84,7 +84,7 @@ function BookingForm(props) {
     const idh = '636ce065825a1cd1940641a2';
 
     const handleSearch = () => {
-        var bonusPoint = userInfor.bonus_point;
+        var bonusPoint = userInfor?.bonus_point;
         // localStorage.setItem('bonusPoint', bonus);
         dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, payPoint, bonusPoint } });
         navigate(
@@ -455,7 +455,7 @@ function BookingForm(props) {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                         </svg>
                     </div>
-                    <Button type="submit" className={cx('btn-booking')} onClick={handleSearch}>
+                    <Button type="button" className={cx('btn-booking')} onClick={handleSearch}>
                         Đặt Phòng
                     </Button>
                     <Button type="button" className={cx('btn-cart')} onClick={handleAddToCart}>
