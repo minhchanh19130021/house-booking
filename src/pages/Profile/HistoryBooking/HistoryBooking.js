@@ -24,6 +24,7 @@ function HistoryBooking() {
             .then((response) => response.json())
             .then((response) => {
                 if (response.success === true) {
+                   
                     setHistory(response.data);
                 } else if (response === 'Bạn chưa có mã token') {
                     navigate('/signin');

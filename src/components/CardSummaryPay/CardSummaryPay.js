@@ -15,7 +15,7 @@ const cx = classNames.bind(styles);
 
 function CardSummaryPay(props) {
     const user = useSelector((state) => state.authentication.login.currentUser);
-    const { home, dates, options, bonusPoint } = useContext(SearchContext);
+    const { home, dates, options } = useContext(SearchContext);
     const location = useLocation();
     const id = location.pathname.split('/')[2];
     const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/` + home);
@@ -77,17 +77,20 @@ function CardSummaryPay(props) {
     const { dispatch } = useContext(SearchContext);
     if (!visiblePayByPoint) {
         localStorage.setItem('payPoint', 0);
+        localStorage.setItem('bonusPoint', 1);
     }
 
     const handleChange = () => {
         if (!visiblePayByPoint) {
             var payPoint = props.userInfor?.bonus_point;
             localStorage.setItem('payPoint', payPoint);
-            dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, payPoint } });
+            var bonusPoint = 1;
+            dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, payPoint, bonusPoint } });
         } else {
             var payPoint = 0;
+            var bonusPoint = 1;
             localStorage.setItem('payPoint', payPoint);
-            dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, payPoint } });
+            dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, payPoint, bonusPoint } });
         }
     };
 

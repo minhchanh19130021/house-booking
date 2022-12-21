@@ -20,7 +20,7 @@ const cx = classNames.bind(styles);
 function BookingForm(props) {
     const user = useSelector((state) => state.authentication.login.currentUser);
     const [visibleGuestInfo, setVisibleGuestInfo] = useState(false);
-
+    const [warn, setWarn] = useState("Xin chọn ngày");
     const hanldeVisibleGuestInfo = () => {
         setVisibleGuestInfo((visibleGuestInfo) => !visibleGuestInfo);
     };
@@ -30,23 +30,11 @@ function BookingForm(props) {
     // const [home, setHome] = useState(props.dataFromParent?._id);
 
     const [visiblePayByPoint, setVisiblePayByPoint] = useState(false);
-    // useEffect(() => {
-    //     fetch(`http://localhost:8080/api/v1/user/get/638c56fe8693fbfdd908508b`, {
-    //         method: 'GET',
-    //     })
-    //         .then((response) => response.json())
-    //         .then((response) => {
-    //             if (response.success === true) {
-    //                 setUserInfor(response.data[0]);
-    //             }
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         });
-    // }, []);
+    const [historyBooking, setHistoryBooking] = useState([]);
+
     const [payPoint, setPayPoint] = useState(0);
     const [warnVisiter, setWarnVisiter] = useState(false);
-
+    const [checkDate, setCheckDate] = useState(true);
     const [goToCheckout, setGoToCheckout] = useState(true);
     const [openDate, setOpenDate] = useState(false);
     const today = new Date();
@@ -55,7 +43,7 @@ function BookingForm(props) {
     const [dates, setDates] = useState([
         {
             startDate: new Date(),
-            endDate: tomorrow,
+            endDate: today,
             key: 'selection',
         },
     ]);
@@ -72,16 +60,19 @@ function BookingForm(props) {
 
     const handleOption = (name, operation) => {
         setOptions((prev) => {
-            if(options.baby == props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby-1 || options.adult+options.children == props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children-1 || options.pet == props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet-1){
-                setWarnVisiter(true)
+            if (
+                options.baby == props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby - 1 ||
+                options.adult + options.children ==
+                    props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children - 1 ||
+                options.pet == props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet - 1
+            ) {
+                setWarnVisiter(true);
             }
             return {
                 ...prev,
                 [name]: operation === 'i' ? options[name] + 1 : options[name] - 1,
             };
         });
-       
-
     };
 
     const { dispatch } = useContext(SearchContext);
@@ -90,9 +81,12 @@ function BookingForm(props) {
     const idh = props.dataFromParent?._id;
 
     const handleSearch = () => {
-        var bonusPoint = props.userInfor?.bonus_point
+        if(!checkDate){
+        var payPoint = props.userInfor?.bonus_point;
         var home = props.dataFromParent?._id;
-        dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, payPoint, bonusPoint } });
+        var bonusPoint = 1; 
+        // localStorage.setItem('bonusPoint', bonusPoint);
+        dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, payPoint, bonusPoint} });
         navigate(
             '/payment/' +
                 idh +
@@ -107,6 +101,9 @@ function BookingForm(props) {
                 '&checkout=' +
                 dates[0].endDate,
         );
+
+        }
+        
     };
 
     const handleContinueWatch = (e) => {
@@ -133,9 +130,6 @@ function BookingForm(props) {
         cartDetailToAdd.checkout = dates[0].endDate;
         cartDetailToAdd.uid = user?._id;
         cartDetailToAdd.is_booked = false;
-       
-           
-      
 
         fetch(`http://localhost:8080/api/v2/cart/put`, {
             method: 'PUT',
@@ -176,18 +170,81 @@ function BookingForm(props) {
         return props.dataFromParent?.price * days;
     }
 
+    const checkday = (e) => {
+        setDates(e);
+       
+        fetch(`http://localhost:8080/api/v2/history-booking-by-homdid`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+            body: JSON.stringify({ hid: idh }),
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                console.log(response.data);
+                setHistoryBooking(response.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        
+        if(historyBooking.length ==0){
+            setCheckDate(false);
+            setWarn("")
+            if(dayDifference(e[0].startDate,e[0].endDate) == 0){
+                setCheckDate(true)
+                setWarn("Không được chọn cùng 1 ngày")
+            }
+        }
+
+        historyBooking.map((item) => {
+            var sDay = item.order_detail[0]?.checkin;
+            var eDay = item.order_detail[0]?.checkout;
+            console.log(convert(e[0].startDate));
+            console.log(convert(e[0].endDate));
+            if (
+                (convert(e[0].startDate) < sDay &&
+                    convert(e[0].startDate) < eDay &&
+                    convert(e[0].endDate) < sDay &&
+                    convert(e[0].endDate) < eDay) ||
+                (convert(e[0].startDate) > sDay &&
+                    convert(e[0].startDate) > eDay &&
+                    convert(e[0].endDate) > sDay &&
+                    convert(e[0].endDate) > eDay)
+            ) {
+                setCheckDate(false);
+                setWarn("")
+            } else {
+                setCheckDate(true);
+                setWarn("Những ngày này đã được đặt")
+            }
+            if(dayDifference(e[0].startDate,e[0].endDate) == 0){
+                setCheckDate(true)
+                setWarn("Không được chọn cùng 1 ngày")
+            }
+        });
+    };
+
+    function convert(str) {
+        var date = new Date(str),
+            mnth = ('0' + (date.getMonth() + 1)).slice(-2),
+            day = ('0' + date.getDate()).slice(-2);
+        return [date.getFullYear(), mnth, day].join('-');
+    }
+
     return (
         <>
             <form className={cx('booking-form')}>
                 <div className={cx('booking-form__header')}>
                     <div className={cx('price')}>
-                        <p className={cx('old')}>{formatter.format(props.dataFromParent?.price)} / đêm</p>
+                        <p className={cx('old')}>{formatter.format(props.dataFromParent?.price)} / đêm </p>
                         <p className={cx('new')}>
                             {formatter.format(
                                 props.dataFromParent?.price -
                                     props.dataFromParent?.price * props.dataFromParent?.discount,
                             )}{' '}
-                            / đêm 
+                            / đêm
                         </p>
                     </div>
                     <div className={cx('star')}>
@@ -213,7 +270,7 @@ function BookingForm(props) {
                     <div className={cx('guest')}>
                         <div className={cx('guest-title')}>
                             <label>
-                                <FontAwesomeIcon icon={faCalendarDays} className="headerIcon" /> Ngày 
+                                <FontAwesomeIcon icon={faCalendarDays} className="headerIcon" /> Ngày
                             </label>
                             <div className="headerSearchItem">
                                 <label onClick={() => setOpenDate(!openDate)} className="headerSearchText">{`${format(
@@ -223,7 +280,7 @@ function BookingForm(props) {
                                 {openDate && (
                                     <DateRange
                                         editableDateInputs={true}
-                                        onChange={(item) => setDates([item.selection])}
+                                        onChange={(item) => checkday([item.selection])}
                                         moveRangeOnFirstSelection={false}
                                         ranges={dates}
                                         className="date"
@@ -250,12 +307,13 @@ function BookingForm(props) {
                                 <FontAwesomeIcon icon={faPerson} className="headerIcon" /> Khách
                             </label>
                             <label onClick={hanldeVisibleGuestInfo} style={{ fontSize: 14 }}>
-                            {`${options.adult+options.children} Khách · ${options.baby} Em bé  · ${options.pet} Thú cưng`}
+                                {`${options.adult + options.children} Khách · ${options.baby} Em bé  · ${
+                                    options.pet
+                                } Thú cưng`}
                                 {/* {`${props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children} Người lớn · ${props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby} Em bé  ·${props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet} Thú cưng`} */}
                             </label>
                             {visibleGuestInfo && (
                                 <motion.div animate={{}} className={cx('guest-info')}>
-                                    
                                     <div className={cx('guest-info__item')}>
                                         <div className={cx('guest-info__item-title')}>
                                             <p>Người lớn</p>
@@ -283,9 +341,16 @@ function BookingForm(props) {
                                                 </svg>
                                             </div>
                                             <p className={cx('current-number')}>{`${options.adult}`}</p>
-                                            <div className={cx('select-decrement')}
-                                             style={{ display: options.adult + options.children == props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children ? 'none' : 'block' }}
-                                            
+                                            <div
+                                                className={cx('select-decrement')}
+                                                style={{
+                                                    display:
+                                                        options.adult + options.children ==
+                                                        props.dataFromParent?.detail[0]?.maximum_number_visitor
+                                                            ?.adult_children
+                                                            ? 'none'
+                                                            : 'block',
+                                                }}
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -333,8 +398,16 @@ function BookingForm(props) {
                                                 </svg>
                                             </div>
                                             <p className={cx('current-number')}>{`${options.children}`}</p>
-                                            <div className={cx('select-decrement')}
-                                             style={{ display: options.adult+options.children == props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children ? 'none' : 'block' }}
+                                            <div
+                                                className={cx('select-decrement')}
+                                                style={{
+                                                    display:
+                                                        options.adult + options.children ==
+                                                        props.dataFromParent?.detail[0]?.maximum_number_visitor
+                                                            ?.adult_children
+                                                            ? 'none'
+                                                            : 'block',
+                                                }}
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -382,8 +455,15 @@ function BookingForm(props) {
                                                 </svg>
                                             </div>
                                             <p className={cx('current-number')}>{`${options.baby}`}</p>
-                                            <div className={cx('select-decrement')}
-                                             style={{ display: options.baby == props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby ? 'none' : 'block' }}
+                                            <div
+                                                className={cx('select-decrement')}
+                                                style={{
+                                                    display:
+                                                        options.baby ==
+                                                        props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby
+                                                            ? 'none'
+                                                            : 'block',
+                                                }}
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -431,8 +511,15 @@ function BookingForm(props) {
                                                 </svg>
                                             </div>
                                             <p className={cx('current-number')}>{`${options.pet}`}</p>
-                                            <div className={cx('select-decrement')}
-                                             style={{ display: options.pet == props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet ? 'none' : 'block' }}
+                                            <div
+                                                className={cx('select-decrement')}
+                                                style={{
+                                                    display:
+                                                        options.pet ==
+                                                        props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet
+                                                            ? 'none'
+                                                            : 'block',
+                                                }}
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -476,9 +563,18 @@ function BookingForm(props) {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                         </svg>
                     </div>
-                    <Button type="button" className={cx('btn-booking')} onClick={handleSearch}>
-                        Đặt Phòng
-                    </Button>
+                    {checkDate && <p style={{ color: 'red' }}>{warn}</p>}
+                    {/* {checkDate && (
+                        <Button type="button" disabled className={cx('btn-booking')} onClick={handleSearch}>
+                            Đặt Phòng
+                        </Button>
+                    )} */}
+                    {/* {!checkDate && ( */}
+                        <Button type="button" className={cx('btn-booking')} onClick={handleSearch}>
+                            Đặt Phòng
+                        </Button>
+                    {/* )} */}
+
                     <Button type="button" className={cx('btn-cart')} onClick={handleAddToCart}>
                         Thêm vào giỏ hàng
                     </Button>
