@@ -113,7 +113,7 @@ function Statistical() {
                     ],
                 });
             });
-    }, []);
+    }, [timeStart, timeEnd]);
 
     useEffect(() => {
         fetch(`http://localhost:8080/api/v1/orderByIdUserAndMonth`, {
