@@ -97,7 +97,7 @@ function CardSummaryPay(props) {
     };
 
     function pricePoint() {
-        return user?.bonus_point * 1000;
+        return props.userInfor?.bonus_point * 1000;
     }
 
     return (
