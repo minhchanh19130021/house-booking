@@ -64,6 +64,7 @@ function Detail() {
                 let images = response.data[0]?.detail[0] ? response.data[0]?.detail[0]?.image : [];
                 images?.unshift(response.data[0]?.avatar);
                 getImageFromFirebase(response.data[0]?.folder_image, images, 0);
+                increaseViewNumber(response.data[0]?._id);
             })
             .catch((err) => console.log(err));
     }, []);
@@ -84,6 +85,21 @@ function Detail() {
             })
             .catch((err) => console.log(err));
     }, [dataDetail?._id]);
+
+    function increaseViewNumber(hid) {
+        fetch(`http://localhost:8080/api/v2/detail/increase_view`, {
+            method: 'POST',
+            body: JSON.stringify({
+                hid: hid,
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+            .then()
+            .catch((err) => console.log(err));
+    }
+
     return (
         <div className={cx('wrapper', 'grid', 'wide')}>
             <div className={cx('row', 'header')}>

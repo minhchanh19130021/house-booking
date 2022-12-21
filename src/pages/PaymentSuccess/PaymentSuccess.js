@@ -9,7 +9,7 @@ import { date } from 'yup';
 const cx = classNames.bind(styles);
 function PaymentSuccess() {
     const user = useSelector((state) => state.authentication.login.currentUser);
-    const { home, dates, options, payPoint, bonusPoint} = useContext(SearchContext);
+    const { home, dates, options, payPoint, bonusPoint } = useContext(SearchContext);
     const [userInfor, setUserInfor] = useState([]);
     const [isGoToCheckout, setIsGoToCheckOut] = useState(false);
     const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/` + home);
@@ -17,7 +17,7 @@ function PaymentSuccess() {
     const { dispatch } = useContext(SearchContext);
     const [address, setAddress] = useState({});
     const [listVoucher, setListVoucher] = useState([]);
-    
+
     const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
     function dayDifference(date1, date2) {
         const timeDiff = Math.abs(date2.getTime() - date1.getTime());
@@ -56,8 +56,8 @@ function PaymentSuccess() {
                 .then((response) => response.json())
                 .then((response) => {
                     if (response.success) {
-                       setUserInfor(response.data[0])
-                       setAddress(response.data[0].address)
+                        setUserInfor(response.data[0]);
+                        setAddress(response.data[0].address);
                     }
                 })
                 .catch((err) => {
@@ -329,7 +329,7 @@ function PaymentSuccess() {
                                                     margin: 0,
                                                 }}
                                             >
-                                                Thanh toán thành công! 
+                                                Thanh toán thành công!
                                             </h2>
                                         </td>
                                     </tr>
@@ -374,7 +374,7 @@ function PaymentSuccess() {
                                                                 padding: 10,
                                                             }}
                                                         >
-                                                            Xác nhận đặt phòng # 
+                                                            Xác nhận đặt phòng #
                                                         </td>
                                                         <td
                                                             width="25%"
@@ -609,8 +609,7 @@ function PaymentSuccess() {
                                                                 <p>
                                                                     {userInfor.firstname} {userInfor.lastname}
                                                                     <br />
-                                                                    {address.specifically} 
-                                                        
+                                                                    {address.specifically}
                                                                 </p>
                                                             </td>
                                                         </tr>

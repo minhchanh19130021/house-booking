@@ -54,7 +54,7 @@ function Header() {
                     console.log(err);
                 });
         }
-    }, []);
+    }, [avatar]);
 
     const handleVisibleModal = () => {
         setSearchModal((searchModal) => !searchModal);

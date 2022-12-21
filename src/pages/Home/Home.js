@@ -221,13 +221,14 @@ function Home() {
                             >
                                 {listBestSellingHome.map((e, i) => {
                                     let home = e.homes.home_id[0];
+                                    console.log(home);
                                     return (
                                         <div key={i} className={cx('col', 'l-4', 'm-6', 'c-12')}>
                                             <CardHouse
                                                 folder_image={home?.folder_image}
                                                 avatar={home.avatar}
                                                 idHouse={home._id}
-                                                to={`/detail/${e.slug}`}
+                                                to={`/detail/${home.slug}`}
                                                 status={home.status ? 'open' : 'close'}
                                                 numberReview={home.number_review}
                                                 title={home.name}
@@ -258,6 +259,7 @@ function Home() {
                                     return (
                                         <div key={i} className={cx('col', 'l-4', 'm-6', 'c-12')}>
                                             <CardHouse
+                                                folder_image={e?.folder_image}
                                                 avatar={e.avatar}
                                                 idHouse={e._id}
                                                 to={`/detail/${e.slug}`}
@@ -293,9 +295,10 @@ function Home() {
                                     return (
                                         <div key={i} className={cx('col', 'l-4', 'm-6', 'c-12')}>
                                             <CardHouse
+                                                folder_image={home?.folder_image}
                                                 avatar={home.avatar}
                                                 idHouse={home._id}
-                                                to={`/detail/${e.slug}`}
+                                                to={`/detail/${home.slug}`}
                                                 status={home.status ? 'open' : 'close'}
                                                 numberReview={home.number_review}
                                                 title={home.name}
