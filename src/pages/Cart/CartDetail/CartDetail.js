@@ -3,12 +3,26 @@ import styles from './CartDetail.module.scss';
 import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SearchContext } from '../../../context/SearchContext';
-import { setDate } from 'date-fns';
+import { ref, getDownloadURL } from 'firebase/storage';
+import { storage } from '~/config/firebase';
+import { useSelector } from 'react-redux';
 
 const cx = classNames.bind(styles);
 
 function Cart(props) {
     const navigate = useNavigate();
+    const user = useSelector((state) => state.authentication.login.currentUser);
+    const [linkImg, setLinkImg] = useState(
+        'https://preview.redd.it/zcgs03lgoy351.png?width=288&format=png&auto=webp&s=d9bf4b46713d7fdbf11b82a8e364ceee79724a9c',
+    );
+    let getImageFromFirebase = () => {
+        getDownloadURL(ref(storage, `house/${props.folder_image}/${props.avatar}`))
+            .then((url) => {
+                setLinkImg(url);
+            })
+            .catch((error) => {});
+    };
+    getImageFromFirebase();
     const data = props.data;
     const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
     const checkIn = new Date(data?.check_in);
@@ -43,7 +57,8 @@ function Cart(props) {
         baby: 0,
         pet: 0,
     });
-    const [home, setHome] = useState(data?._id);
+    const [home, setHome] = useState(data?.home[0]?._id);
+    const [payPoint, setPayPoint] = useState(100);
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -54,6 +69,10 @@ function Cart(props) {
             key: 'selection',
         },
     ]);
+    const folder_image = props?.folder_image ? props?.folder_image : '';
+    const avatar = props?.avatar ? props?.avatar : '';
+    const bonusPoint = user?.bonus_point;
+
     useEffect(() => {
         setOptions({
             adult: data?.number_visitor?.adult,
@@ -70,10 +89,11 @@ function Cart(props) {
     }, []);
     function handleCheckout(e) {
         e.preventDefault();
-        console.log(checkIn);
-        console.log(checkout);
         if (!isActive) {
-            dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, goToCheckout } });
+            dispatch({
+                type: 'NEW_SEARCH',
+                payload: { home, dates, options, payPoint, bonusPoint, folder_image, avatar },
+            });
 
             navigate(
                 '/payment/' +
@@ -114,7 +134,7 @@ function Cart(props) {
             <div className={cx('container_cart')}>
                 <div className={cx('top')}>
                     <div className={cx('information-home')}>
-                        <img src="https://q-xx.bstatic.com/xdata/images/hotel/840x460/364913494.jpg?k=1778a39ee86633d6a5d4309849356f05f8cdde6326ea49a8d7a821150124c621&o=" />
+                        <img src={linkImg} />
                         <div className={cx('information')}>
                             <p>{data?.home[0]?.name}</p>
                             <span className={cx('star')}>
@@ -131,7 +151,11 @@ function Cart(props) {
                                 className={cx('location-name')}
                             >{`${data?.home[0]?.address?.city} ${data?.home[0]?.address?.district} ${data?.home[0]?.address?.number}`}</span>
                             <div className={cx('rate')}>
-                                <span className={cx('point')}>{`${data?.home_detail[0]?.rates?.experience}/5`}</span>
+                                <span className={cx('point')}>{`${
+                                    data?.home_detail[0]?.rates?.experience === undefined
+                                        ? 0
+                                        : data?.home_detail[0]?.rates?.experience
+                                }/5`}</span>
                                 <span className={cx('idea')}>
                                     {data?.home_detail[0]?.rates?.experience == 5
                                         ? 'Trên cả tuyệt vời'
@@ -213,9 +237,8 @@ function Cart(props) {
                         </div>
                         <div>
                             <p className={cx('price', isActive ? 'none-click' : null)}>
-                                {`${Array.from(
-                                    data?.home[0]?.price && data?.home[0]?.discount ? JSON.stringify(price) : '',
-                                )
+                                {data?.home[0]?.price}
+                                {`${Array.from(data?.home[0]?.price ? JSON.stringify(price) : '')
                                     .reverse()
                                     .map((e, i) => (i % 3 === 0 && i !== 0 ? `${e}.` : e))
                                     .reverse()

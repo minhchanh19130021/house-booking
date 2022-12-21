@@ -81,7 +81,7 @@ function SignIn() {
                                         }),
                                     );
                                 });
-                            navigate('/personal-detail');
+                            navigate('/');
                         } else {
                             dispatch(loginFailure());
                         }

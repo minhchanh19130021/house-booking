@@ -93,6 +93,8 @@ function Cart() {
                         {cartDetail.map((e, i) => {
                             return (
                                 <CartDetail
+                                    folder_image={e?.home[0]?.folder_image}
+                                    avatar={e?.home[0]?.avatar}
                                     key={i}
                                     data={e}
                                     setIsDisplayFromDelete={setIsDisplayFromDelete}

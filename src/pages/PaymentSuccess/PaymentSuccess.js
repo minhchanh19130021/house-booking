@@ -13,7 +13,7 @@ function PaymentSuccess() {
     const [userInfor, setUserInfor] = useState([]);
     const [isGoToCheckout, setIsGoToCheckOut] = useState(false);
     const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/` + home);
-    const uid = user?.id;
+    const uid = user?._id;
     const { dispatch } = useContext(SearchContext);
     const [address, setAddress] = useState({});
     const [listVoucher, setListVoucher] = useState([]);
@@ -91,7 +91,6 @@ function PaymentSuccess() {
         }).catch((err) => {
             console.log(err);
         });
-
     })();
 
     (async () => {
@@ -121,7 +120,7 @@ function PaymentSuccess() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     _id: user._id,
-                    bonus_point:  Math.floor(total() / 100000)+Number.parseInt(bonusPoint),
+                    bonus_point: Math.floor(total() / 100000) + Number.parseInt(bonusPoint),
                 }),
             })
                 .then((response) => response.json())

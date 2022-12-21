@@ -72,16 +72,19 @@ function BookingForm(props) {
 
     const handleOption = (name, operation) => {
         setOptions((prev) => {
-            if(options.baby == props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby-1 || options.adult+options.children == props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children-1 || options.pet == props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet-1){
-                setWarnVisiter(true)
+            if (
+                options.baby == props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby - 1 ||
+                options.adult + options.children ==
+                    props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children - 1 ||
+                options.pet == props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet - 1
+            ) {
+                setWarnVisiter(true);
             }
             return {
                 ...prev,
                 [name]: operation === 'i' ? options[name] + 1 : options[name] - 1,
             };
         });
-       
-
     };
 
     const { dispatch } = useContext(SearchContext);
@@ -92,7 +95,9 @@ function BookingForm(props) {
     const handleSearch = () => {
         var bonusPoint = user?.bonus_point;
         var home = props.dataFromParent?._id;
-        dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, payPoint, bonusPoint } });
+        var folder_image = props.dataFromParent?.folder_image;
+        var avatar = props.dataFromParent?.avatar;
+        dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, payPoint, bonusPoint, folder_image, avatar } });
         navigate(
             '/payment/' +
                 idh +
@@ -183,7 +188,7 @@ function BookingForm(props) {
                                 props.dataFromParent?.price -
                                     props.dataFromParent?.price * props.dataFromParent?.discount,
                             )}{' '}
-                            / đêm 
+                            / đêm
                         </p>
                     </div>
                     <div className={cx('star')}>
@@ -209,7 +214,7 @@ function BookingForm(props) {
                     <div className={cx('guest')}>
                         <div className={cx('guest-title')}>
                             <label>
-                                <FontAwesomeIcon icon={faCalendarDays} className="headerIcon" /> Ngày 
+                                <FontAwesomeIcon icon={faCalendarDays} className="headerIcon" /> Ngày
                             </label>
                             <div className="headerSearchItem">
                                 <label onClick={() => setOpenDate(!openDate)} className="headerSearchText">{`${format(
@@ -246,12 +251,19 @@ function BookingForm(props) {
                                 <FontAwesomeIcon icon={faPerson} className="headerIcon" /> Khách
                             </label>
                             <label onClick={hanldeVisibleGuestInfo} style={{ fontSize: 14 }}>
-                            {`${options.adult+options.children} Người lớn · ${options.baby} Em bé  ·${options.pet} Thú cưng`}
+                                {`${options.adult + options.children} Người lớn · ${options.baby} Em bé  ·${
+                                    options.pet
+                                } Thú cưng`}
                                 {/* {`${props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children} Người lớn · ${props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby} Em bé  ·${props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet} Thú cưng`} */}
                             </label>
                             {visibleGuestInfo && (
                                 <motion.div animate={{}} className={cx('guest-info')}>
-                                    {warnVisiter && (<p style={{color: "red"}}>Giới hạn: {`${props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children} Người lớn · ${props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby} Em bé  ·${props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet} Thú cưng`}</p>)}
+                                    {warnVisiter && (
+                                        <p style={{ color: 'red' }}>
+                                            Giới hạn:{' '}
+                                            {`${props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children} Người lớn · ${props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby} Em bé  ·${props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet} Thú cưng`}
+                                        </p>
+                                    )}
                                     <div className={cx('guest-info__item')}>
                                         <div className={cx('guest-info__item-title')}>
                                             <p>Người lớn</p>
@@ -279,9 +291,16 @@ function BookingForm(props) {
                                                 </svg>
                                             </div>
                                             <p className={cx('current-number')}>{`${options.adult}`}</p>
-                                            <div className={cx('select-decrement')}
-                                             style={{ display: options.adult + options.children == props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children ? 'none' : 'block' }}
-                                            
+                                            <div
+                                                className={cx('select-decrement')}
+                                                style={{
+                                                    display:
+                                                        options.adult + options.children ==
+                                                        props.dataFromParent?.detail[0]?.maximum_number_visitor
+                                                            ?.adult_children
+                                                            ? 'none'
+                                                            : 'block',
+                                                }}
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -329,8 +348,16 @@ function BookingForm(props) {
                                                 </svg>
                                             </div>
                                             <p className={cx('current-number')}>{`${options.children}`}</p>
-                                            <div className={cx('select-decrement')}
-                                             style={{ display: options.adult+options.children == props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children ? 'none' : 'block' }}
+                                            <div
+                                                className={cx('select-decrement')}
+                                                style={{
+                                                    display:
+                                                        options.adult + options.children ==
+                                                        props.dataFromParent?.detail[0]?.maximum_number_visitor
+                                                            ?.adult_children
+                                                            ? 'none'
+                                                            : 'block',
+                                                }}
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -378,8 +405,15 @@ function BookingForm(props) {
                                                 </svg>
                                             </div>
                                             <p className={cx('current-number')}>{`${options.baby}`}</p>
-                                            <div className={cx('select-decrement')}
-                                             style={{ display: options.baby == props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby ? 'none' : 'block' }}
+                                            <div
+                                                className={cx('select-decrement')}
+                                                style={{
+                                                    display:
+                                                        options.baby ==
+                                                        props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby
+                                                            ? 'none'
+                                                            : 'block',
+                                                }}
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -427,8 +461,15 @@ function BookingForm(props) {
                                                 </svg>
                                             </div>
                                             <p className={cx('current-number')}>{`${options.pet}`}</p>
-                                            <div className={cx('select-decrement')}
-                                             style={{ display: options.pet == props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet ? 'none' : 'block' }}
+                                            <div
+                                                className={cx('select-decrement')}
+                                                style={{
+                                                    display:
+                                                        options.pet ==
+                                                        props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet
+                                                            ? 'none'
+                                                            : 'block',
+                                                }}
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
