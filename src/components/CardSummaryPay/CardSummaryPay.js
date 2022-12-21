@@ -13,30 +13,30 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const cx = classNames.bind(styles);
 
-function CardSummaryPay() {
+function CardSummaryPay(props) {
     const user = useSelector((state) => state.authentication.login.currentUser);
-    const { home, dates, options } = useContext(SearchContext);
+    const { home, dates, options, bonusPoint } = useContext(SearchContext);
     const location = useLocation();
     const id = location.pathname.split('/')[2];
     const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/` + home);
-    const [userInfor, setUserInfor] = useState([]);
+    // const [userInfor, setUserInfor] = useState([]);
     // const [payPoint, setPayPoint] = useState(0);
 
     const [visiblePayByPoint, setVisiblePayByPoint] = useState(false);
-    useEffect(() => {
-        fetch(`http://localhost:8080/api/v1/user/get/638c56fe8693fbfdd908508b`, {
-            method: 'GET',
-        })
-            .then((response) => response.json())
-            .then((response) => {
-                if (response.success === true) {
-                    setUserInfor(response.data[0]);
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, []);
+    // useEffect(() => {
+    //     fetch(`http://localhost:8080/api/v1/user/get/638c56fe8693fbfdd908508b`, {
+    //         method: 'GET',
+    //     })
+    //         .then((response) => response.json())
+    //         .then((response) => {
+    //             if (response.success === true) {
+    //                 setUserInfor(response.data[0]);
+    //             }
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
+    // }, []);
    
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -81,7 +81,7 @@ function CardSummaryPay() {
 
     const handleChange = () => {
         if (!visiblePayByPoint) {
-            var payPoint = user?.bonus_point;
+            var payPoint = props.userInfor?.bonus_point;
             localStorage.setItem('payPoint', payPoint);
             dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, payPoint } });
         } else {
@@ -348,10 +348,10 @@ function CardSummaryPay() {
                                                 )}
                                                 <div className={cx('_jbgt15')}></div>
 
-                                                {user?.bonus_point > 0 && (
+                                                {props.userInfor?.bonus_point > 0 && (
                                                     <div className={cx('_dmn8hc')}>
                                                         <div className={cx('_1x5uynhu')}>
-                                                            Dùng {user?.bonus_point} điểm tích lũy
+                                                            Dùng {props.userInfor?.bonus_point} điểm tích lũy
                                                             {/* <button
                                                                 id="MowebCurrencyPicker_trigger"
                                                                 aria-label="Loại tiền tệ hiện tại: (₫). Thay đổi loại tiền tệ thanh toán"
