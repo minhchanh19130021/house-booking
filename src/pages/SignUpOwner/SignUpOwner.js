@@ -81,7 +81,7 @@ function SignUpOwner() {
     });
     const [currentStep, setCurrentStep] = useState(0);
     const markRequest = (formData) => {
-        console.log('Form Submited', formData);
+        // console.log('Form Submited', formData);
     };
     const [statusRegister, setStatusRegister] = useState();
     const handleNextStep = (newData, final = false) => {
@@ -149,13 +149,12 @@ function SignUpOwner() {
                 })
                     .then((response) => response.json())
                     .then((data) => {
-                        console.log(data);
                         setStatusRegister(data);
-                        // if (data.status === true) {
-                        //     setTimeout(() => {
-                        //         navigate('/signin');
-                        //     }, 2000);
-                        // }
+                        if (data.status === true) {
+                            setTimeout(() => {
+                                navigate('/');
+                            }, 2000);
+                        }
 
                         return data;
                     })
@@ -368,6 +367,11 @@ function SignUpOwner() {
                                         <p className={cx('warning')}>{statusRegister?.msg}</p>
                                     )}
                                 </div>
+                                <div className="col l-12 m-12 c-12">
+                                    {statusRegister?.status === true && (
+                                        <p className={cx('success')}>{statusRegister?.msg}</p>
+                                    )}
+                                </div>
                                 <div className={cx('form-group', 'col', 'l-12', 'm-12', 'c-12')}>
                                     <label htmlFor="name">Tên chỗ cho thuê</label>
                                     <Field name="name" id="name-house" type="text" />
@@ -432,6 +436,11 @@ function SignUpOwner() {
                                 <div className="col l-12 m-12 c-12">
                                     {statusRegister?.status === false && (
                                         <p className={cx('warning')}>{statusRegister?.msg}</p>
+                                    )}
+                                </div>
+                                <div className="col l-12 m-12 c-12">
+                                    {statusRegister?.status === true && (
+                                        <p className={cx('success')}>{statusRegister?.msg}</p>
                                     )}
                                 </div>
                                 <div className={cx('form-group', 'col', 'l-4', 'm-12', 'c-12')}>
@@ -569,6 +578,11 @@ function SignUpOwner() {
                                         <p className={cx('warning')}>{statusRegister?.msg}</p>
                                     )}
                                 </div>
+                                <div className="col l-12 m-12 c-12">
+                                    {statusRegister?.status === true && (
+                                        <p className={cx('success')}>{statusRegister?.msg}</p>
+                                    )}
+                                </div>
                                 {allFacilities?.map((e) => (
                                     <div className={cx('form-convenient', 'col', 'l-4', 'm-6', 'c-6')} key={e._id}>
                                         <Field name="facilities" id={e._id} type="checkbox" value={e._id} />
@@ -605,6 +619,11 @@ function SignUpOwner() {
                                 <div className="col l-12 m-12 c-12">
                                     {statusRegister?.status === false && (
                                         <p className={cx('warning')}>{statusRegister?.msg}</p>
+                                    )}
+                                </div>
+                                <div className="col l-12 m-12 c-12">
+                                    {statusRegister?.status === true && (
+                                        <p className={cx('success')}>{statusRegister?.msg}</p>
                                     )}
                                 </div>
                                 <div className={cx('form-group', 'col', 'l-6', 'm-6', 'c-12')}>
@@ -840,6 +859,11 @@ function SignUpOwner() {
                                         <p className={cx('warning')}>{statusRegister?.msg}</p>
                                     )}
                                 </div>
+                                <div className="col l-12 m-12 c-12">
+                                    {statusRegister?.status === true && (
+                                        <p className={cx('success')}>{statusRegister?.msg}</p>
+                                    )}
+                                </div>
                                 <div className={cx('form-group', 'col', 'l-12', 'm-12', 'c-12')}>
                                     <label htmlFor="img-1">Ảnh 1</label>
                                     <input name="img-1" id="img-1" type="file" onChange={handleImage01} />
@@ -925,6 +949,11 @@ function SignUpOwner() {
                                 <div className="col l-12 m-12 c-12">
                                     {statusRegister?.status === false && (
                                         <p className={cx('warning')}>{statusRegister?.msg}</p>
+                                    )}
+                                </div>
+                                <div className="col l-12 m-12 c-12">
+                                    {statusRegister?.status === true && (
+                                        <p className={cx('success')}>{statusRegister?.msg}</p>
                                     )}
                                 </div>
                                 <div className={cx('form-group', 'col', 'l-6', 'm-6', 'c-12')}>
