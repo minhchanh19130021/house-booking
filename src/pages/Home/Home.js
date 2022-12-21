@@ -91,7 +91,7 @@ function Home() {
                 <div className={cx('row')}>
                     <div className={cx('col', 'l-4', 'm-6', 'c-12')}>
                         <CardBest
-                            link={'/ListHouse/city/Ho%20Chi%20Minh/1'}
+                            link={'/ListHouse/location/Ho%20Chi%20Minh/1'}
                             bg="https://storage.googleapis.com/digital-platform/hinh_anh_landmark_81_cap_nhat_thong_tin_moi_nhat_tu_cdt_so_2_b2be622cf8/hinh_anh_landmark_81_cap_nhat_thong_tin_moi_nhat_tu_cdt_so_2_b2be622cf8.jpg"
                             title="Hồ Chí Minh"
                             desc="Thành phố Hồ Chí Minh - còn được gọi là Sài Gòn - là thành phố lớn nhất Việt Nam nằm bên bờ sông Sài Gòn. Sân bay Tân Sơn Nhất chỉ cách trung tâm thành phố khoảng 15 phút đi bằng taxi khách sạn gần sân bay Tân Sơn Nhất thường phục vụ khách là doanh nhân, còn khách du lịch thì sẽ tìm một địa điểm phù hợp cho việc tham quan của mình."
@@ -99,7 +99,7 @@ function Home() {
                     </div>
                     <div className={cx('col', 'l-4', 'm-6', 'c-12')}>
                         <CardBest
-                            link={'/ListHouse/city/Ha%20Noi/1'}
+                            link={'/ListHouse/location/Ha%20Noi/1'}
                             bg="https://dulichkhampha24.com/wp-content/uploads/2019/09/kinh-nghiem-du-lich-Ha-Noi-1.jpg"
                             title="Hà Nội"
                             desc="Hà Nội là một trong những thành phố thanh lịch nhất Đông Nam Á, được kết hợp hài hòa giữa nét truyền thống và sự hiện đại. Những quán cà phê ở đây mang đôi chút hình dáng của Paris; các loại bia và bia hơi nội địa được bán ở khắp mọi nơi từ các quầy bán hàng rong hay trong các nhà hàng cao cấp, còn xe máy thì như một mê cung xuyên khắp các con phố cổ"
@@ -107,7 +107,7 @@ function Home() {
                     </div>
                     <div className={cx('col', 'l-4', 'm-6', 'c-12')}>
                         <CardBest
-                            link={'/ListHouse/city/Da%20Lat/1'}
+                            link={'/ListHouse/location/Da%20Lat/1'}
                             bg="https://a.cdn-hotels.com/gdcs/production154/d1245/0a3c326f-cedf-4cf9-ada2-71f7517d0a09.jpg?impolicy=fcrop&w=800&h=533&q=medium"
                             title="Đà Lạt"
                             desc="Nhiệt độ trung bình 18—21°C, nhiệt độ cao nhất chưa bao giờ quá 30°C và thấp nhất không dưới 5°C. Đà Lạt vẫn là một thành phố du lịch được yêu thích nhất ngày nay, có thể đi bằng xe buýt từ Nha Trang hoặc TP Hồ Chí Minh tới, mất khoảng năm tới bảy tiếng đồng hồ."
@@ -115,7 +115,7 @@ function Home() {
                     </div>
                     <div className={cx('col', 'l-4', 'm-6', 'c-12')}>
                         <CardBest
-                            link={'/ListHouse/city/Phu%20Quoc/1'}
+                            link={'/ListHouse/location/Phu%20Quoc/1'}
                             bg="http://xaviahotel.com/vnt_upload/news/11_2017/nha-trang_1.jpg"
                             title="Phú Quốc"
                             desc="Hòn đảo ngày càng thu hút được du khách quốc tế, nhưng vẫn giữ lại được phong cảnh độc đáo của vùng nông thôn Việt Nam. Ngày nay những bãi biển đẹp nhất đã có các khu nghỉ dưỡng cao cấp được xây dựng, du khách có thể thuê xe máy dễ dàng để tìm một bãi biển hoang vắng và xem mặt trời lặn trên Vịnh Thái Lan."
@@ -123,7 +123,7 @@ function Home() {
                     </div>
                     <div className={cx('col', 'l-8', 'm-12', 'c-12')}>
                         <CardBest
-                            link={'/ListHouse/city/Nha%20Trang/1'}
+                            link={'/ListHouse/location/Nha%20Trang/1'}
                             bg="https://vietnam.travel/sites/default/files/2021-05/Nha%20Trang%20Travel%20Guide%20Vietnam%20Tourism.jpg"
                             title="Nha Trang"
                             desc="Nha Trang không chỉ đơn thuần là nơi nghỉ mát mà nó đã trở thành một địa điểm du lịch nổi tiếng làm đẹp cho ngành du lịch Việt Nam. Với những bãi biển cát trắng, di tích cổ và cảnh đêm êm đềm, đây là một thành phố ven biển với các lựa chọn phong phú phù hợp với tất cả du khách. Hơn thế nữa, khách sạn ở Nha Trang rất đa dạng và giá cả lại rất phải chăng."

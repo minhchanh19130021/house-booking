@@ -15,7 +15,7 @@ function Pagination(props) {
                     href={
                         Number(props.currentPagination) - 1 < 1
                             ? ''
-                            : `${Number(props.currentPagination) - 1}?${props.queryString}`
+                            : `${Number(props.currentPagination) - 1}${props.queryString}`
                     }
                     className={cx('pagination__button-prev', 'pagination__button')}
                 >
@@ -24,21 +24,25 @@ function Pagination(props) {
 
                 {Number(props.currentPagination) - 1 < 1 ? null : (
                     <NavLink
-                        to={`/ListHouse/city/Phu%20Quoc/${Number(props.currentPagination) - 1}?${props.queryString}`}
+                        to={`/ListHouse/location/Phu%20Quoc/${Number(props.currentPagination) - 1}?${
+                            props.queryString
+                        }`}
                         className={cx('pagination__button')}
                     >
                         {Number(props.currentPagination) - 1}
                     </NavLink>
                 )}
                 <NavLink
-                    to={`/ListHouse/city/Phu%20Quoc/${Number(props.currentPagination)}?${props.queryString}`}
+                    to={`/ListHouse/location/Phu%20Quoc/${Number(props.currentPagination)}?${props.queryString}`}
                     className={cx('pagination__button', 'active')}
                 >
                     {props.currentPagination}
                 </NavLink>
                 {Number(props.currentPagination) + 1 > props.totalPagination ? null : (
                     <NavLink
-                        to={`/ListHouse/city/Phu%20Quoc/${Number(props.currentPagination) + 1}?${props.queryString}`}
+                        to={`/ListHouse/location/Phu%20Quoc/${Number(props.currentPagination) + 1}?${
+                            props.queryString
+                        }`}
                         className={cx('pagination__button')}
                     >
                         {Number(props.currentPagination) + 1}

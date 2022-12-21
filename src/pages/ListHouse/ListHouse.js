@@ -51,6 +51,7 @@ function ListHouse() {
                     console.log(response);
                     setListHouse(response.data);
                     setTotalPagination(response.pagination);
+                    setFetch(true);
                 })
                 .catch((err) => {
                     console.log(err);
