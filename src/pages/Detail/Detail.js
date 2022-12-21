@@ -19,6 +19,7 @@ import { storage } from '~/config/firebase';
 import ListHouse from '../ListHouse';
 import HostManage from '../ProfileHost/HostManage';
 import { useDispatch, useSelector } from 'react-redux';
+import { faJpy } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 
@@ -29,7 +30,7 @@ function Detail() {
     const [dataDetail, setDataDetail] = useState();
     const [dataReview, setDataReview] = useState();
     const [linkImg, setLinkImg] = useState([]);
-    const [listOrderId, setListOrderId] = useState([]);
+    const [historyBooking, setHistoryBooking] = useState([]);
     const [userInfor, setUserInfor] = useState([]);
     const imageNotFound =
         'https://preview.redd.it/zcgs03lgoy351.png?width=288&format=png&auto=webp&s=d9bf4b46713d7fdbf11b82a8e364ceee79724a9c';
@@ -107,6 +108,8 @@ function Detail() {
             .then()
             .catch((err) => console.log(err));
     }
+   
+
 
     useEffect(() => {
         fetch(`http://localhost:8080/api/v1/orderIdByHomeId`, {
@@ -125,6 +128,7 @@ function Detail() {
             })
             .catch((err) => console.log(err));
     }, []);
+
 
     useEffect(() => {
         if (user?._id) {
@@ -150,8 +154,8 @@ function Detail() {
 
     return (
         <div className={cx('wrapper', 'grid', 'wide')}>
-            <div className={cx('row', 'header')}>
-                <TitleHeader dataFromParent={dataDetail} /> {listOrderId.length} {userInfor.bonus_point}
+            <div className={cx('row', 'header')}> 
+                <TitleHeader dataFromParent={dataDetail} /> {dataDetail?._id}
                 <div className={cx('action')}>
                     <Button
                         leftIcon={
@@ -169,7 +173,7 @@ function Detail() {
                             </svg>
                         }
                     >
-                        Chia sẻ
+                        Chia sẻ 
                     </Button>
                     <Button
                         leftIcon={
@@ -259,7 +263,7 @@ function Detail() {
 
                             <div className="col l-6 m-12 c-12">
                                 <HighLightItem
-                                    title={`Nhận phòng ${dataDetail?.detail[0]?.check_in}`}
+                                    title={`Nhận phòng ${dataDetail?.detail[0]?.check_in}`} 
                                     // desc="Bạn có thể gặp nhân viên trực cửa để nhận phòng."
                                     svg={
                                         <svg

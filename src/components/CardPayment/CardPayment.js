@@ -19,7 +19,7 @@ function CardPayment(props) {
     const { dispatch } = useContext(SearchContext);
     const location = useLocation();
     const id = location.pathname.split('/')[2];
-    const { home, dates, options, payPoint } = useContext(SearchContext);
+    const { home, dates, options, payPoint, bonusPoint } = useContext(SearchContext);
     const [slideNumber, setSlideNumber] = useState(0);
     const [visible, setVisible] = useState(0);
     const [methodPay, setMethodPay] = useState('PAYPAL');

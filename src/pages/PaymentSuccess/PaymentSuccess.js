@@ -10,7 +10,9 @@ import { date } from 'yup';
 const cx = classNames.bind(styles);
 function PaymentSuccess() {
     const user = useSelector((state) => state.authentication.login.currentUser);
+    
     const { home, dates, options, payPoint, bonusPoint } = useContext(SearchContext);
+    
     const [userInfor, setUserInfor] = useState([]);
     const [isGoToCheckout, setIsGoToCheckOut] = useState(false);
     const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/` + home);
@@ -68,78 +70,82 @@ function PaymentSuccess() {
         }
     }, []);
 
-    (async () => {
-        await fetch('http://localhost:8080/api/v1/newBooking', {
-            method: 'POST',
-            body: JSON.stringify({
-                hid: home,
-                uid: uid,
-                cartId: cartId,
-                total_price: total(),
-                payment_method: 'PayPal',
-                checkin: dates[0].startDate,
-                checkout: dates[0].endDate,
-                number_visitor: {
-                    adults: options.adult,
-                    child: options.children,
-                    baby: options.baby,
-                    pet: options.pet,
+ if(bonusPoint == 1){
+    
+        (async () => {
+            await fetch('http://localhost:8080/api/v1/newBooking', {
+                method: 'POST',
+                body: JSON.stringify({
+                    hid: home,
+                    uid: uid,
+                    total_price: total(),
+                    payment_method: 'PayPal',
+                    checkin: (new Date()).setDate(dates[0].startDate.getDate()+1),
+                    checkout:  (new Date()).setDate(dates[0].endDate.getDate()+1),
+                    number_visitor: {
+                        adults: options.adult,
+                        child: options.children,
+                        baby: options.baby,
+                        pet: options.pet,
+                    },
+                    voucher: listVoucher,
+                    price: data.price,
+                }),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
                 },
-                voucher: listVoucher,
-                price: data.price,
-            }),
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        }).catch((err) => {
-            console.log(err);
-        });
-    })();
-
-    (async () => {
-        if (payPoint > 0) {
-            await fetch(`http://localhost:8080/api/v1/user/updateBonusPoint`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    _id: user._id,
-                    bonus_point: 0,
-                }),
-            })
-                .then((response) => response.json())
-                .then((response) => {
-                    if (response.success == true) {
-                        console.log('Thay đổi thành công');
-                    } else {
-                        console.log('Thay đổi không thành công');
-                    }
+            }).catch((err) => {
+                console.log(err);
+            });
+    
+        })();
+    
+        (async () => {
+            if (payPoint > 0) {
+                await fetch(`http://localhost:8080/api/v1/user/updateBonusPoint`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        _id: user._id,
+                        bonus_point: 0,
+                    }),
                 })
-                .catch((err) => {
-                    console.log(err);
-                });
-        } else {
-            await fetch(`http://localhost:8080/api/v1/user/updateBonusPoint`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    _id: user._id,
-                    bonus_point: Math.floor(total() / 100000) + Number.parseInt(bonusPoint),
-                }),
-            })
-                .then((response) => response.json())
-                .then((response) => {
-                    if (response.success == true) {
-                        console.log('Thay đổi thành công1');
-                    } else {
-                        console.log('Thay đổi không thành công1');
-                    }
+                    .then((response) => response.json())
+                    .then((response) => {
+                        if (response.success == true) {
+                            console.log('Thay đổi thành công');
+                        } else {
+                            console.log('Thay đổi không thành công');
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            } else {
+                await fetch(`http://localhost:8080/api/v1/user/updateBonusPoint`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        _id: user._id,
+                        bonus_point:  Math.floor(total() / 100000)+Number.parseInt(userInfor.bonus_point),
+                    }),
                 })
-                .catch((err) => {
-                    console.log(err);
-                });
-        }
-    })();
+                    .then((response) => response.json())
+                    .then((response) => {
+                        if (response.success == true) {
+                            console.log('Thay đổi thành công1');
+                        } else {
+                            console.log('Thay đổi không thành công1');
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
+        })();
+        localStorage.setItem('bonusPoint', 0);
 
+    }
     const creatDate = new Date().toUTCString();
 
     return (
@@ -331,7 +337,7 @@ function PaymentSuccess() {
                                                     margin: 0,
                                                 }}
                                             >
-                                                Thanh toán thành công!
+                                                Thanh toán thành công! 
                                             </h2>
                                         </td>
                                     </tr>
