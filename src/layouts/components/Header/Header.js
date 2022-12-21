@@ -171,7 +171,9 @@ function Header() {
                             <p className={cx('username')}>Xin chào, {user?.username}</p>
                             <div className={cx('menu-user')}>
                                 <li className={cx('menu-item')}>
-                                    <NavLink to="/personal-detail">Trang cá nhân</NavLink>
+                                    <NavLink to={user?.type === 'host' ? '/statistical' : '/personal-detail'}>
+                                        Trang cá nhân
+                                    </NavLink>
                                 </li>
                                 <li className={cx('menu-item')} onClick={handleLogout}>
                                     Đăng xuất

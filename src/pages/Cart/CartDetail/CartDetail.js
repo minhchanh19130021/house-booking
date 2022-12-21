@@ -27,8 +27,8 @@ function Cart(props) {
     const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
     const checkIn = new Date(data?.check_in);
     const checkout = new Date(data?.checkout);
-    checkIn.setDate(checkIn.getDate() - 1);
-    checkout.setDate(checkout.getDate() - 1);
+    checkIn.setDate(checkIn.getDate() + 1);
+    checkout.setDate(checkout.getDate() + 1);
     const countDays = Math.round(Math.abs((checkIn - checkout) / oneDay));
     const days = countDays ? countDays : 0;
     const [choose, setChoose] = useState(false);
@@ -64,13 +64,14 @@ function Cart(props) {
     tomorrow.setDate(tomorrow.getDate() + 1);
     const [dates, setDates] = useState([
         {
-            startDate: new Date(),
-            endDate: tomorrow,
+            startDate: checkIn,
+            endDate: checkout,
             key: 'selection',
         },
     ]);
     const folder_image = props?.folder_image ? props?.folder_image : '';
     const avatar = props?.avatar ? props?.avatar : '';
+    const cartId = props?.cartId;
     const bonusPoint = user?.bonus_point;
 
     useEffect(() => {
@@ -90,9 +91,10 @@ function Cart(props) {
     function handleCheckout(e) {
         e.preventDefault();
         if (!isActive) {
+            console.log(cartId);
             dispatch({
                 type: 'NEW_SEARCH',
-                payload: { home, dates, options, payPoint, bonusPoint, folder_image, avatar },
+                payload: { home, dates, options, payPoint, bonusPoint, folder_image, avatar, cartId },
             });
 
             navigate(
@@ -210,14 +212,16 @@ function Cart(props) {
                                     {`${data?.number_visitor?.adult} người lớn ${data?.number_visitor?.children} trẻ em ${data?.number_visitor?.baby} em bé ${data?.number_visitor?.pet} thú cưng`}
                                 </span>
                             </div>
-                            <p className={cx('date', isActive ? 'none-click' : null)}>{`${data?.check_in
+                            <p className={cx('date', isActive ? 'none-click' : null)}>{`${checkIn
+                                .toISOString()
                                 ?.substring(0, 10)
                                 ?.split('-')
                                 ?.reverse()
                                 ?.join('/')
                                 ?.replace('/', ' ngày ')
                                 ?.replace('/', ' tháng ')
-                                ?.replace('/', ' năm ')} - ${data?.checkout
+                                ?.replace('/', ' năm ')} - ${checkout
+                                .toISOString()
                                 ?.substring(0, 10)
                                 ?.split('-')
                                 ?.reverse()
@@ -237,7 +241,6 @@ function Cart(props) {
                         </div>
                         <div>
                             <p className={cx('price', isActive ? 'none-click' : null)}>
-                                {data?.home[0]?.price}
                                 {`${Array.from(data?.home[0]?.price ? JSON.stringify(price) : '')
                                     .reverse()
                                     .map((e, i) => (i % 3 === 0 && i !== 0 ? `${e}.` : e))

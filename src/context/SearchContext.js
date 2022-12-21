@@ -20,6 +20,7 @@ const INITIAL_STATE = {
     bonusPoint: localStorage.getItem('bonusPoint') || 0,
     folder_image: localStorage.getItem('folder_image') || '',
     avatar: localStorage.getItem('avatar') || '',
+    cartId: localStorage.getItem('cartId') || '',
 };
 
 export const SearchContext = createContext(INITIAL_STATE);
@@ -87,6 +88,7 @@ export const SearchContextProvider = ({ children }) => {
                 bonusPoint: state.bonusPoint,
                 folder_image: state.folder_image,
                 avatar: state.avatar,
+                cartId: state.cartId,
                 dispatch,
             }}
         >

@@ -259,12 +259,6 @@ function BookingForm(props) {
                             </label>
                             {visibleGuestInfo && (
                                 <motion.div animate={{}} className={cx('guest-info')}>
-                                    {warnVisiter && (
-                                        <p style={{ color: 'red' }}>
-                                            Giới hạn:{' '}
-                                            {`${props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children} Người lớn · ${props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby} Em bé  ·${props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet} Thú cưng`}
-                                        </p>
-                                    )}
                                     <div className={cx('guest-info__item')}>
                                         <div className={cx('guest-info__item-title')}>
                                             <p>Người lớn</p>
