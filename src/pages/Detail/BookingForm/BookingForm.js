@@ -250,12 +250,12 @@ function BookingForm(props) {
                                 <FontAwesomeIcon icon={faPerson} className="headerIcon" /> Khách
                             </label>
                             <label onClick={hanldeVisibleGuestInfo} style={{ fontSize: 14 }}>
-                            {`${options.adult+options.children} Người lớn · ${options.baby} Em bé  ·${options.pet} Thú cưng`}
+                            {`${options.adult+options.children} Khách · ${options.baby} Em bé  · ${options.pet} Thú cưng`}
                                 {/* {`${props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children} Người lớn · ${props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby} Em bé  ·${props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet} Thú cưng`} */}
                             </label>
                             {visibleGuestInfo && (
                                 <motion.div animate={{}} className={cx('guest-info')}>
-                                    {warnVisiter && (<p style={{color: "red"}}>Giới hạn: {`${props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children} Người lớn · ${props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby} Em bé  ·${props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet} Thú cưng`}</p>)}
+                                    
                                     <div className={cx('guest-info__item')}>
                                         <div className={cx('guest-info__item-title')}>
                                             <p>Người lớn</p>
