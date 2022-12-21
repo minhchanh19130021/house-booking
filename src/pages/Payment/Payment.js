@@ -8,17 +8,12 @@ const cx = classNames.bind(styles);
 function Payment() {
     return (
         <div>
-            <Title
-            title="Xác nhận và thanh toán"
-            to="/detail"
-            />         
+            <Title title="Xác nhận và thanh toán" to="/detail" />
             <div className={cx('_12nksyy')}>
-                <CardPayment/>
-                <CardSummaryPay/>
+                <CardPayment />
+                <CardSummaryPay />
             </div>
-            
         </div>
-        
     );
 }
 
