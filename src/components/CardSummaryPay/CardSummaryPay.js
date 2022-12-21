@@ -15,7 +15,7 @@ const cx = classNames.bind(styles);
 
 function CardSummaryPay(props) {
     const user = useSelector((state) => state.authentication.login.currentUser);
-    const { home, dates, options, bonusPoint } = useContext(SearchContext);
+    const { home, dates, options, bonusPoint, folder_image, avatar } = useContext(SearchContext);
     const location = useLocation();
     const id = location.pathname.split('/')[2];
     const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/` + home);
@@ -37,7 +37,7 @@ function CardSummaryPay(props) {
     //             console.log(err);
     //         });
     // }, []);
-   
+
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'VND',
@@ -52,22 +52,22 @@ function CardSummaryPay(props) {
 
     function totalPrice() {
         if (visiblePayByPoint) {
-            return data.price * days + 350000 + 100000 - pricePoint();
+            return data?.price * days + 350000 + 100000 - pricePoint();
         }
-        return data.price * days + 350000 + 100000;
+        return data?.price * days + 350000 + 100000;
     }
 
     const days = dayDifference(dates[0].endDate, dates[0].startDate);
 
     function priceStay() {
-        return data.price * days;
+        return data?.price * days;
     }
 
     const [linkImg, setLinkImg] = useState(
         'https://preview.redd.it/zcgs03lgoy351.png?width=288&format=png&auto=webp&s=d9bf4b46713d7fdbf11b82a8e364ceee79724a9c',
     );
     let getImageFromFirebase = (_id) => {
-        getDownloadURL(ref(storage, `house/${_id}/avatar.jpg`))
+        getDownloadURL(ref(storage, `house/${folder_image}/${avatar}`))
             .then((url) => {
                 setLinkImg(url);
             })
@@ -136,7 +136,7 @@ function CardSummaryPay(props) {
                                         <div>
                                             <div className={cx('_1fza94o')}>Phòng riêng tại nhà</div>
                                             <div id="LISTING_CARD-title" className={cx('_bp4bbx')}>
-                                                {data.name}
+                                                {data?.name}
                                             </div>
                                         </div>
                                         <div className={cx('_1l43ux5')}>
@@ -163,7 +163,7 @@ function CardSummaryPay(props) {
                                                             </svg>
                                                         </span>
                                                         <span className={cx('_2a6au1i')} aria-hidden="true">
-                                                            {data.rate}
+                                                            {data?.rate}
                                                         </span>
                                                         <span className={cx('_a7a5sx')} aria-hidden="true">
                                                             &nbsp;(1 đánh giá)
@@ -239,7 +239,7 @@ function CardSummaryPay(props) {
                                     role="img"
                                     aria-label="Đặt phòng của bạn được bảo vệ bởi AirCover"
                                 >
-                                     Đặt phòng của bạn được bảo vệ bởi &nbsp;
+                                    Đặt phòng của bạn được bảo vệ bởi &nbsp;
                                     <div className={cx('_1p752y2')}>
                                         <img
                                             className={cx('_hx27jd')}
@@ -284,7 +284,7 @@ function CardSummaryPay(props) {
                                                         <div className={cx('_10d7v0r')}>
                                                             <button type="button" className={cx('_101nvu7m')}>
                                                                 <div className={cx('_12hv04d')}>
-                                                                    {formatter.format(data.price)} x {days}
+                                                                    {formatter.format(data?.price)} x {days}
                                                                     &nbsp;đêm&nbsp;
                                                                 </div>
                                                             </button>

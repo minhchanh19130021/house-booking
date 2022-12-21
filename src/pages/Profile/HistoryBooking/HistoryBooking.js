@@ -44,7 +44,6 @@ function HistoryBooking() {
                     <div className={cx('list-history')}>
                         {history.map((e, i) => {
                             let number_visitor = e?.order_detail[0]?.number_visitor;
-                            console.log(e);
                             return (
                                 <HistoryItem
                                     uid={e?.user[0]?._id}

@@ -36,6 +36,7 @@ function ListHouse() {
                         setTotalPagination(response.pagination);
                         setFetch(true);
                     }
+                    console.log(response);
                 })
                 .catch((err) => {
                     console.log(err);

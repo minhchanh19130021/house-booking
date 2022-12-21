@@ -69,6 +69,8 @@ function Detail() {
                 setDataDetail(response.data[0]);
                 let images = response.data[0]?.detail[0] ? response.data[0]?.detail[0]?.image : [];
                 images?.unshift(response.data[0]?.avatar);
+                images = [...new Set(images)];
+                console.log(images);
                 getImageFromFirebase(response.data[0]?.folder_image, images, 0);
                 increaseViewNumber(response.data[0]?._id);
             })
@@ -118,8 +120,8 @@ function Detail() {
         })
             .then((response) => response.json())
             .then((response) => {
-                setListOrderId(response.data)
-                console.log("hau " + response.length)
+                setListOrderId(response.data);
+                console.log('hau ' + response.length);
             })
             .catch((err) => console.log(err));
     }, []);
@@ -138,7 +140,6 @@ function Detail() {
                 .then((response) => {
                     if (response.success) {
                         setUserInfor(response.data[0]);
-                       
                     }
                 })
                 .catch((err) => {
@@ -338,7 +339,7 @@ function Detail() {
                     </div>
                 </div>
                 <div className={cx('col', 'l-4', 'm-12', 'c-12')}>
-                    <BookingForm dataFromParent={dataDetail} userInfor={userInfor}/>
+                    <BookingForm dataFromParent={dataDetail} userInfor={userInfor} />
                 </div>
             </div>
 

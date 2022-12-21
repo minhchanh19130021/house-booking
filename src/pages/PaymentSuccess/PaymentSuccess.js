@@ -9,7 +9,9 @@ import { date } from 'yup';
 const cx = classNames.bind(styles);
 function PaymentSuccess() {
     const user = useSelector((state) => state.authentication.login.currentUser);
-    const { home, dates, options, payPoint, bonusPoint } = useContext(SearchContext);
+    const { home, dates, options, payPoint, bonusPoint, cartId, avatar } = useContext(SearchContext);
+    console.log(cartId);
+    console.log(avatar);
     const [userInfor, setUserInfor] = useState([]);
     const [isGoToCheckout, setIsGoToCheckOut] = useState(false);
     const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/` + home);
@@ -76,6 +78,7 @@ function PaymentSuccess() {
                 payment_method: 'PayPal',
                 checkin: dates[0].startDate,
                 checkout: dates[0].endDate,
+                cartId: cartId,
                 number_visitor: {
                     adults: options.adult,
                     child: options.children,
@@ -91,7 +94,6 @@ function PaymentSuccess() {
         }).catch((err) => {
             console.log(err);
         });
-
     })();
 
     (async () => {
@@ -121,7 +123,7 @@ function PaymentSuccess() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     _id: user._id,
-                    bonus_point:  Math.floor(total() / 100000)+Number.parseInt(bonusPoint),
+                    bonus_point: Math.floor(total() / 100000) + Number.parseInt(bonusPoint),
                 }),
             })
                 .then((response) => response.json())
@@ -607,7 +609,8 @@ function PaymentSuccess() {
                                                             >
                                                                 <p style={{ fontWeight: 800 }}>Thông tin khách hàng</p>
                                                                 <p>
-                                                                    {userInfor.firstname} {userInfor.lastname} {userInfor.bonus_point}
+                                                                    {userInfor.firstname} {userInfor.lastname}{' '}
+                                                                    {userInfor.bonus_point}
                                                                     <br />
                                                                     {address.specifically}
                                                                 </p>
