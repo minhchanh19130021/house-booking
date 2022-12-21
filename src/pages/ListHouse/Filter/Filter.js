@@ -98,7 +98,7 @@ function Filter(props) {
         title: tiêu đề 
         url: đường dẫn mới của trang web
         */
-        window.history.replaceState(null, null, `/ListHouse/city/Phu%20Quoc/1?${queryString}`);
+        window.history.replaceState(null, null, `/ListHouse/location/Phu%20Quoc/1?${queryString}`);
         props.setQueryString(queryString);
         fetch(`http://localhost:8080/api/v2/filter?pagination=${props.currentPagination}`, {
             method: 'POST',

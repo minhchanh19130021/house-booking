@@ -7,7 +7,7 @@ const routes = {
 
     signin: '/signin',
     forgot_password: '/forgot-password',
-    listHouse: '/listHouse/city/:slug/:currentPagination',
+    listHouse: '/listHouse/location/:slug/:currentPagination',
     new_password: '/new-password/:id/:token',
     payment:
         '/payment/:id&numberOfAdults=:nad&numberOfChildren=:ncd&numberOfInfants=:nif&checkin=:dayin&checkout=:dayout',

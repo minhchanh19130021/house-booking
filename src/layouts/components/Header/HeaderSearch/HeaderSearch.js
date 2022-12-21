@@ -16,7 +16,7 @@ function HeaderSearch(props) {
         },
         onSubmit: (values) => {
             // navigate(`/search/location=${values.txtSearch}`);
-            navigate(`/ListHouse/city/${values?.txtSearch ? values?.txtSearch : 'null'}/1`);
+            navigate(`/ListHouse/location/${values?.txtSearch ? values?.txtSearch : 'null'}/1`);
         },
     });
 
