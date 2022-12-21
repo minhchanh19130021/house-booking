@@ -93,7 +93,7 @@ function BookingForm(props) {
     const idh = props.dataFromParent?._id;
 
     const handleSearch = () => {
-        var bonusPoint = props.userInfor?.bonus_point
+        var bonusPoint = props.userInfor?.bonus_point;
         var home = props.dataFromParent?._id;
         var folder_image = props.dataFromParent?.folder_image;
         var avatar = props.dataFromParent?.avatar;
@@ -138,9 +138,6 @@ function BookingForm(props) {
         cartDetailToAdd.checkout = dates[0].endDate;
         cartDetailToAdd.uid = user?._id;
         cartDetailToAdd.is_booked = false;
-       
-           
-      
 
         fetch(`http://localhost:8080/api/v2/cart/put`, {
             method: 'PUT',
@@ -255,7 +252,7 @@ function BookingForm(props) {
                                 <FontAwesomeIcon icon={faPerson} className="headerIcon" /> Khách
                             </label>
                             <label onClick={hanldeVisibleGuestInfo} style={{ fontSize: 14 }}>
-                                {`${options.adult + options.children} Người lớn · ${options.baby} Em bé  ·${
+                                {`${options.adult + options.children} Khách · ${options.baby} Em bé  · ${
                                     options.pet
                                 } Thú cưng`}
                                 {/* {`${props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children} Người lớn · ${props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby} Em bé  ·${props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet} Thú cưng`} */}
