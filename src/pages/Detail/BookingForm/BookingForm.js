@@ -81,12 +81,19 @@ function BookingForm(props) {
     const idh = props.dataFromParent?._id;
 
     const handleSearch = () => {
+
         if(!checkDate){
         var payPoint = props.userInfor?.bonus_point;
         var home = props.dataFromParent?._id;
         var bonusPoint = 1; 
         // localStorage.setItem('bonusPoint', bonusPoint);
         dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, payPoint, bonusPoint} });
+        var bonusPoint = props.userInfor?.bonus_point;
+        var home = props.dataFromParent?._id;
+        var folder_image = props.dataFromParent?.folder_image;
+        var avatar = props.dataFromParent?.avatar;
+        dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, payPoint, bonusPoint, folder_image, avatar } });
+
         navigate(
             '/payment/' +
                 idh +

@@ -6,9 +6,11 @@ import CardHouse from '~/components/CardHouse';
 import { useEffect, useState } from 'react';
 import CardNew from '~/components/CardNew';
 import SearchHome from './SearchHome';
+import Slider from 'react-slick';
+
 const cx = classNames.bind(styles);
 
-function Home() {
+function Home(props) {
     const [visible, setVisible] = useState(1);
     const [listNewestHome, setListNewestHome] = useState([]);
     const [listBestSellingHome, setListBestSellingHome] = useState([]);
@@ -71,12 +73,66 @@ function Home() {
                 console.log(err);
             });
     }, []);
+    const settings = {
+        dots: true,
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        speed: 5000,
+        cssEase: 'linear',
+    };
 
     return (
+        // Image by <a href="">Freepik</a>
         <div className={cx('wrapper')}>
             <div className={cx('bg-banner', 'grid')}>
                 <div className={cx('overlay')}></div>
-                <img src="https://townhub.kwst.net/images/bg/hero/1.jpg" alt="home-banner" className={cx('grid')} />
+                <div className={cx('', 'grid')}>
+                    <Slider {...settings}>
+                        <div>
+                            <img
+                                src="https://img.freepik.com/free-photo/travel-concept-with-landmarks_23-2149153256.jpg?w=1480&t=st=1671632076~exp=1671632676~hmac=d9fce10a933328e2812701f5038c514622a2d96ba94602e8a413c457ef6b6193"
+                                alt="img-house"
+                                className={cx('thumbnail-slide')}
+                            />
+                        </div>
+                        <div>
+                            <img
+                                src="https://img.freepik.com/free-photo/full-shot-travel-concept-with-landmarks_23-2149153258.jpg?3&w=1480&t=st=1671631837~exp=1671632437~hmac=f693badc28d86805f2f9541cadaa2edf48a38ccd4b2332c48ee9da7f5840a517"
+                                className={cx('thumbnail-slide')}
+                                alt="img-house"
+                            />
+                        </div>
+                        <div>
+                            <img
+                                src="https://img.freepik.com/free-photo/full-shot-family-wearing-face-masks_23-2149272151.jpg?w=1380&t=st=1671632877~exp=1671633477~hmac=d417a6b07ddf760c2aeba8aecc55b25b6fd774dfc2ac6221f0d868bfef6062f4"
+                                className={cx('thumbnail-slide')}
+                                alt="img-house"
+                            />
+                        </div>
+                        <div>
+                            <img
+                                src="https://img.freepik.com/free-photo/safari-casual-hipster-camping-off-morning_1253-1036.jpg?w=1380&t=st=1671632297~exp=1671632897~hmac=13c2829cbd78437a1cc032bc2de4cef1193e9d9090be599e02ee5bcd7dddf47b"
+                                className={cx('thumbnail-slide')}
+                                alt="img-house"
+                            />
+                        </div>
+                        <div>
+                            <img
+                                src="https://img.freepik.com/free-photo/beautiful-girl-red-bikini-boat-koh-phi-phi-island-thailand_335224-1384.jpg?w=1380&t=st=1671632312~exp=1671632912~hmac=c95157856588409a1d267a235ce0b985759599d9405f17b72443ccb7d92c11f8"
+                                className={cx('thumbnail-slide')}
+                                alt="img-house"
+                            />
+                        </div>
+                    </Slider>
+                </div>
+                {/* <img
+                    src="https://img.freepik.com/free-photo/travel-concept-with-landmarks_23-2149153256.jpg?w=1480&t=st=1671632076~exp=1671632676~hmac=d9fce10a933328e2812701f5038c514622a2d96ba94602e8a413c457ef6b6193"
+                    alt="home-banner"
+                    className={cx('grid')}
+                /> */}
+
                 <SearchHome />
             </div>
             <div className={cx('location-best', 'grid', 'wide')}>
@@ -91,7 +147,7 @@ function Home() {
                 <div className={cx('row')}>
                     <div className={cx('col', 'l-4', 'm-6', 'c-12')}>
                         <CardBest
-                            link={'/ListHouse/location/Ho%20Chi%20Minh/1'}
+                            link={'/ListHouse/location/Thành phố Hồ Chí Minh/1'}
                             bg="https://storage.googleapis.com/digital-platform/hinh_anh_landmark_81_cap_nhat_thong_tin_moi_nhat_tu_cdt_so_2_b2be622cf8/hinh_anh_landmark_81_cap_nhat_thong_tin_moi_nhat_tu_cdt_so_2_b2be622cf8.jpg"
                             title="Hồ Chí Minh"
                             desc="Thành phố Hồ Chí Minh - còn được gọi là Sài Gòn - là thành phố lớn nhất Việt Nam nằm bên bờ sông Sài Gòn. Sân bay Tân Sơn Nhất chỉ cách trung tâm thành phố khoảng 15 phút đi bằng taxi khách sạn gần sân bay Tân Sơn Nhất thường phục vụ khách là doanh nhân, còn khách du lịch thì sẽ tìm một địa điểm phù hợp cho việc tham quan của mình."
@@ -99,7 +155,7 @@ function Home() {
                     </div>
                     <div className={cx('col', 'l-4', 'm-6', 'c-12')}>
                         <CardBest
-                            link={'/ListHouse/location/Ha%20Noi/1'}
+                            link={'/ListHouse/location/Thành phố Hà Nội/1'}
                             bg="https://dulichkhampha24.com/wp-content/uploads/2019/09/kinh-nghiem-du-lich-Ha-Noi-1.jpg"
                             title="Hà Nội"
                             desc="Hà Nội là một trong những thành phố thanh lịch nhất Đông Nam Á, được kết hợp hài hòa giữa nét truyền thống và sự hiện đại. Những quán cà phê ở đây mang đôi chút hình dáng của Paris; các loại bia và bia hơi nội địa được bán ở khắp mọi nơi từ các quầy bán hàng rong hay trong các nhà hàng cao cấp, còn xe máy thì như một mê cung xuyên khắp các con phố cổ"
@@ -107,7 +163,7 @@ function Home() {
                     </div>
                     <div className={cx('col', 'l-4', 'm-6', 'c-12')}>
                         <CardBest
-                            link={'/ListHouse/location/Da%20Lat/1'}
+                            link={'/ListHouse/location/Tỉnh Lâm Đồng/1'}
                             bg="https://a.cdn-hotels.com/gdcs/production154/d1245/0a3c326f-cedf-4cf9-ada2-71f7517d0a09.jpg?impolicy=fcrop&w=800&h=533&q=medium"
                             title="Đà Lạt"
                             desc="Nhiệt độ trung bình 18—21°C, nhiệt độ cao nhất chưa bao giờ quá 30°C và thấp nhất không dưới 5°C. Đà Lạt vẫn là một thành phố du lịch được yêu thích nhất ngày nay, có thể đi bằng xe buýt từ Nha Trang hoặc TP Hồ Chí Minh tới, mất khoảng năm tới bảy tiếng đồng hồ."
@@ -123,35 +179,12 @@ function Home() {
                     </div>
                     <div className={cx('col', 'l-8', 'm-12', 'c-12')}>
                         <CardBest
-                            link={'/ListHouse/location/Nha%20Trang/1'}
+                            link={'/ListHouse/location/Tỉnh Khánh Hòa/1'}
                             bg="https://vietnam.travel/sites/default/files/2021-05/Nha%20Trang%20Travel%20Guide%20Vietnam%20Tourism.jpg"
                             title="Nha Trang"
                             desc="Nha Trang không chỉ đơn thuần là nơi nghỉ mát mà nó đã trở thành một địa điểm du lịch nổi tiếng làm đẹp cho ngành du lịch Việt Nam. Với những bãi biển cát trắng, di tích cổ và cảnh đêm êm đềm, đây là một thành phố ven biển với các lựa chọn phong phú phù hợp với tất cả du khách. Hơn thế nữa, khách sạn ở Nha Trang rất đa dạng và giá cả lại rất phải chăng."
                         />
                     </div>
-                </div>
-                <div className={cx('see-more')}>
-                    <Button
-                        primary
-                        rightIcon={
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="w-6 h-6"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                />
-                            </svg>
-                        }
-                    >
-                        Xem tất cả
-                    </Button>
                 </div>
             </div>
 

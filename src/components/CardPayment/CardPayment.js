@@ -58,7 +58,7 @@ function CardPayment(props) {
 
     //
 
-    const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/`+home);
+    const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/` + home);
 
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -72,28 +72,23 @@ function CardPayment(props) {
         return diffDays;
     }
 
-    console.log(dates[0].endDate);
     const days = dayDifference(dates[0].endDate, dates[0].startDate);
 
     function priceStay() {
-        var num = data.price * days * 0.00004;
+        var num = data?.price * days * 0.00004;
         return Number.parseFloat(num.toFixed(2));
     }
 
     function pricePoint() {
-        var num
+        var num;
         // var point = localStorage.getItem("payPoint");
-        if(payPoint > 0){
-            num = 1000 * payPoint  * 0.00004;
-
-        }
-        else {
+        if (payPoint > 0) {
+            num = 1000 * payPoint * 0.00004;
+        } else {
             num = 0;
         }
         return Number.parseFloat(num.toFixed(2));
     }
-
-
 
     function totalPrice() {
         var num = priceStay() + 350000 * 0.00004 + 100000 * 0.00004 - pricePoint();
@@ -102,7 +97,7 @@ function CardPayment(props) {
 
     const urlPay =
         'http://localhost:8080/pay/636ce065825a1cd1940641a2/' +
-        data.name +
+        data?.name +
         ' x ' +
         days +
         '/' +
@@ -112,7 +107,7 @@ function CardPayment(props) {
         '/' +
         pricePoint() +
         '/' +
-        data.introduce;
+        data?.introduce;
     // chỉnh sửa
 
     const [visibleModalDate, setvisibleModalDate] = useState();
@@ -267,7 +262,7 @@ function CardPayment(props) {
                                                                     elementtiming="LCP-target"
                                                                     className={cx('_14i3z6h')}
                                                                 >
-                                                                    Thanh toán bằng 
+                                                                    Thanh toán bằng
                                                                 </h2>
                                                             </div>
                                                             <div className={cx('_1nc6ity')}>
@@ -342,7 +337,7 @@ function CardPayment(props) {
                                                                     elementtiming="LCP-target"
                                                                     className={cx('_14i3z6h')}
                                                                 >
-                                                                    Thanh toán bằng 
+                                                                    Thanh toán bằng
                                                                 </h2>
                                                             </div>
                                                             <div>
@@ -885,7 +880,6 @@ function CardPayment(props) {
                                                 />
                                             </form>
                                         )}
-                                        
                                     </div>
                                 </div>
                             </div>
@@ -948,7 +942,9 @@ function CardPayment(props) {
                     </svg>
                 </ModalCustomer>
             )}
-            <a className={cx('_fu49hrz')} href='/payment/success'>paysuccess</a>
+            <a className={cx('_fu49hrz')} href="/payment/success">
+                paysuccess
+            </a>
         </div>
     );
 }

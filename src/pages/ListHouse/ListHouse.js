@@ -36,6 +36,7 @@ function ListHouse() {
                         setTotalPagination(response.pagination);
                         setFetch(true);
                     }
+                    console.log(response);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -133,6 +134,7 @@ function ListHouse() {
                             totalPagination={totalPagination}
                             currentPagination={currentPagination}
                             queryString={queryString}
+                            slug={slug}
                         ></Pagination>
                     ) : null}
                 </div>

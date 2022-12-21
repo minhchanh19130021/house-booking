@@ -6,6 +6,7 @@ import { SearchContext } from '../../context/SearchContext';
 import useFetch from '../../hooks/useFetch';
 import { format } from 'date-fns';
 import { date } from 'yup';
+
 const cx = classNames.bind(styles);
 function PaymentSuccess() {
     const user = useSelector((state) => state.authentication.login.currentUser);
@@ -19,6 +20,7 @@ function PaymentSuccess() {
     const { dispatch } = useContext(SearchContext);
     const [address, setAddress] = useState({});
     const [listVoucher, setListVoucher] = useState([]);
+    const cartId = useSelector((state) => state.cart.cart.cartId);
 
     const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
     function dayDifference(date1, date2) {
@@ -68,7 +70,7 @@ function PaymentSuccess() {
         }
     }, []);
 
-    if(bonusPoint == 1){
+ if(bonusPoint == 1){
     
         (async () => {
             await fetch('http://localhost:8080/api/v1/newBooking', {
@@ -144,8 +146,6 @@ function PaymentSuccess() {
         localStorage.setItem('bonusPoint', 0);
 
     }
-    
-
     const creatDate = new Date().toUTCString();
 
     return (
@@ -615,7 +615,8 @@ function PaymentSuccess() {
                                                             >
                                                                 <p style={{ fontWeight: 800 }}>Thông tin khách hàng</p>
                                                                 <p>
-                                                                    {userInfor.firstname} {userInfor.lastname} {userInfor.bonus_point}
+                                                                    {userInfor.firstname} {userInfor.lastname}{' '}
+                                                                    {userInfor.bonus_point}
                                                                     <br />
                                                                     {address.specifically}
                                                                 </p>
