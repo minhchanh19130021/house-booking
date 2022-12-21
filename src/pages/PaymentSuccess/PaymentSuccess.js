@@ -51,7 +51,7 @@ function PaymentSuccess() {
                     'Content-type': 'application/json; charset=UTF-8',
                     token: `Bearer ${user?.accessToken}`,
                 },
-                body: JSON.stringify({ uid: user._id }),
+                body: JSON.stringify({ uid: user?._id }),
             })
                 .then((response) => response.json())
                 .then((response) => {
@@ -606,7 +606,7 @@ function PaymentSuccess() {
                                                             >
                                                                 <p style={{ fontWeight: 800 }}>Thông tin khách hàng</p>
                                                                 <p>
-                                                                    {userInfor.firstname} {userInfor.lastname}
+                                                                    {userInfor.firstname} {userInfor.lastname} {userInfor.bonus_point}
                                                                     <br />
                                                                     {address.specifically}
                                                                 </p>

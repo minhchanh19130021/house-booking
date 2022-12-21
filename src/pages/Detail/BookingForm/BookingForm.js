@@ -28,22 +28,22 @@ function BookingForm(props) {
     const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/636ce065825a1cd1940641a2`);
 
     // const [home, setHome] = useState(props.dataFromParent?._id);
-    const [userInfor, setUserInfor] = useState([]);
+
     const [visiblePayByPoint, setVisiblePayByPoint] = useState(false);
-    useEffect(() => {
-        fetch(`http://localhost:8080/api/v1/user/get/638c56fe8693fbfdd908508b`, {
-            method: 'GET',
-        })
-            .then((response) => response.json())
-            .then((response) => {
-                if (response.success === true) {
-                    setUserInfor(response.data[0]);
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, []);
+    // useEffect(() => {
+    //     fetch(`http://localhost:8080/api/v1/user/get/638c56fe8693fbfdd908508b`, {
+    //         method: 'GET',
+    //     })
+    //         .then((response) => response.json())
+    //         .then((response) => {
+    //             if (response.success === true) {
+    //                 setUserInfor(response.data[0]);
+    //             }
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         });
+    // }, []);
     const [payPoint, setPayPoint] = useState(0);
     const [warnVisiter, setWarnVisiter] = useState(false);
 
@@ -93,7 +93,7 @@ function BookingForm(props) {
     const idh = props.dataFromParent?._id;
 
     const handleSearch = () => {
-        var bonusPoint = user?.bonus_point;
+        var bonusPoint = props.userInfor?.bonus_point
         var home = props.dataFromParent?._id;
         var folder_image = props.dataFromParent?.folder_image;
         var avatar = props.dataFromParent?.avatar;
@@ -138,6 +138,10 @@ function BookingForm(props) {
         cartDetailToAdd.checkout = dates[0].endDate;
         cartDetailToAdd.uid = user?._id;
         cartDetailToAdd.is_booked = false;
+       
+           
+      
+
         fetch(`http://localhost:8080/api/v2/cart/put`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json', token: `Bearer ${user?.accessToken}` },
@@ -182,7 +186,7 @@ function BookingForm(props) {
             <form className={cx('booking-form')}>
                 <div className={cx('booking-form__header')}>
                     <div className={cx('price')}>
-                        <p className={cx('old')}>{formatter.format(props.dataFromParent?.price)} / đêm </p>
+                        <p className={cx('old')}>{formatter.format(props.dataFromParent?.price)} / đêm</p>
                         <p className={cx('new')}>
                             {formatter.format(
                                 props.dataFromParent?.price -
