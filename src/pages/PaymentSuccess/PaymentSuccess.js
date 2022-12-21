@@ -13,7 +13,7 @@ function PaymentSuccess() {
     const [userInfor, setUserInfor] = useState([]);
     const [isGoToCheckout, setIsGoToCheckOut] = useState(false);
     const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/` + home);
-    const uid = user?.id;
+    const uid = user?._id;
     const { dispatch } = useContext(SearchContext);
     const [address, setAddress] = useState({});
     const [listVoucher, setListVoucher] = useState([]);
@@ -51,7 +51,7 @@ function PaymentSuccess() {
                     'Content-type': 'application/json; charset=UTF-8',
                     token: `Bearer ${user?.accessToken}`,
                 },
-                body: JSON.stringify({ uid: user._id }),
+                body: JSON.stringify({ uid: user?._id }),
             })
                 .then((response) => response.json())
                 .then((response) => {

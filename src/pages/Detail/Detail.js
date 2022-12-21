@@ -25,6 +25,7 @@ function Detail() {
     const [dataDetail, setDataDetail] = useState();
     const [dataReview, setDataReview] = useState();
     const [linkImg, setLinkImg] = useState([]);
+    const [listOrderId, setListOrderId] = useState([]);
     const imageNotFound =
         'https://preview.redd.it/zcgs03lgoy351.png?width=288&format=png&auto=webp&s=d9bf4b46713d7fdbf11b82a8e364ceee79724a9c';
 
@@ -85,6 +86,24 @@ function Detail() {
             })
             .catch((err) => console.log(err));
     }, [dataDetail?._id]);
+
+    useEffect(() => {
+        fetch(`http://localhost:8080/api/v1/orderIdByHomeId`, {
+            method: 'POST',
+            body: JSON.stringify({
+                idHome: dataDetail?._id,
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                setListOrderId(response.data)
+                console.log("hau " + response.length)
+            })
+            .catch((err) => console.log(err));
+    }, []);
     return (
         <div className={cx('wrapper', 'grid', 'wide')}>
             <div className={cx('row', 'header')}>
@@ -106,7 +125,7 @@ function Detail() {
                             </svg>
                         }
                     >
-                        Chia sẻ
+                        Chia sẻ 
                     </Button>
                     <Button
                         leftIcon={
@@ -133,7 +152,7 @@ function Detail() {
             <ImageHouse images={linkImg} notFoundImages={imageNotFound} />
             <div className={cx('info', 'row')}>
                 <div className={cx('col', 'l-8', 'm-12', 'c-12')}>
-                    <h3 className={cx('introduce')}>{dataDetail?.introduce}</h3>
+                    <h3 className={cx('introduce')}>{dataDetail?.introduce} ab{listOrderId.length}</h3>
                     <div className={cx('info-title')}>
                         <div className={cx('info-facilities')}>
                             <span>{dataDetail?.detail[0]?.maximum_number_visitor?.adult_children} người lớn</span>
