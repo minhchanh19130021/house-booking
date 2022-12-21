@@ -15,9 +15,10 @@ const cx = classNames.bind(styles);
 
 function CardSummaryPay() {
     const user = useSelector((state) => state.authentication.login.currentUser);
+    const { home, dates, options } = useContext(SearchContext);
     const location = useLocation();
     const id = location.pathname.split('/')[2];
-    const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/636ce065825a1cd1940641a2`);
+    const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/` + home);
     const [userInfor, setUserInfor] = useState([]);
     // const [payPoint, setPayPoint] = useState(0);
 
@@ -36,7 +37,7 @@ function CardSummaryPay() {
                 console.log(err);
             });
     }, []);
-    const { home, dates, options } = useContext(SearchContext);
+   
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'VND',
@@ -72,7 +73,7 @@ function CardSummaryPay() {
             })
             .catch((error) => {});
     };
-    getImageFromFirebase('636ce065825a1cd1940641a2');
+    getImageFromFirebase(home);
     const { dispatch } = useContext(SearchContext);
     if (!visiblePayByPoint) {
         localStorage.setItem('payPoint', 0);
@@ -80,7 +81,7 @@ function CardSummaryPay() {
 
     const handleChange = () => {
         if (!visiblePayByPoint) {
-            var payPoint = userInfor.bonus_point;
+            var payPoint = user?.bonus_point;
             localStorage.setItem('payPoint', payPoint);
             dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, payPoint } });
         } else {
@@ -96,7 +97,7 @@ function CardSummaryPay() {
     };
 
     function pricePoint() {
-        return userInfor.bonus_point * 1000;
+        return user?.bonus_point * 1000;
     }
 
     return (
@@ -238,7 +239,7 @@ function CardSummaryPay() {
                                     role="img"
                                     aria-label="Đặt phòng của bạn được bảo vệ bởi AirCover"
                                 >
-                                    Đặt phòng của bạn được bảo vệ bởi &nbsp;
+                                     Đặt phòng của bạn được bảo vệ bởi &nbsp;
                                     <div className={cx('_1p752y2')}>
                                         <img
                                             className={cx('_hx27jd')}
@@ -347,10 +348,10 @@ function CardSummaryPay() {
                                                 )}
                                                 <div className={cx('_jbgt15')}></div>
 
-                                                {userInfor?.bonus_point > 0 && (
+                                                {user?.bonus_point > 0 && (
                                                     <div className={cx('_dmn8hc')}>
                                                         <div className={cx('_1x5uynhu')}>
-                                                            Dùng {userInfor.bonus_point} điểm tích lũy
+                                                            Dùng {user?.bonus_point} điểm tích lũy
                                                             {/* <button
                                                                 id="MowebCurrencyPicker_trigger"
                                                                 aria-label="Loại tiền tệ hiện tại: (₫). Thay đổi loại tiền tệ thanh toán"
@@ -373,53 +374,6 @@ function CardSummaryPay() {
                                                     </div>
                                                 )}
                                                 <div className={cx('_dmn8hc')} style={{ marginTop: 10 }}>
-                                                    <div className={cx('_1x5uynhu')}>
-                                                        Tổng
-                                                        <button
-                                                            id="MowebCurrencyPicker_trigger"
-                                                            aria-label="Loại tiền tệ hiện tại: (₫). Thay đổi loại tiền tệ thanh toán"
-                                                            type="button"
-                                                            className={cx('_15rpys7s')}
-                                                        >
-                                                            (₫)
-                                                        </button>
-                                                    </div>
-                                                    <div data-testid="price-item-total" className={cx('_j1143kl')}>
-                                                        <span>{formatter.format(totalPrice())}</span>
-                                                    </div>
-                                                </div>
-                                                <div className={cx('_64pbdv')}>
-                                                    <div className={cx('_dmn8hc')}>
-                                                        <div className={cx('_10d7v0r')}>
-                                                            <button type="button" className={cx('_101nvu7m')}>
-                                                                <div className={cx('_12hv04d')}>Phí vệ sinh</div>
-                                                            </button>
-                                                        </div>
-                                                        <div
-                                                            data-testid="price-item-CLEANING_FEE"
-                                                            className={cx('_t65zql')}
-                                                        >
-                                                            <span> {formatter.format(100000)}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className={cx('_64pbdv')}>
-                                                    <div className={cx('_dmn8hc')}>
-                                                        <div className={cx('_10d7v0r')}>
-                                                            <button type="button" className={cx('_101nvu7m')}>
-                                                                <div className={cx('_12hv04d')}>Phí dịch vụ</div>
-                                                            </button>
-                                                        </div>
-                                                        <div
-                                                            data-testid="price-item-AIRBNB_GUEST_FEE"
-                                                            className={cx('_t65zql')}
-                                                        >
-                                                            <span> {formatter.format(350000)}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className={cx('_jbgt15')}></div>
-                                                <div className={cx('_dmn8hc')}>
                                                     <div className={cx('_1x5uynhu')}>
                                                         Tổng
                                                         <button
