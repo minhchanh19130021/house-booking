@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 const cx = classNames.bind(styles);
 
 function CardSummaryPay(props) {
+    const cartId = useSelector((state) => state.cart.cart.cartId);
     const user = useSelector((state) => state.authentication.login.currentUser);
     const { home, dates, options, bonusPoint, folder_image, avatar } = useContext(SearchContext);
     const location = useLocation();

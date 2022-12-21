@@ -134,6 +134,7 @@ function ListHouse() {
                             totalPagination={totalPagination}
                             currentPagination={currentPagination}
                             queryString={queryString}
+                            slug={slug}
                         ></Pagination>
                     ) : null}
                 </div>

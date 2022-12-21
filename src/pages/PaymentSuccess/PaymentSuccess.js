@@ -6,12 +6,11 @@ import { SearchContext } from '../../context/SearchContext';
 import useFetch from '../../hooks/useFetch';
 import { format } from 'date-fns';
 import { date } from 'yup';
+
 const cx = classNames.bind(styles);
 function PaymentSuccess() {
     const user = useSelector((state) => state.authentication.login.currentUser);
-    const { home, dates, options, payPoint, bonusPoint, cartId, avatar } = useContext(SearchContext);
-    console.log(cartId);
-    console.log(avatar);
+    const { home, dates, options, payPoint, bonusPoint } = useContext(SearchContext);
     const [userInfor, setUserInfor] = useState([]);
     const [isGoToCheckout, setIsGoToCheckOut] = useState(false);
     const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/` + home);
@@ -19,6 +18,7 @@ function PaymentSuccess() {
     const { dispatch } = useContext(SearchContext);
     const [address, setAddress] = useState({});
     const [listVoucher, setListVoucher] = useState([]);
+    const cartId = useSelector((state) => state.cart.cart.cartId);
 
     const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
     function dayDifference(date1, date2) {
@@ -74,11 +74,11 @@ function PaymentSuccess() {
             body: JSON.stringify({
                 hid: home,
                 uid: uid,
+                cartId: cartId,
                 total_price: total(),
                 payment_method: 'PayPal',
                 checkin: dates[0].startDate,
                 checkout: dates[0].endDate,
-                cartId: cartId,
                 number_visitor: {
                     adults: options.adult,
                     child: options.children,
