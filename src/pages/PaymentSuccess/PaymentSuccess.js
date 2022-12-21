@@ -14,9 +14,9 @@ function PaymentSuccess() {
     const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/636ce065825a1cd1940641a2`);
     const uid = user.id;
     const { dispatch } = useContext(SearchContext);
-    const { home, dates, options, payPoint, bonusPoint} = useContext(SearchContext);
+    const { home, dates, options, payPoint, bonusPoint } = useContext(SearchContext);
     const [listVoucher, setListVoucher] = useState([]);
-    
+
     const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
     function dayDifference(date1, date2) {
         const timeDiff = Math.abs(date2.getTime() - date1.getTime());
@@ -67,7 +67,6 @@ function PaymentSuccess() {
         }).catch((err) => {
             console.log(err);
         });
-
     })();
 
     (async () => {
@@ -98,7 +97,7 @@ function PaymentSuccess() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     _id: user._id,
-                    bonus_point:  Math.floor(total() / 100000)+Number.parseInt(bonusPoint),
+                    bonus_point: Math.floor(total() / 100000) + Number.parseInt(bonusPoint),
                 }),
             })
                 .then((response) => response.json())
@@ -306,7 +305,7 @@ function PaymentSuccess() {
                                                     margin: 0,
                                                 }}
                                             >
-                                                Thanh toán thành công! 
+                                                Thanh toán thành công!
                                             </h2>
                                         </td>
                                     </tr>
@@ -586,10 +585,10 @@ function PaymentSuccess() {
                                                                 <p>
                                                                     {user.lastname} {user.firstname}
                                                                     <br />
-                                                                    {user.address.specifically}
+                                                                    {user?.address?.specifically}
                                                                     <br />
-                                                                    {user.address.village} {user.address.district}{' '}
-                                                                    {user.address.city}
+                                                                    {user?.address?.village} {user?.address?.district}{' '}
+                                                                    {user?.address?.city}
                                                                 </p>
                                                             </td>
                                                         </tr>

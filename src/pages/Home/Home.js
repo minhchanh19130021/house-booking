@@ -13,8 +13,8 @@ function Home() {
     const [visible, setVisible] = useState(1);
     const [listNewestHome, setListNewestHome] = useState([]);
     const [listBestSellingHome, setListBestSellingHome] = useState([]);
-    const [listMostViewedHome, setListMostViewedHome] = useState([]); 
-    const [listSuggestionHome, setListSuggestionHome] = useState([]); 
+    const [listMostViewedHome, setListMostViewedHome] = useState([]);
+    const [listSuggestionHome, setListSuggestionHome] = useState([]);
     const toggleTab = (index) => {
         setVisible(index);
     };
@@ -59,7 +59,7 @@ function Home() {
             .catch((err) => {
                 console.log(err);
             });
-           // get suggestion 
+        // get suggestion
         fetch(`http://localhost:8080/api/v2/houses/suggestion `, {
             method: 'GET',
         })
@@ -223,13 +223,14 @@ function Home() {
                             >
                                 {listBestSellingHome.map((e, i) => {
                                     let home = e.homes.home_id[0];
+                                    console.log(home);
                                     return (
                                         <div key={i} className={cx('col', 'l-4', 'm-6', 'c-12')}>
                                             <CardHouse
                                                 folder_image={home?.folder_image}
                                                 avatar={home.avatar}
                                                 idHouse={home._id}
-                                                to={`/detail/${e.slug}`}
+                                                to={`/detail/${home.slug}`}
                                                 status={home.status ? 'open' : 'close'}
                                                 numberReview={home.number_review}
                                                 title={home.name}
@@ -247,7 +248,7 @@ function Home() {
                             </div>
                         </div>
                     )}
-                      {visible === 3 && (
+                    {visible === 3 && (
                         <div className={cx('tab-content', 'grid', 'wide')}>
                             <div
                                 className={cx({
@@ -259,22 +260,23 @@ function Home() {
                                 {listMostViewedHome.map((e, i) => {
                                     return (
                                         <div key={i} className={cx('col', 'l-4', 'm-6', 'c-12')}>
-                                        <CardHouse
-                                            avatar={e.avatar}
-                                            idHouse={e._id}
-                                            to={`/detail/${e.slug}`}
-                                            status={e.status ? 'open' : 'close'}
-                                            numberReview={e.number_review}
-                                            title={e.name}
-                                            location={`${e.address.city} ${e.address.district} ${e.address.number}`}
-                                            desc={e.introduce}
-                                            rate={e.rate}
-                                            facilities={e.outstanding_facilities.map((e, i) => {
-                                                return e;
-                                            })}
-                                            price={e.price}
-                                        />
-                                    </div>
+                                            <CardHouse
+                                                folder_image={e?.folder_image}
+                                                avatar={e.avatar}
+                                                idHouse={e._id}
+                                                to={`/detail/${e.slug}`}
+                                                status={e.status ? 'open' : 'close'}
+                                                numberReview={e.number_review}
+                                                title={e.name}
+                                                location={`${e.address.city} ${e.address.district} ${e.address.number}`}
+                                                desc={e.introduce}
+                                                rate={e.rate}
+                                                facilities={e.outstanding_facilities.map((e, i) => {
+                                                    return e;
+                                                })}
+                                                price={e.price}
+                                            />
+                                        </div>
                                     );
                                 })}
                             </div>
@@ -295,9 +297,10 @@ function Home() {
                                     return (
                                         <div key={i} className={cx('col', 'l-4', 'm-6', 'c-12')}>
                                             <CardHouse
+                                                folder_image={home?.folder_image}
                                                 avatar={home.avatar}
                                                 idHouse={home._id}
-                                                to={`/detail/${e.slug}`}
+                                                to={`/detail/${home.slug}`}
                                                 status={home.status ? 'open' : 'close'}
                                                 numberReview={home.number_review}
                                                 title={home.name}
@@ -312,7 +315,6 @@ function Home() {
                                         </div>
                                     );
                                 })}
-                            
 
                                 {/* <div className={cx('col', 'l-4', 'm-6', 'c-12')}>
                                     <CardHouse
