@@ -14,7 +14,7 @@ import { motion } from 'framer-motion';
 import ModalCustomer from '~/pages/Payment/ModalCustomer';
 const cx = classNames.bind(styles);
 
-function CardPayment() {
+function CardPayment(props) {
     const user = useSelector((state) => state.authentication.login.currentUser);
     const { dispatch } = useContext(SearchContext);
     const location = useLocation();
@@ -125,6 +125,8 @@ function CardPayment() {
     const handlevisibleModalCustomer = () => {
         setvisibleModalCusmtomer((visibleModalCustomer) => !visibleModalCustomer);
     };
+
+
 
     return (
         <div className={cx('_bdo76v7')}>
