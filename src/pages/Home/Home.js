@@ -6,9 +6,11 @@ import CardHouse from '~/components/CardHouse';
 import { useEffect, useState } from 'react';
 import CardNew from '~/components/CardNew';
 import SearchHome from './SearchHome';
+import Slider from 'react-slick';
+
 const cx = classNames.bind(styles);
 
-function Home() {
+function Home(props) {
     const [visible, setVisible] = useState(1);
     const [listNewestHome, setListNewestHome] = useState([]);
     const [listBestSellingHome, setListBestSellingHome] = useState([]);
@@ -71,12 +73,66 @@ function Home() {
                 console.log(err);
             });
     }, []);
+    const settings = {
+        dots: true,
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        speed: 5000,
+        cssEase: 'linear',
+    };
 
     return (
+        // Image by <a href="">Freepik</a>
         <div className={cx('wrapper')}>
             <div className={cx('bg-banner', 'grid')}>
                 <div className={cx('overlay')}></div>
-                <img src="https://townhub.kwst.net/images/bg/hero/1.jpg" alt="home-banner" className={cx('grid')} />
+                <div className={cx('', 'grid')}>
+                    <Slider {...settings}>
+                        <div>
+                            <img
+                                src="https://img.freepik.com/free-photo/travel-concept-with-landmarks_23-2149153256.jpg?w=1480&t=st=1671632076~exp=1671632676~hmac=d9fce10a933328e2812701f5038c514622a2d96ba94602e8a413c457ef6b6193"
+                                alt="img-house"
+                                className={cx('thumbnail-slide')}
+                            />
+                        </div>
+                        <div>
+                            <img
+                                src="https://img.freepik.com/free-photo/full-shot-travel-concept-with-landmarks_23-2149153258.jpg?3&w=1480&t=st=1671631837~exp=1671632437~hmac=f693badc28d86805f2f9541cadaa2edf48a38ccd4b2332c48ee9da7f5840a517"
+                                className={cx('thumbnail-slide')}
+                                alt="img-house"
+                            />
+                        </div>
+                        <div>
+                            <img
+                                src="https://img.freepik.com/free-photo/full-shot-family-wearing-face-masks_23-2149272151.jpg?w=1380&t=st=1671632877~exp=1671633477~hmac=d417a6b07ddf760c2aeba8aecc55b25b6fd774dfc2ac6221f0d868bfef6062f4"
+                                className={cx('thumbnail-slide')}
+                                alt="img-house"
+                            />
+                        </div>
+                        <div>
+                            <img
+                                src="https://img.freepik.com/free-photo/safari-casual-hipster-camping-off-morning_1253-1036.jpg?w=1380&t=st=1671632297~exp=1671632897~hmac=13c2829cbd78437a1cc032bc2de4cef1193e9d9090be599e02ee5bcd7dddf47b"
+                                className={cx('thumbnail-slide')}
+                                alt="img-house"
+                            />
+                        </div>
+                        <div>
+                            <img
+                                src="https://img.freepik.com/free-photo/beautiful-girl-red-bikini-boat-koh-phi-phi-island-thailand_335224-1384.jpg?w=1380&t=st=1671632312~exp=1671632912~hmac=c95157856588409a1d267a235ce0b985759599d9405f17b72443ccb7d92c11f8"
+                                className={cx('thumbnail-slide')}
+                                alt="img-house"
+                            />
+                        </div>
+                    </Slider>
+                </div>
+                {/* <img
+                    src="https://img.freepik.com/free-photo/travel-concept-with-landmarks_23-2149153256.jpg?w=1480&t=st=1671632076~exp=1671632676~hmac=d9fce10a933328e2812701f5038c514622a2d96ba94602e8a413c457ef6b6193"
+                    alt="home-banner"
+                    className={cx('grid')}
+                /> */}
+
                 <SearchHome />
             </div>
             <div className={cx('location-best', 'grid', 'wide')}>
