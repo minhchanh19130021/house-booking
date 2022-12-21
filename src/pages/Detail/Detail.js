@@ -31,7 +31,7 @@ function Detail() {
     const handleVisibleModal = () => {
         setVisibleModal((visibleModal) => !visibleModal);
     };
-
+    console.log(`${process.env.API_URL}`);
     function getImageFromFirebase(folder_image, images, indexImage) {
         getDownloadURL(ref(storage, `house/${folder_image}/${images[indexImage]}`))
             .then((url) => {

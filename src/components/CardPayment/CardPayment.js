@@ -58,7 +58,7 @@ function CardPayment() {
 
     //
 
-    const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/636ce065825a1cd1940641a2`);
+    const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/`+home);
 
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',

@@ -6,7 +6,6 @@ import CardHouse from '~/components/CardHouse';
 import { useEffect, useState } from 'react';
 import CardNew from '~/components/CardNew';
 import SearchHome from './SearchHome';
-
 const cx = classNames.bind(styles);
 
 function Home() {
@@ -18,7 +17,6 @@ function Home() {
     const toggleTab = (index) => {
         setVisible(index);
     };
-
     useEffect(() => {
         // get newest home
         fetch(`http://localhost:8080/api/v2/houses/newest`, {

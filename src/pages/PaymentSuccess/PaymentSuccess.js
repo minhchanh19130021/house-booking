@@ -9,12 +9,13 @@ import { date } from 'yup';
 const cx = classNames.bind(styles);
 function PaymentSuccess() {
     const user = useSelector((state) => state.authentication.login.currentUser);
-    const [listOrders, setListOrders] = useState([]);
-    const [isGoToCheckout, setIsGoToCheckOut] = useState(false);
-    const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/636ce065825a1cd1940641a2`);
-    const uid = user.id;
-    const { dispatch } = useContext(SearchContext);
     const { home, dates, options, payPoint, bonusPoint } = useContext(SearchContext);
+    const [userInfor, setUserInfor] = useState([]);
+    const [isGoToCheckout, setIsGoToCheckOut] = useState(false);
+    const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/` + home);
+    const uid = user?.id;
+    const { dispatch } = useContext(SearchContext);
+    const [address, setAddress] = useState({});
     const [listVoucher, setListVoucher] = useState([]);
 
     const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
@@ -42,77 +43,100 @@ function PaymentSuccess() {
         }
     }
 
-    (async () => {
-        await fetch('http://localhost:8080/api/v1/newBooking', {
-            method: 'POST',
-            body: JSON.stringify({
-                hid: home,
-                uid: uid,
-                total_price: total(),
-                payment_method: 'PayPal',
-                checkin: dates[0].startDate,
-                checkout: dates[0].endDate,
-                number_visitor: {
-                    adults: options.adult,
-                    child: options.children,
-                    baby: options.baby,
-                    pet: options.pet,
+    useEffect(() => {
+        if (user?._id) {
+            fetch(`http://localhost:8080/api/v1/user/get`, {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    token: `Bearer ${user?.accessToken}`,
                 },
-                voucher: listVoucher,
-                price: data.price,
-            }),
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        }).catch((err) => {
-            console.log(err);
-        });
-    })();
-
-    (async () => {
-        if (payPoint > 0) {
-            await fetch(`http://localhost:8080/api/v1/user/updateBonusPoint`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    _id: user._id,
-                    bonus_point: 0,
-                }),
+                body: JSON.stringify({ uid: user._id }),
             })
                 .then((response) => response.json())
                 .then((response) => {
-                    if (response.success == true) {
-                        console.log('Thay đổi thành công');
-                    } else {
-                        console.log('Thay đổi không thành công');
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        } else {
-            // console.log(userInfor.bonus_point);
-            await fetch(`http://localhost:8080/api/v1/user/updateBonusPoint`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    _id: user._id,
-                    bonus_point: Math.floor(total() / 100000) + Number.parseInt(bonusPoint),
-                }),
-            })
-                .then((response) => response.json())
-                .then((response) => {
-                    if (response.success == true) {
-                        console.log('Thay đổi thành công1');
-                    } else {
-                        console.log('Thay đổi không thành công1');
+                    if (response.success) {
+                        setUserInfor(response.data[0]);
+                        setAddress(response.data[0].address);
                     }
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         }
-    })();
+    }, []);
+
+    // (async () => {
+    //     await fetch('http://localhost:8080/api/v1/newBooking', {
+    //         method: 'POST',
+    //         body: JSON.stringify({
+    //             hid: home,
+    //             uid: uid,
+    //             total_price: total(),
+    //             payment_method: 'PayPal',
+    //             checkin: dates[0].startDate,
+    //             checkout: dates[0].endDate,
+    //             number_visitor: {
+    //                 adults: options.adult,
+    //                 child: options.children,
+    //                 baby: options.baby,
+    //                 pet: options.pet,
+    //             },
+    //             voucher: listVoucher,
+    //             price: data.price,
+    //         }),
+    //         headers: {
+    //             'Content-type': 'application/json; charset=UTF-8',
+    //         },
+    //     }).catch((err) => {
+    //         console.log(err);
+    //     });
+
+    // })();
+
+    // (async () => {
+    //     if (payPoint > 0) {
+    //         await fetch(`http://localhost:8080/api/v1/user/updateBonusPoint`, {
+    //             method: 'PUT',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify({
+    //                 _id: user._id,
+    //                 bonus_point: 0,
+    //             }),
+    //         })
+    //             .then((response) => response.json())
+    //             .then((response) => {
+    //                 if (response.success == true) {
+    //                     console.log('Thay đổi thành công');
+    //                 } else {
+    //                     console.log('Thay đổi không thành công');
+    //                 }
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err);
+    //             });
+    //     } else {
+    //         await fetch(`http://localhost:8080/api/v1/user/updateBonusPoint`, {
+    //             method: 'PUT',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify({
+    //                 _id: user._id,
+    //                 bonus_point:  Math.floor(total() / 100000)+Number.parseInt(bonusPoint),
+    //             }),
+    //         })
+    //             .then((response) => response.json())
+    //             .then((response) => {
+    //                 if (response.success == true) {
+    //                     console.log('Thay đổi thành công1');
+    //                 } else {
+    //                     console.log('Thay đổi không thành công1');
+    //                 }
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err);
+    //             });
+    //     }
+    // })();
 
     const creatDate = new Date().toUTCString();
 
@@ -350,7 +374,7 @@ function PaymentSuccess() {
                                                                 padding: 10,
                                                             }}
                                                         >
-                                                            Xác nhận đặt phòng # {user.bonus_point}
+                                                            Xác nhận đặt phòng #
                                                         </td>
                                                         <td
                                                             width="25%"
@@ -583,12 +607,9 @@ function PaymentSuccess() {
                                                             >
                                                                 <p style={{ fontWeight: 800 }}>Thông tin khách hàng</p>
                                                                 <p>
-                                                                    {user.lastname} {user.firstname}
+                                                                    {userInfor.firstname} {userInfor.lastname}
                                                                     <br />
-                                                                    {user?.address?.specifically}
-                                                                    <br />
-                                                                    {user?.address?.village} {user?.address?.district}{' '}
-                                                                    {user?.address?.city}
+                                                                    {address.specifically}
                                                                 </p>
                                                             </td>
                                                         </tr>

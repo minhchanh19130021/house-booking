@@ -18,8 +18,8 @@ function TitleHeader(props) {
                 <span className={cx('number-star')}>{props.dataFromParent?.rate}</span>
                 <span className={cx('number-rate')}>{props.dataFromParent?.number_review} đánh giá</span>
                 <p className={cx('location')}>
-                    {props.dataFromParent?.address.number}, {props.dataFromParent?.address.district},{' '}
-                    {props.dataFromParent?.address.city}, {props.dataFromParent?.address.area}{' '}
+                    {props.dataFromParent?.address?.district},  {props.dataFromParent?.address?.village},
+                    {props.dataFromParent?.address?.city}, {props.dataFromParent?.address?.area}
                 </p>
             </div>
         </div>

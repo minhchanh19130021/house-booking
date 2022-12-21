@@ -14,6 +14,7 @@ import { format } from 'date-fns';
 // import { data } from 'autoprefixer';
 import useFetch from '../../../hooks/useFetch';
 import { useDispatch, useSelector } from 'react-redux';
+import { info } from 'autoprefixer';
 
 const cx = classNames.bind(styles);
 function BookingForm(props) {
@@ -26,7 +27,7 @@ function BookingForm(props) {
 
     const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/636ce065825a1cd1940641a2`);
 
-    const [home, setHome] = useState('636ce065825a1cd1940641a2');
+    // const [home, setHome] = useState(props.dataFromParent?._id);
     const [userInfor, setUserInfor] = useState([]);
     const [visiblePayByPoint, setVisiblePayByPoint] = useState(false);
     useEffect(() => {
@@ -44,7 +45,7 @@ function BookingForm(props) {
             });
     }, []);
     const [payPoint, setPayPoint] = useState(0);
-    // const [bonusPoint, setBonusPoint] = useState(0);
+    const [warnVisiter, setWarnVisiter] = useState(false);
 
     const [goToCheckout, setGoToCheckout] = useState(true);
     const [openDate, setOpenDate] = useState(false);
@@ -71,21 +72,26 @@ function BookingForm(props) {
 
     const handleOption = (name, operation) => {
         setOptions((prev) => {
+            if(options.baby == props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby-1 || options.adult+options.children == props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children-1 || options.pet == props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet-1){
+                setWarnVisiter(true)
+            }
             return {
                 ...prev,
                 [name]: operation === 'i' ? options[name] + 1 : options[name] - 1,
             };
         });
+       
+
     };
 
     const { dispatch } = useContext(SearchContext);
     const navigate = useNavigate();
 
-    const idh = '636ce065825a1cd1940641a2';
+    const idh = props.dataFromParent?._id;
 
     const handleSearch = () => {
-        var bonusPoint = userInfor?.bonus_point;
-        // localStorage.setItem('bonusPoint', bonus);
+        var bonusPoint = user?.bonus_point;
+        var home = props.dataFromParent?._id;
         dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, payPoint, bonusPoint } });
         navigate(
             '/payment/' +
@@ -163,7 +169,7 @@ function BookingForm(props) {
     const days = dayDifference(dates[0].endDate, dates[0].startDate);
 
     function priceStay() {
-        return data.price * days;
+        return props.dataFromParent?.price * days;
     }
 
     return (
@@ -171,13 +177,13 @@ function BookingForm(props) {
             <form className={cx('booking-form')}>
                 <div className={cx('booking-form__header')}>
                     <div className={cx('price')}>
-                        <p className={cx('old')}>{formatter.format(props.dataFromParent?.price)} / đêm</p>
+                        <p className={cx('old')}>{formatter.format(props.dataFromParent?.price)} / đêm </p>
                         <p className={cx('new')}>
                             {formatter.format(
                                 props.dataFromParent?.price -
                                     props.dataFromParent?.price * props.dataFromParent?.discount,
                             )}{' '}
-                            / đêm
+                            / đêm 
                         </p>
                     </div>
                     <div className={cx('star')}>
@@ -203,7 +209,7 @@ function BookingForm(props) {
                     <div className={cx('guest')}>
                         <div className={cx('guest-title')}>
                             <label>
-                                <FontAwesomeIcon icon={faCalendarDays} className="headerIcon" /> Ngày
+                                <FontAwesomeIcon icon={faCalendarDays} className="headerIcon" /> Ngày 
                             </label>
                             <div className="headerSearchItem">
                                 <label onClick={() => setOpenDate(!openDate)} className="headerSearchText">{`${format(
@@ -240,10 +246,12 @@ function BookingForm(props) {
                                 <FontAwesomeIcon icon={faPerson} className="headerIcon" /> Khách
                             </label>
                             <label onClick={hanldeVisibleGuestInfo} style={{ fontSize: 14 }}>
-                                {`${props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children} Người lớn · ${props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby} Em bé  ·${props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet} Thú cưng`}
+                            {`${options.adult+options.children} Người lớn · ${options.baby} Em bé  ·${options.pet} Thú cưng`}
+                                {/* {`${props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children} Người lớn · ${props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby} Em bé  ·${props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet} Thú cưng`} */}
                             </label>
                             {visibleGuestInfo && (
                                 <motion.div animate={{}} className={cx('guest-info')}>
+                                    {warnVisiter && (<p style={{color: "red"}}>Giới hạn: {`${props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children} Người lớn · ${props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby} Em bé  ·${props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet} Thú cưng`}</p>)}
                                     <div className={cx('guest-info__item')}>
                                         <div className={cx('guest-info__item-title')}>
                                             <p>Người lớn</p>
@@ -271,7 +279,10 @@ function BookingForm(props) {
                                                 </svg>
                                             </div>
                                             <p className={cx('current-number')}>{`${options.adult}`}</p>
-                                            <div className={cx('select-decrement')}>
+                                            <div className={cx('select-decrement')}
+                                             style={{ display: options.adult + options.children == props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children ? 'none' : 'block' }}
+                                            
+                                            >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     fill="none"
@@ -318,7 +329,9 @@ function BookingForm(props) {
                                                 </svg>
                                             </div>
                                             <p className={cx('current-number')}>{`${options.children}`}</p>
-                                            <div className={cx('select-decrement')}>
+                                            <div className={cx('select-decrement')}
+                                             style={{ display: options.adult+options.children == props.dataFromParent?.detail[0]?.maximum_number_visitor?.adult_children ? 'none' : 'block' }}
+                                            >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     fill="none"
@@ -365,7 +378,9 @@ function BookingForm(props) {
                                                 </svg>
                                             </div>
                                             <p className={cx('current-number')}>{`${options.baby}`}</p>
-                                            <div className={cx('select-decrement')}>
+                                            <div className={cx('select-decrement')}
+                                             style={{ display: options.baby == props.dataFromParent?.detail[0]?.maximum_number_visitor?.baby ? 'none' : 'block' }}
+                                            >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     fill="none"
@@ -412,7 +427,9 @@ function BookingForm(props) {
                                                 </svg>
                                             </div>
                                             <p className={cx('current-number')}>{`${options.pet}`}</p>
-                                            <div className={cx('select-decrement')}>
+                                            <div className={cx('select-decrement')}
+                                             style={{ display: options.pet == props.dataFromParent?.detail[0]?.maximum_number_visitor?.pet ? 'none' : 'block' }}
+                                            >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     fill="none"

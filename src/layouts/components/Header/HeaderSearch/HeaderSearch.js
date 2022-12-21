@@ -8,18 +8,17 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
-function HeaderSearch() {
+function HeaderSearch(props) {
     const navigate = useNavigate();
     const formik = useFormik({
         initialValues: {
             txtSearch: '',
         },
         onSubmit: (values) => {
-            console.log(values);
             navigate(`/search/location=${values.txtSearch}`);
         },
     });
-
+    
     return (
         <motion.div animate={{}} className={cx('modal-search')}>
             <div className="grid wide">
@@ -51,7 +50,7 @@ function HeaderSearch() {
                         </div>
 
                         <div className={cx('reset-padding', 'col', 'l-3', 'm-10', 'c-12')}>
-                            <button type="submit" large className={cx('btn-search')}>
+                            <button type="submit" className={cx('btn-search')}>
                                 Tìm kiếm
                             </button>
                         </div>
