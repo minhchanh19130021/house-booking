@@ -15,10 +15,11 @@ function HeaderSearch(props) {
             txtSearch: '',
         },
         onSubmit: (values) => {
-            navigate(`/search/location=${values.txtSearch}`);
+            // navigate(`/search/location=${values.txtSearch}`);
+            navigate(`/ListHouse/city/${values?.txtSearch ? values?.txtSearch : 'null'}/1`);
         },
     });
-    
+
     return (
         <motion.div animate={{}} className={cx('modal-search')}>
             <div className="grid wide">
