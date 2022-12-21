@@ -6,9 +6,11 @@
     align-items: center;
     margin-bottom: 12px;
     .highlight-desc {
-        margin-left: 10px;
-        p {
+        .title {
             font-weight: 700;
+        }
+        .desc {
+            margin-left: 20px;
         }
     }
 }

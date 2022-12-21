@@ -11,7 +11,6 @@ import useMatchMedia from 'react-use-match-media';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '~/config/firebase';
 import { setAvatar } from '~/redux/avatarSlice';
-import { motion } from 'framer-motion';
 
 const cx = classNames.bind(styles);
 function Header() {
@@ -87,6 +86,15 @@ function Header() {
                 });
         })();
     };
+    useEffect(() => {
+        document.addEventListener('scroll', () => {
+            const scrollCheck = window.scrollY < 1;
+            if (scrollCheck) {
+                setSearchModal(false);
+            }
+        });
+    });
+
     return (
         <div className={cx('wrapper', 'grid')}>
             <div className={cx('left')}>
@@ -202,7 +210,7 @@ function Header() {
             )}
             {searchModal && <HeaderSearch />}
             {isDesktopResolution && (
-                <motion className={cx('right-mobile')}>
+                <div className={cx('right-mobile')}>
                     <button className={cx('btn-bar')} onClick={() => setModalMenu(true)}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -287,7 +295,7 @@ function Header() {
                             </div>
                         </div>
                     )}
-                </motion>
+                </div>
             )}
         </div>
     );

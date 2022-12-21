@@ -15,7 +15,7 @@ function Host(props) {
                 </div>
                 <div className={cx('owner-header__left')}>
                     <h3>Chủ nhà {props.dataFromParent?.host[0]?.username}</h3>
-                    <p>Đã tham gia vào {props.dataFromParent?.host[0]?.created_at}</p>
+                    <p>Đã tham gia vào {new Date(props.dataFromParent?.host[0]?.created_at).toLocaleDateString()}</p>
                 </div>
             </div>
             <div className={cx('row')}>

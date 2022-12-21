@@ -6,19 +6,17 @@ import CardHouse from '~/components/CardHouse';
 import { useEffect, useState } from 'react';
 import CardNew from '~/components/CardNew';
 import SearchHome from './SearchHome';
-
 const cx = classNames.bind(styles);
 
 function Home() {
     const [visible, setVisible] = useState(1);
     const [listNewestHome, setListNewestHome] = useState([]);
     const [listBestSellingHome, setListBestSellingHome] = useState([]);
-    const [listMostViewedHome, setListMostViewedHome] = useState([]); 
-    const [listSuggestionHome, setListSuggestionHome] = useState([]); 
+    const [listMostViewedHome, setListMostViewedHome] = useState([]);
+    const [listSuggestionHome, setListSuggestionHome] = useState([]);
     const toggleTab = (index) => {
         setVisible(index);
     };
-
     useEffect(() => {
         // get newest home
         fetch(`http://localhost:8080/api/v2/houses/newest`, {
@@ -59,7 +57,7 @@ function Home() {
             .catch((err) => {
                 console.log(err);
             });
-           // get suggestion 
+        // get suggestion
         fetch(`http://localhost:8080/api/v2/houses/suggestion `, {
             method: 'GET',
         })
@@ -247,7 +245,7 @@ function Home() {
                             </div>
                         </div>
                     )}
-                      {visible === 3 && (
+                    {visible === 3 && (
                         <div className={cx('tab-content', 'grid', 'wide')}>
                             <div
                                 className={cx({
@@ -259,22 +257,22 @@ function Home() {
                                 {listMostViewedHome.map((e, i) => {
                                     return (
                                         <div key={i} className={cx('col', 'l-4', 'm-6', 'c-12')}>
-                                        <CardHouse
-                                            avatar={e.avatar}
-                                            idHouse={e._id}
-                                            to={`/detail/${e.slug}`}
-                                            status={e.status ? 'open' : 'close'}
-                                            numberReview={e.number_review}
-                                            title={e.name}
-                                            location={`${e.address.city} ${e.address.district} ${e.address.number}`}
-                                            desc={e.introduce}
-                                            rate={e.rate}
-                                            facilities={e.outstanding_facilities.map((e, i) => {
-                                                return e;
-                                            })}
-                                            price={e.price}
-                                        />
-                                    </div>
+                                            <CardHouse
+                                                avatar={e.avatar}
+                                                idHouse={e._id}
+                                                to={`/detail/${e.slug}`}
+                                                status={e.status ? 'open' : 'close'}
+                                                numberReview={e.number_review}
+                                                title={e.name}
+                                                location={`${e.address.city} ${e.address.district} ${e.address.number}`}
+                                                desc={e.introduce}
+                                                rate={e.rate}
+                                                facilities={e.outstanding_facilities.map((e, i) => {
+                                                    return e;
+                                                })}
+                                                price={e.price}
+                                            />
+                                        </div>
                                     );
                                 })}
                             </div>
@@ -312,7 +310,6 @@ function Home() {
                                         </div>
                                     );
                                 })}
-                            
 
                                 {/* <div className={cx('col', 'l-4', 'm-6', 'c-12')}>
                                     <CardHouse

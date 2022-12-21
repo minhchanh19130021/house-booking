@@ -7,8 +7,8 @@ function HighLightItem({ svg, title, desc }) {
         <div className={cx('highlight-item')}>
             {svg}
             <div className={cx('highlight-desc')}>
-                <p>{title}</p>
-                <span>{desc}</span>
+                <p className={cx('title')}>{title}</p>
+                <p className={cx('desc')}>{desc}</p>
             </div>
         </div>
     );

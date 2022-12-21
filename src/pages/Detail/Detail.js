@@ -31,7 +31,7 @@ function Detail() {
     const handleVisibleModal = () => {
         setVisibleModal((visibleModal) => !visibleModal);
     };
-
+    console.log(`${process.env.API_URL}`);
     function getImageFromFirebase(folder_image, images, indexImage) {
         getDownloadURL(ref(storage, `house/${folder_image}/${images[indexImage]}`))
             .then((url) => {
@@ -63,7 +63,6 @@ function Detail() {
                 setDataDetail(response.data[0]);
                 let images = response.data[0]?.detail[0] ? response.data[0]?.detail[0]?.image : [];
                 images?.unshift(response.data[0]?.avatar);
-                console.log(response.data[0]);
                 getImageFromFirebase(response.data[0]?.folder_image, images, 0);
             })
             .catch((err) => console.log(err));
