@@ -6,6 +6,7 @@ import { SearchContext } from '../../../context/SearchContext';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '~/config/firebase';
 import { useSelector } from 'react-redux';
+import { setCartId } from '~/redux/cartSlice';
 
 const cx = classNames.bind(styles);
 
@@ -71,7 +72,6 @@ function Cart(props) {
     ]);
     const folder_image = props?.folder_image ? props?.folder_image : '';
     const avatar = props?.avatar ? props?.avatar : '';
-    const cartId = props?.cartId;
     const bonusPoint = user?.bonus_point;
 
     useEffect(() => {
@@ -91,10 +91,15 @@ function Cart(props) {
     function handleCheckout(e) {
         e.preventDefault();
         if (!isActive) {
-            console.log(cartId);
+            dispatch(
+                setCartId({
+                    cartId: props.cartId ? props.cartId : '123',
+                }),
+            );
+
             dispatch({
                 type: 'NEW_SEARCH',
-                payload: { home, dates, options, payPoint, bonusPoint, folder_image, avatar, cartId },
+                payload: { home, dates, options, payPoint, bonusPoint, folder_image, avatar },
             });
 
             navigate(

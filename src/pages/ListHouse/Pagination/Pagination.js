@@ -24,7 +24,7 @@ function Pagination(props) {
 
                 {Number(props.currentPagination) - 1 < 1 ? null : (
                     <NavLink
-                        to={`/ListHouse/location/Phu%20Quoc/${Number(props.currentPagination) - 1}?${
+                        to={`/ListHouse/location/${props.slug}/${Number(props.currentPagination) - 1}?${
                             props.queryString
                         }`}
                         className={cx('pagination__button')}
@@ -33,7 +33,7 @@ function Pagination(props) {
                     </NavLink>
                 )}
                 <NavLink
-                    to={`/ListHouse/location/Phu%20Quoc/${Number(props.currentPagination)}?${props.queryString}`}
+                    to={`/ListHouse/location/${props.slug}/${Number(props.currentPagination)}?${props.queryString}`}
                     className={cx('pagination__button', 'active')}
                 >
                     {props.currentPagination}
