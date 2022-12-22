@@ -34,8 +34,8 @@ function Cart(props) {
     const days = countDays ? countDays : 0;
     const [choose, setChoose] = useState(false);
     const price =
-        data?.home[0]?.price && data?.home[0]?.discount && days
-            ? data?.home[0]?.price - data?.home[0]?.price * data?.home[0]?.discount * days
+        data?.home[0]?.price && days
+            ? (data?.home[0]?.price - data?.home[0]?.price * data?.home[0]?.discount) * days
             : 0;
     const currentDate = new Date();
     const isBooked = data.is_booked;
