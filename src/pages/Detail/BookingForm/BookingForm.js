@@ -86,7 +86,7 @@ function BookingForm(props) {
         var payPoint = props.userInfor?.bonus_point;
         var home = props.dataFromParent?._id;
         var bonusPoint = 1; 
-        // localStorage.setItem('bonusPoint', bonusPoint);
+        localStorage.setItem('bonusPoint', bonusPoint);
         // dispatch({ type: 'NEW_SEARCH', payload: { home, dates, options, payPoint, bonusPoint} });
         // var bonusPoint = props.userInfor?.bonus_point;
         // var home = props.dataFromParent?._id;
