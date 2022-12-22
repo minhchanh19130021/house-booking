@@ -111,23 +111,23 @@ function Detail() {
    
 
 
-    useEffect(() => {
-        fetch(`http://localhost:8080/api/v1/orderIdByHomeId`, {
-            method: 'GET',
-            body: JSON.stringify({
-                idHome: dataDetail?._id,
-            }),
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-            },
-        })
-            .then((response) => response.json())
-            .then((response) => {
-                setListOrderId(response.data);
-                console.log('hau ' + response.length);
-            })
-            .catch((err) => console.log(err));
-    }, []);
+    // useEffect(() => {
+    //     fetch(`http://localhost:8080/api/v1/orderIdByHomeId`, {
+    //         method: 'GET',
+    //         body: JSON.stringify({
+    //             idHome: dataDetail?._id,
+    //         }),
+    //         headers: {
+    //             'Content-type': 'application/json; charset=UTF-8',
+    //         },
+    //     })
+    //         .then((response) => response.json())
+    //         .then((response) => {
+    //             setListOrderId(response.data);
+    //             console.log('hau ' + response.length);
+    //         })
+    //         .catch((err) => console.log(err));
+    // }, []);
 
 
     useEffect(() => {

@@ -127,7 +127,7 @@ function PaymentSuccess() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         _id: user._id,
-                        bonus_point:  Math.floor(total() / 100000)+Number.parseInt(userInfor.bonus_point),
+                        bonus_point:  Math.floor(total() / 100000)+Number.parseInt(payPoint),
                     }),
                 })
                     .then((response) => response.json())
@@ -616,7 +616,7 @@ function PaymentSuccess() {
                                                                 <p style={{ fontWeight: 800 }}>Thông tin khách hàng</p>
                                                                 <p>
                                                                     {userInfor.firstname} {userInfor.lastname}{' '}
-                                                                    {userInfor.bonus_point}
+                                                                    {/* {userInfor.bonus_point} */}
                                                                     <br />
                                                                     {address.specifically}
                                                                 </p>

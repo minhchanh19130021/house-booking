@@ -17,7 +17,7 @@ function CardSummaryPay(props) {
     const cartId = useSelector((state) => state.cart.cart.cartId);
     const user = useSelector((state) => state.authentication.login.currentUser);
 
-    const { home, dates, options, bonusPoint, folder_image, avatar } = useContext(SearchContext);
+    const { home, dates, options, payPoint, bonusPoint, folder_image, avatar } = useContext(SearchContext);
 
     const location = useLocation();
     const id = location.pathname.split('/')[2];
@@ -245,7 +245,7 @@ function CardSummaryPay(props) {
                                     role="img"
                                     aria-label="Đặt phòng của bạn được bảo vệ bởi AirCover"
                                 >
-                                    Đặt phòng của bạn được bảo vệ bởi &nbsp;
+                                    Đặt phòng của bạn được bảo vệ bởi &nbsp; {payPoint}
                                     <div className={cx('_1p752y2')}>
                                         <img
                                             className={cx('_hx27jd')}
