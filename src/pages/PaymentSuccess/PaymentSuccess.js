@@ -10,9 +10,9 @@ import { date } from 'yup';
 const cx = classNames.bind(styles);
 function PaymentSuccess() {
     const user = useSelector((state) => state.authentication.login.currentUser);
-    
+
     const { home, dates, options, payPoint, bonusPoint } = useContext(SearchContext);
-    
+
     const [userInfor, setUserInfor] = useState([]);
     const [isGoToCheckout, setIsGoToCheckOut] = useState(false);
     const { data, loading, error } = useFetch(`http://localhost:8080/api/homes/find/` + home);
@@ -70,18 +70,17 @@ function PaymentSuccess() {
         }
     }, []);
 
- if(bonusPoint == 1){
-    
+    if (bonusPoint == 1) {
         (async () => {
-            await fetch('http://localhost:8080/api/v1/newBooking', {
+            await fetch(`http://localhost:8080/api/v1/newBooking`, {
                 method: 'POST',
                 body: JSON.stringify({
                     hid: home,
                     uid: uid,
                     total_price: total(),
                     payment_method: 'PayPal',
-                    checkin: (new Date()).setDate(dates[0].startDate.getDate()+1),
-                    checkout:  (new Date()).setDate(dates[0].endDate.getDate()+1),
+                    checkin: (new Date()).setUTCDate(dates[0].startDate.getDate()),
+                    checkout: (new Date()).setUTCDate(dates[0].endDate.getDate()),
                     number_visitor: {
                         adults: options.adult,
                         child: options.children,
@@ -97,9 +96,8 @@ function PaymentSuccess() {
             }).catch((err) => {
                 console.log(err);
             });
-    
         })();
-    
+
         (async () => {
             if (payPoint > 0) {
                 await fetch(`http://localhost:8080/api/v1/user/updateBonusPoint`, {
@@ -127,7 +125,7 @@ function PaymentSuccess() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         _id: user._id,
-                        bonus_point:  Math.floor(total() / 100000)+Number.parseInt(payPoint),
+                        bonus_point: Math.floor(total() / 100000) + Number.parseInt(payPoint),
                     }),
                 })
                     .then((response) => response.json())
@@ -144,7 +142,6 @@ function PaymentSuccess() {
             }
         })();
         localStorage.setItem('bonusPoint', 0);
-
     }
     const creatDate = new Date().toUTCString();
 
@@ -337,7 +334,7 @@ function PaymentSuccess() {
                                                     margin: 0,
                                                 }}
                                             >
-                                                Thanh toán thành công! 
+                                                Thanh toán thành công!
                                             </h2>
                                         </td>
                                     </tr>
