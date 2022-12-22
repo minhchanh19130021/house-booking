@@ -79,8 +79,8 @@ function PaymentSuccess() {
                     uid: uid,
                     total_price: total(),
                     payment_method: 'PayPal',
-                    checkin: (new Date()).setUTCDate(dates[0].startDate.getDate()),
-                    checkout: (new Date()).setUTCDate(dates[0].endDate.getDate()),
+                    checkin: dates[0].startDate,
+                    checkout: dates[0].endDate,
                     number_visitor: {
                         adults: options.adult,
                         child: options.children,
